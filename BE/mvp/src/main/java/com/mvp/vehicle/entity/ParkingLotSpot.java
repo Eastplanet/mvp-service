@@ -1,32 +1,30 @@
-package com.mvp.logs.entity;
+package com.mvp.vehicle.entity;
 
 import com.mvp.parkinglot.entity.ParkingLot;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import jakarta.persistence.*;
-import java.sql.Timestamp;
 
 @Entity
-@Table(name = "log")
+@Table(name = "parking_lot_spot")
 @Getter
 @NoArgsConstructor
-public class Logs {
+public class ParkingLotSpot {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    private String licensePlate;
+    private int status;
 
-    private Timestamp entranceTime;
-
-    private Timestamp exitTime;
-
-    private int fee;
+    private int spotNumber;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parking_lot_id", nullable = false)
     private ParkingLot parkingLot;
-}
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parked_vehicle_id", nullable = false)
+    private ParkedVehicle parkedVehicle;
+}

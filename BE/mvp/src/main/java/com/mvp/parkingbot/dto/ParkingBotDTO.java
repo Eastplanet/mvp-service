@@ -1,4 +1,4 @@
 package com.mvp.parkingbot.dto;
 
-public class ParkingBot {
+public class ParkingBotDTO {
 }
