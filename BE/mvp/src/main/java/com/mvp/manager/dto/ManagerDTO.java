@@ -1,13 +1,10 @@
 package com.mvp.manager.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Data
 @NoArgsConstructor
 @Builder
+@Getter
 @AllArgsConstructor
 public class ManagerDTO {
     private String name;
