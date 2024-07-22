@@ -21,10 +21,10 @@ public class ParkingLotManager {
     private int id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parking_lot_id", nullable = false)
+    @JoinColumn(name = "parking_lot_id")
     private ParkingLot parkingLot;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "manager_id", nullable = false)
+    @JoinColumn(name = "manager_id")
     private Manager manager;
 }
