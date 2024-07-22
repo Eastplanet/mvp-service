@@ -6,7 +6,6 @@ import com.mvp.manager.entity.Manager;
 public class ManagerConverter {
     public static ManagerDTO toDTO(Manager manager) {
         return ManagerDTO.builder()
-                .id(manager.getId())
                 .name(manager.getName())
                 .password(manager.getPassword())
                 .email(manager.getEmail())
@@ -16,7 +15,6 @@ public class ManagerConverter {
 
     public static Manager toEntity(ManagerDTO managerDTO) {
         return Manager.builder()
-                .id(managerDTO.getId())
                 .name(managerDTO.getName())
                 .password(managerDTO.getPassword())
                 .email(managerDTO.getEmail())

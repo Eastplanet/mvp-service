@@ -1,5 +1,6 @@
 package com.mvp.manager.entity;
 
+import com.mvp.manager.dto.ManagerDTO;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -11,8 +12,8 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
-@Builder
 @NoArgsConstructor
+@Builder(toBuilder = true)
 @AllArgsConstructor
 public class Manager {
 
@@ -23,13 +24,6 @@ public class Manager {
     private String password;
     private String email;
     private String phoneNumber;
-
-    public void update(Manager m) {
-        this.name = m.getName();
-        this.password = m.getPassword();
-        this.email = m.getEmail();
-        this.phoneNumber = m.getPhoneNumber();
-    }
 }
 
 
