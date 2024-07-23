@@ -2,11 +2,13 @@ package com.mvp.parkingbot.controller;
 
 import com.mvp.parkingbot.dto.ParkingBotDTO;
 import com.mvp.parkingbot.service.ParkingBotService;
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/parking-bot")
+@AllArgsConstructor
 public class ParkingBotController {
     private ParkingBotService parkingBotService;
 
@@ -16,11 +18,11 @@ public class ParkingBotController {
      * @return
      */
     @PostMapping
-    public ResponseEntity<String> parkingBot(@RequestBody ParkingBotDTO parkingBotDTO) {
+    public ResponseEntity<ParkingBotDTO> parkingBot(@RequestBody ParkingBotDTO parkingBotDTO) {
         ParkingBotDTO savedParkingBotDTO = parkingBotService.registerParkingBot(parkingBotDTO);
 
         if(savedParkingBotDTO != null) {
-            return ResponseEntity.ok(savedParkingBotDTO.toString());
+            return ResponseEntity.ok(savedParkingBotDTO);
         } else{
             return ResponseEntity.badRequest().build();
         }
