@@ -12,9 +12,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ParkingLotDTO {
-    private Long id;
     private String name;
     private String address;
-    private ParkingLotSetting parkingLotSetting;
-    private ParkingLotMap parkingLotMap;
+    private ParkingLotSettingDTO parkingLotSetting;
+    private ParkingLotMapDTO parkingLotMap;
 }
