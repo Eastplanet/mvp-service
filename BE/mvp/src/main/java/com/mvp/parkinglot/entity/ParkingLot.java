@@ -17,12 +17,12 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 public class ParkingLot {
     @Id
     @GeneratedValue(strategy = IDENTITY)
-    private int id;
+    private Long id;
 
-    @Column
+    @Column(name = "name", length = 255)
     private String name;
 
-    @Column
+    @Column(name = "address", length = 255)
     private String address;
 
     @ManyToOne(fetch = FetchType.LAZY)

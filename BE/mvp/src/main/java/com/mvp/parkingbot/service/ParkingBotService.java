@@ -12,36 +12,4 @@ import org.springframework.stereotype.Service;
 @Service
 @AllArgsConstructor
 public class ParkingBotService {
-    private ParkingBotRepository parkingBotRepository;
-    private ParkingLotRepository parkingLotRepository;
-
-    /**
-     * 주차 봇 등록
-     * @param parkingBotDTO
-     * @return
-     */
-    public ParkingBotDTO registerParkingBot(ParkingBotDTO parkingBotDTO) {
-        ParkingLot parkingLot = parkingLotRepository.findById(parkingBotDTO.getParkingLotId()).orElse(null);
-
-        if(parkingLot == null){
-            return null;
-        }
-
-        ParkingBot savedParkingBot = parkingBotRepository.save(ParkingBotConverter.toEntity(parkingBotDTO, parkingLot));
-        return ParkingBotConverter.toDto(savedParkingBot);
-    }
-
-    /**
-     * 주차 봇 삭제
-     * @param parkingBotId
-     * @return
-     */
-    public boolean deleteParkingBot(Long parkingBotId){
-        if (parkingBotRepository.existsById(parkingBotId)) {
-            parkingBotRepository.deleteById(parkingBotId);
-            return true;
-        } else {
-            return false;
-        }
-    }
 }

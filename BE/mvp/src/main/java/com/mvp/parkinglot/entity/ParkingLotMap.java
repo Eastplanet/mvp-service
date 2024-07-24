@@ -1,13 +1,10 @@
 package com.mvp.parkinglot.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import static jakarta.persistence.GenerationType.IDENTITY;
-
+import lombok.AllArgsConstructor;
 
 @Entity
 @Table(name = "parking_lot_map")
@@ -18,12 +15,13 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 public class ParkingLotMap {
 
     @Id
-    @GeneratedValue(strategy = IDENTITY)
-    private int id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
+    @Column(name = "image")
     @Lob
     private byte[] image;
 
-    @Lob
+    @Column(name = "map_info", columnDefinition = "TEXT")
     private String mapInfo;
 }

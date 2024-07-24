@@ -1,31 +1,26 @@
 package com.mvp.parkingbot.entity;
 
-import com.mvp.parkinglot.entity.ParkingLot;
-import lombok.AllArgsConstructor;
+import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 
 @Entity
 @Table(name = "parking_bot")
 @Getter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class ParkingBot {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parking_lot_id", nullable = false)
-    private ParkingLot parkingLot;
+    @Column(name = "serial_number")
+    private Integer serialNumber;
 
-    @Column(nullable = false)
-    private int serialNumber;
-
-    @Column(nullable = false)
-    private int status;
+    @Column(name = "status")
+    private Integer status;
 }

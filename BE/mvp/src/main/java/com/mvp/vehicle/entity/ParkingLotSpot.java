@@ -1,30 +1,30 @@
 package com.mvp.vehicle.entity;
 
-import com.mvp.parkinglot.entity.ParkingLot;
+import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 
 @Entity
 @Table(name = "parking_lot_spot")
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class ParkingLotSpot {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
-    private int status;
+    @Column(name = "status")
+    private Integer status;
 
-    private int spotNumber;
+    @Column(name = "spot_number")
+    private Integer spotNumber;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parking_lot_id", nullable = false)
-    private ParkingLot parkingLot;
-
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "parked_vehicle_id", nullable = false)
     private ParkedVehicle parkedVehicle;
 }

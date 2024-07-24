@@ -10,8 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ParkingBotDTO {
-    private Long id;
     private int serialNumber;
     private int status;
-    private Long parkingLotId;
 }

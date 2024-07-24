@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ParkingLotDTO {
-    private int id;
+    private Long id;
     private String name;
     private String address;
     private ParkingLotSetting parkingLotSetting;
