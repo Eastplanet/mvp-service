@@ -8,9 +8,8 @@ from gui.settlement_window import SettlementWindow
 from core.handlers import handle_enter, handle_exit
 
 class MainWindow(QMainWindow):
-    def __init__(self, mqtt_client):
+    def __init__(self):
         super().__init__()
-        self.mqtt_client = mqtt_client
         self.initUI()
 
     def initUI(self):
@@ -44,7 +43,7 @@ class MainWindow(QMainWindow):
         self.settlement_window.exec_()
 
     def handle_enter(self):
-        handle_enter(self.mqtt_client)
+        handle_enter()
 
     def handle_exit(self):
-        handle_exit(self.mqtt_client)
+        handle_exit()
