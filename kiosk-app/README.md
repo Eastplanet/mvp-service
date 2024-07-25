@@ -17,18 +17,17 @@ parking_kiosk/
 ├── config/
 │   └── config.py
 ├── core/
-│   ├── __init__.py
 │   ├── mqtt_client.py
-│   └── handlers.py
+│   ├── camera.py
+│   ├── handlers.py
+│   └── ocr_reader.py
 ├── gui/
-│   ├── __init__.py
 │   ├── main_window.py
 │   ├── start_window.py
 │   ├── enter_window.py
 │   ├── exit_window.py
 │   └── settlement_window.py
 ├── resources/
-│   └── __init__.py
 ├── requirements.txt
 └── README.md
 ```
@@ -42,6 +41,10 @@ parking_kiosk/
 `core/mqtt_client.py` 파일은 MQTT 클라이언트를 설정하고 연결 및 메시지 처리 로직을 포함합니다.
 
 `core/handlers.py` 파일은 입차 및 출차 명령을 처리하는 함수를 포함합니다.
+
+`core/camera.py` 번호판 인식을 위한 카메라 촬용 함수를 포함합니다.
+
+`core/ocr_reader.py` OCR을 활용해 번호판 -> 문자열 함수를 포함합니다.
 
 ### GUI 구성
 
