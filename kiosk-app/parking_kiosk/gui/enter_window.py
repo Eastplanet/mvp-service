@@ -24,5 +24,6 @@ class EnterWindow(QWidget):
         self.setLayout(layout)
 
     def confirm(self):
+        
         self.main_window.handle_enter()
         self.main_window.show_start_window()

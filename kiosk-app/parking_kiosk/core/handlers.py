@@ -1,31 +1,32 @@
 # core/handlers.py
 
+import base64
+import json
 import requests
 
-def handle_enter():
-    base_url = "http://localhost:8080/test"  # 서버 엔드포인트 URL을 입력하세요
+def handle_enter(image_path, license_plate, entrance_time):
+    url = "http://localhost:8080/test/enter"  # 서버 엔드포인트 URL을 입력하세요
+
+    # 이미지 파일을 읽어서 Base64로 인코딩
+    with open(image_path, 'rb') as image_file:
+        image_data = base64.b64encode(image_file.read()).decode('utf-8')
+    
+    # JSON 데이터 구성
+    payload = {
+        'image': image_data,
+        'license_plate': license_plate,
+        'entrance_time': entrance_time.isoformat()  # datetime 객체를 ISO 포맷 문자열로 변환
+    }
+    
     headers = {
         'Content-Type': 'application/json'
     }
-    params = {
-        'vehicle_id': 1,
-        'parking_lot_id': 1
-    }
-    
-    try:
-        response = requests.get(base_url, headers=headers, params=params)
-        response.raise_for_status()  # HTTP 요청에 대한 예외 처리
-        
-        try:
-            response_data = response.json()  # 응답을 JSON으로 파싱 시도
-            print(f"Success: {response.status_code}, {response_data}")
-        except ValueError:
-            print(f"Success: {response.status_code}, {response.text}")  # 응답이 JSON이 아닌 경우
-        
-    except requests.exceptions.RequestException as e:
-        print(f"HTTP Request failed: {e}")
 
-    print("입차 명령 전송 완료")
+    # POST 요청 전송
+    response = requests.post(url, data=json.dumps(payload), headers=headers)
+    
+    print(f"Status Code: {response.status_code}")
+    print(f"Response: {response.text}")
 
 def handle_exit():
     print('출차 명령 전송 완료')
