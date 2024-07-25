@@ -1,0 +1,62 @@
+/* src/features/auth/Login.module.css */
+.container {
+    display: flex;
+    height: 100vh;
+}
+  
+.left {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    width: 25%;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+  
+.right {
+    flex: 1;
+    background-image: url('');
+    background-size: cover;
+    background-position: center;
+}
+  
+.form {
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+    max-width: 400px;
+}
+  
+.input {
+    margin: 10px 0;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+  
+.button {
+    width: 40%;
+    height: 70px;
+    padding: 10px;
+    margin-top: 20px;
+    background-color: #0055FF;
+    color: white;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    align-self: center;
+    font-size: 20px;
+    font-weight: 800;
+}
+
+.button:hover {
+    background-color: #0056b3;
+}
+  
+.logo {
+    margin-bottom: 40px;
+    width: 60%;
+}
+  
