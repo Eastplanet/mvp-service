@@ -5,6 +5,7 @@
 }
   
 .left {
+    position: relative;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -13,19 +14,25 @@
     width: 25%;
     background-color: white;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    min-width: 300px;
+    min-height: 600px;
 }
   
 .right {
     flex: 1;
-    background-image: url('');
+    background-image: url('../../assets/images/login_bg.jpg');
     background-size: cover;
     background-position: center;
+    min-height: 640px;
 }
   
 .form {
+    position: absolute;
+    top: 35%;
+    left: 20%;
     display: flex;
     flex-direction: column;
-    width: 80%;
+    width: 60%;
     max-width: 400px;
 }
   
@@ -40,7 +47,7 @@
     width: 40%;
     height: 70px;
     padding: 10px;
-    margin-top: 20px;
+    margin-top: 40px;
     background-color: #0055FF;
     color: white;
     border: none;
@@ -58,5 +65,8 @@
 .logo {
     margin-bottom: 40px;
     width: 60%;
+    position: absolute;
+    top: 10%;
+    left: 20%;
 }
   
