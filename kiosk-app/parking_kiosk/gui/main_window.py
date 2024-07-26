@@ -1,5 +1,6 @@
 # gui/main_window.py
 
+import time
 from PyQt5.QtWidgets import QMainWindow, QStackedWidget
 from gui.start_window import StartWindow
 from gui.enter_window import EnterWindow
@@ -9,6 +10,7 @@ from core.handlers import handle_enter, handle_exit
 from datetime import datetime
 from core.camera import getVehicleImage
 from core.ocr_reader import getLicensePlate
+from core.parking_barrier.parking_barrier_controller import ParkingBarrierController
 import paho.mqtt.client as mqtt
 
 class MainWindow(QMainWindow):
@@ -55,8 +57,17 @@ class MainWindow(QMainWindow):
         handle_enter(image_path, license_plate, entrance_time)
 
         # MQTT 메시지 발행
-        mqtt_message = "1111"
-        self.mqtt_client.publish_message(mqtt_message)
+        # TODO: 메시지는 중앙 서버에서 받아올 것
+        command = {
+            "start_point" : "출발점 정보",
+            "end_point" : "도착점 정보"
+        }
+        
+        self.mqtt_client.publish_message(command)
+        
+        ParkingBarrierController.upBarrier()
+        time.sleep(5)
+        ParkingBarrierController.downBarrier()
 
     def handle_exit(self):
         handle_exit()
