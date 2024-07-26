@@ -14,7 +14,7 @@ class MQTTClient:
         self.client.connect(self.broker, self.port, 60)
         self.client.loop_start()
 
-    def on_connect(self, client, userdata, flags, rc):
+    def on_connect(self, client, userdata, flags, rc, properties=None):
         if rc == 0:
             print("Connected to MQTT Broker!")
         else:
