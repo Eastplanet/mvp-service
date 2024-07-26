@@ -1,3 +1,4 @@
+import json
 import paho.mqtt.client as mqtt
 
 class MQTTClient:
@@ -32,7 +33,10 @@ class MQTTClient:
         if not self.client.is_connected():
             print("reconnect")
             self.connect()
-        result = self.client.publish(self.topic, message)
+        
+        message_json = json.dumps(message)    
+        
+        result = self.client.publish(self.topic, message_json)
         status = result[0]
         if status == 0:
             print(f"Sent `{message}` to topic `{self.topic}`")
