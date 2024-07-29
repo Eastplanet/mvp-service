@@ -10,6 +10,8 @@ import com.mvp.parkinglot.entity.ParkingLotSetting;
 import com.mvp.parkinglot.repository.ParkingLotMapRepository;
 import com.mvp.parkinglot.repository.ParkingLotRepository;
 import com.mvp.parkinglot.repository.ParkingLotSettingRepository;
+import jakarta.transaction.TransactionScoped;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -30,5 +32,11 @@ public class ParkingLotService {
     public ParkingLotSettingDTO getSetting(){
         ParkingLotSetting setting = parkingLotSettingRepository.findAll().get(0);
         return ParkingLotSettingConverter.entityToDto(setting);
+    }
+
+    @Transactional
+    public void updateSetting(ParkingLotSettingDTO parkingLotSettingDTO) {
+        ParkingLotSetting parkingLotSetting = parkingLotSettingRepository.findAll().get(0);
+        parkingLotSetting.update(parkingLotSettingDTO);
     }
 }

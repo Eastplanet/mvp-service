@@ -1,5 +1,6 @@
 package com.mvp.parkinglot.entity;
 
+import com.mvp.parkinglot.dto.ParkingLotSettingDTO;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -51,4 +52,18 @@ public class ParkingLotSetting {
 
     @Column(name = "monthly_fee")
     private Integer monthlyFee;
+
+    public void update(ParkingLotSettingDTO parkingLotSettingDTO){
+        this.weekdayStartTime = parkingLotSettingDTO.getWeekdayStartTime();
+        this.weekdayEndTime = parkingLotSettingDTO.getWeekdayEndTime();
+        this.weekendStartTime = parkingLotSettingDTO.getWeekendStartTime();
+        this.weekendEndTime = parkingLotSettingDTO.getWeekendEndTime();
+        this.baseParkingTime = parkingLotSettingDTO.getBaseParkingTime();
+        this.baseFee = parkingLotSettingDTO.getBaseFee();
+        this.additionalUnitFee = parkingLotSettingDTO.getAdditionalUnitFee();
+        this.additionalUnitTime = parkingLotSettingDTO.getAdditionalUnitTime();
+        this.dailyFee = parkingLotSettingDTO.getDailyFee();
+        this.weeklyFee = parkingLotSettingDTO.getWeeklyFee();
+        this.monthlyFee = parkingLotSettingDTO.getMonthlyFee();
+    }
 }
