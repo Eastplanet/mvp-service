@@ -1,0 +1,40 @@
+.container {
+    display: flex;
+    height: 100vh;
+    background-color: #f9fafc;
+  }
+  
+  .sidebarWrapper {
+    flex: 0 0 250px; /* 사이드바의 고정 폭 */
+  }
+  
+  .page {
+    flex: 1; /* 남은 공간을 채우도록 설정 */
+    padding: 20px;
+    background-color: skyblue;
+    border: 1px solid black;
+  }
+  
+  .runtime {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .title {
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+  
+  .timeInputs {
+    display: flex;
+    align-items: center;
+  }
+  
+  .timeInput {
+    margin-right: 10px;
+    padding: 5px;
+  }
+  
+
+
+  
