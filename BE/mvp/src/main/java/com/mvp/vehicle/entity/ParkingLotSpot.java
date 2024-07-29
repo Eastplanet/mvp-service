@@ -24,7 +24,8 @@ public class ParkingLotSpot {
     @Column(name = "spot_number")
     private Integer spotNumber;
 
-    @ManyToOne
-    @JoinColumn(name = "parked_vehicle_id", nullable = false)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "parked_vehicle_id", referencedColumnName = "id")
     private ParkedVehicle parkedVehicle;
+
 }
