@@ -19,4 +19,6 @@ public class ParkingLotController {
     public ParkingLotMapDTO getMap(){
         return parkingLotService.getMap();
     }
+
+    @GetMapping("/setting")
 }

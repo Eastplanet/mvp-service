@@ -1,9 +1,12 @@
 package com.mvp.parkinglot.service;
 
 import com.mvp.parkinglot.converter.ParkingLotMapConverter;
+import com.mvp.parkinglot.converter.ParkingLotSettingConverter;
 import com.mvp.parkinglot.dto.ParkingLotMapDTO;
+import com.mvp.parkinglot.dto.ParkingLotSettingDTO;
 import com.mvp.parkinglot.entity.ParkingLot;
 import com.mvp.parkinglot.entity.ParkingLotMap;
+import com.mvp.parkinglot.entity.ParkingLotSetting;
 import com.mvp.parkinglot.repository.ParkingLotMapRepository;
 import com.mvp.parkinglot.repository.ParkingLotRepository;
 import com.mvp.parkinglot.repository.ParkingLotSettingRepository;
@@ -22,5 +25,10 @@ public class ParkingLotService {
     public ParkingLotMapDTO getMap(){
         ParkingLotMap parkingLotMap = parkingLotMapRepository.findAll().get(0);
         return ParkingLotMapConverter.entityToDto(parkingLotMap);
+    }
+
+    public ParkingLotSettingDTO getSetting(){
+        ParkingLotSetting setting = parkingLotSettingRepository.findAll().get(0);
+        return ParkingLotSettingConverter.entityToDto(setting);
     }
 }
