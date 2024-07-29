@@ -36,4 +36,15 @@ public class ParkingBotController {
         }
     }
 
+    @GetMapping("/poll")
+    public ResponseEntity<Task> pollTask(){
+        Task task = parkingBotService.getTaskfromQueue();
+        if(task != null){
+            parkingBotService.updateParingBotStatus(task.getParkingBotSerialNumber(), 1);
+            return ResponseEntity.ok(task);
+        } else{
+            return ResponseEntity.noContent().build();
+        }
+    }
+
 }

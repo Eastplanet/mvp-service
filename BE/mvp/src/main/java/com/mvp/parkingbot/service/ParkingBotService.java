@@ -114,4 +114,17 @@ public class ParkingBotService {
 
         return true;
     }
+
+    public Task getTaskfromQueue() {
+        return taskQueue.getNextTask();
+    }
+
+    public void updateParingBotStatus(Integer parkingBotSerialNumber, int i) {
+        ParkingBot parkingBot = parkingBotRepository.findBySerialNumber(parkingBotSerialNumber);
+        parkingBot = ParkingBot.builder()
+                .serialNumber(parkingBot.getSerialNumber())
+                .status(i)
+                .build();
+        parkingBotRepository.save(parkingBot);
+    }
 }
