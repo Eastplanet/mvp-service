@@ -25,6 +25,6 @@ public class ParkingLotSpot {
     private Integer spotNumber;
 
     @ManyToOne
-    @JoinColumn(name = "parked_vehicle_id", nullable = false)
+    @JoinColumn(name = "parked_vehicle_id", nullable = true)
     private ParkedVehicle parkedVehicle;
 }

@@ -1,15 +1,10 @@
 package com.mvp.parkingbot.service;
 
-import com.mvp.parkingbot.converter.ParkingBotConverter;
 import com.mvp.parkingbot.dto.EnterRequestDTO;
-import com.mvp.parkingbot.dto.ParkingBotDTO;
 import com.mvp.parkingbot.dto.Task;
 import com.mvp.parkingbot.entity.ParkingBot;
 import com.mvp.parkingbot.repository.ParkingBotRepository;
-import com.mvp.parkinglot.entity.ParkingLot;
-import com.mvp.parkinglot.repository.ParkingLotRepository;
-import com.mvp.parkinglot.service.ParkingLotService;
-import com.mvp.vehicle.dto.ParkedVehicleDTO;
+import com.mvp.utils.TaskQueue;
 import com.mvp.vehicle.entity.ParkedVehicle;
 import com.mvp.vehicle.entity.ParkingLotSpot;
 import com.mvp.vehicle.repository.ParkedVehicleRepository;
@@ -17,11 +12,7 @@ import com.mvp.vehicle.repository.ParkingLotSpotRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayDeque;
 import java.util.Optional;
-import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedDeque;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 @Service
 @AllArgsConstructor
@@ -30,8 +21,7 @@ public class ParkingBotService {
     private final ParkingLotSpotRepository parkingLotSpotRepository;
     private final ParkingBotRepository parkingBotRepository;
     private final ParkedVehicleRepository parkedVehicleRepository;
-    private static final Queue<Task> taskQueue = new ConcurrentLinkedQueue<>();
-    private static final Queue<Task> waitingQueue = new ConcurrentLinkedQueue<>();
+    private TaskQueue taskQueue;
 
     /**
      * 입차 처리
@@ -71,32 +61,57 @@ public class ParkingBotService {
                     .start(0)
                     .end(spot.getSpotNumber())
                     .build();
-            waitingQueue.add(task);
+            taskQueue.addWaitingTask(task);
         } else{
             task = Task.builder()
                     .parkingBotSerialNumber(availableBot.get().getSerialNumber())
                     .start(0)
                     .end(spot.getSpotNumber())
                     .build();
-            taskQueue.add(task);
+            taskQueue.addTask(task);
         }
 
         return task;
     }
 
-    public Task getNextTask() {
-        return taskQueue.poll();
-    }
+    public boolean handleExitRequest(String licensePlate) {
+        ParkedVehicle parkedVehicle = parkedVehicleRepository.findByLicensePlate(licensePlate);
+        if(parkedVehicle == null){
+            return false;
+        }
 
-    public Task getWaitingTask() {
-        return waitingQueue.poll();
-    }
+        ParkingLotSpot spot = parkingLotSpotRepository.findByParkedVehicleId(parkedVehicle.getId());
+        if(spot != null){
+            spot = ParkingLotSpot.builder()
+                    .id(spot.getId())
+                    .spotNumber(spot.getSpotNumber())
+                    .parkedVehicle(null)
+                    .status(0)
+                    .build();
+            parkingLotSpotRepository.save(spot);
+        }
 
-    public boolean hasTask() {
-        return !taskQueue.isEmpty();
-    }
+        parkedVehicleRepository.delete(parkedVehicle);
 
-    public boolean hasWaitingTask() {
-        return !waitingQueue.isEmpty();
+        Optional<ParkingBot> availableBot = parkingBotRepository.findFirstByStatus(0);
+
+        Task task;
+        if (availableBot.isEmpty()) {
+            task = Task.builder()
+                    .parkingBotSerialNumber(null)
+                    .start(spot != null ? spot.getSpotNumber() : null)
+                    .end(1)
+                    .build();
+            taskQueue.addWaitingTask(task);
+        } else{
+            task = Task.builder()
+                    .parkingBotSerialNumber(availableBot.get().getSerialNumber())
+                    .start(spot != null ? spot.getSpotNumber() : null)
+                    .end(1)
+                    .build();
+            taskQueue.addTask(task);
+        }
+
+        return true;
     }
 }

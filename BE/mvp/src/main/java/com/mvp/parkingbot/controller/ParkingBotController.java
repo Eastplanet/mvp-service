@@ -25,4 +25,15 @@ public class ParkingBotController {
             return ResponseEntity.badRequest().build();
         }
     }
+
+    @DeleteMapping("/exit/{licensePlate}")
+    public ResponseEntity<Void> exitRequest(@PathVariable String licensePlate) {
+        boolean success = parkingBotService.handleExitRequest(licensePlate);
+        if(success){
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
 }
