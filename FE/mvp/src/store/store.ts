@@ -2,10 +2,12 @@ import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import authReducer from '../features/auth/authSlice';
+import mainReducer from '../features/main/mainSlice';
 
 // 각 리듀서 결합
 const rootReducer = combineReducers({
   auth: authReducer,
+  main: mainReducer,
 });
 
 // persist 설정
