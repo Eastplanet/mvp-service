@@ -1,0 +1,33 @@
+.main {
+    display: flex;
+  }
+  
+  .mainContent {
+    flex-grow: 1;
+    padding: 20px;
+  }
+  
+  .parkingInfo {
+    background-color: #2d2d2d;
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+  }
+  
+  .searchBar {
+    margin: 20px 0;
+  }
+  
+  .searchBar input {
+    margin-right: 10px;
+    padding: 10px;
+  }
+  
+  .dataTables {
+    display: flex;
+    justify-content: space-around;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+  }
+  
