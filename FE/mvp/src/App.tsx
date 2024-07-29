@@ -3,7 +3,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from './store/store';
 import Login from './features/auth/Login';
-import Main from './features/main/main'; // 예: 로그인 후 보여질 대시보드 컴포넌트
+import Main from './features/main/Main'; // 예: 로그인 후 보여질 대시보드 컴포넌트
 import './App.css';
 
 function App() {

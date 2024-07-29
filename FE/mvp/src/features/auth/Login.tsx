@@ -1,10 +1,11 @@
 // src/features/auth/Login.tsx
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { login } from './authActions';
+// import { login } from './authActions';
 import { AppDispatch } from '../../store/store';
 import styles from './Login.module.css';
-import logo from '../../assets/images/logo.png'
+import logo from '../../assets/images/logos/logo.png'
+import { loginSuccess } from './authSlice';
 
 const Login: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -12,7 +13,8 @@ const Login: React.FC = () => {
   const [password, setPassword] = useState('');
 
   const handleLogin = () => {
-    dispatch(login({ email, password }));
+    // dispatch(login({ email, password }));
+    dispatch(loginSuccess());
   };
 
   return (

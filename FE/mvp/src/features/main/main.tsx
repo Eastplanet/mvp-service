@@ -1,15 +1,26 @@
-// src/features/auth/Login.tsx
-import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState, AppDispatch } from '../../store/store';
+import React from 'react';
+import Sidebar from '../sidebar/Sidebar';
+import styles from './Main.module.css';
 
-const Login: React.FC = () => {
-
+const Main: React.FC = () => {
   return (
-    <div>
-      <p>안녕</p>
+    <div className={styles.main}>
+      <Sidebar />
+      <div className={styles.mainContent}>
+        <div className={styles.parkingInfo}>
+          {/* 주차장 시각화 및 기타 정보 */}
+        </div>
+        <div className={styles.searchBar}>
+          <input type="text" placeholder="123가 4568" />
+          <input type="date" />
+          <input type="date" />
+        </div>
+        <div className={styles.dataTables}>
+          {/* 데이터 테이블 및 통계 */}
+        </div>
+      </div>
     </div>
   );
 };
 
-export default Login;
+export default Main;
