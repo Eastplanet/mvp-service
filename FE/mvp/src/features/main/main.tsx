@@ -1,20 +1,27 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '../../store/store'; // 올바른 경로 확인
 import { fetchParkingData, fetchSearchData, setSearchTerm, setStartDate, setEndDate } from './mainSlice';
 import Sidebar from '../sidebar/Sidebar';
 import styles from './Main.module.css';
 import searchIcon from '../../assets/images/icons/searchIcon.png'
+import CarInfo from '../carInfo/CarInfoModal';
 
 type CarLog = {
   carNumber: string;
   parkingDate: string;
   carState: string;
+  entryTime: Date;
+  exitTime?: Date;
+  fee: number;
+  imageBase64?: string;
 };
 
 const Main: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
   const { todayIn, todayOut, todayIncome, searchTerm, startDate, endDate, searchData } = useSelector((state: RootState) => state.main);
+
+  const [selectedCarLog, setSelectedCarLog] = useState<CarLog | null>(null);
 
   useEffect(() => {
     dispatch(fetchParkingData());
@@ -50,6 +57,10 @@ const Main: React.FC = () => {
     }
   };
 
+  const handleCarLogClick = (carLog: CarLog) => {
+    setSelectedCarLog(carLog);
+  };
+
   return (
     <div className={styles.main}>
       <Sidebar />
@@ -83,7 +94,8 @@ const Main: React.FC = () => {
                 placeholder="Search Car Number" 
                 value={searchTerm}
                 onChange={(e) => dispatch(setSearchTerm(e.target.value))}
-                onKeyDown={handleKeyDown} // 엔터키 감지
+                onKeyDown={handleKeyDown}
+                maxLength={10}
               />
               <button className={styles.searchButton} onClick={handleSearch}>
                 <img src={searchIcon} alt="Search" className={styles.icon} />
@@ -107,22 +119,25 @@ const Main: React.FC = () => {
           {searchData.length > 0 && (
             <div className={styles.searchData}>
               <ul>
-                {searchData.map((carLog: CarLog, index: number) => (
-                  <li key={index}>
-                    <div className={styles.leftData}>
-                      <div className={styles.carNumber}>{carLog.carNumber}</div>
-                      <div className={styles.parkingDate}>{formatDate(carLog.parkingDate)}</div>
-                    </div>
-                    <div className={getCarStateClass(carLog.carState)}>
-                      {carLog.carState}
-                    </div>
-                  </li>
-                ))}
+              {searchData.map((carLog: CarLog, index: number) => (
+                <li key={index} onClick={() => handleCarLogClick(carLog)}>
+                  <div className={styles.leftData}>
+                    <div className={styles.carNumber}>{carLog.carNumber}</div>
+                    <div className={styles.parkingDate}>{formatDate(carLog.parkingDate)}</div>
+                  </div>
+                  <div className={getCarStateClass(carLog.carState)}>
+                    {carLog.carState}
+                  </div>
+                </li>
+              ))}
               </ul>
             </div>
           )}
         </div>
       </div>
+      {selectedCarLog && (
+        <CarInfo carLog={selectedCarLog} onClose={() => setSelectedCarLog(null)} />
+      )}
     </div>
   );
 };

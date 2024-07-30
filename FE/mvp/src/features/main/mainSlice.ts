@@ -1,4 +1,15 @@
+// features/main/mainSlice.ts
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+
+interface CarLog {
+  carNumber: string;
+  parkingDate: string;
+  carState: string;
+  entryTime: Date;
+  exitTime?: Date;
+  fee: number;
+  imageBase64?: string;
+}
 
 interface MainState {
   todayIn: number;
@@ -7,7 +18,7 @@ interface MainState {
   searchTerm: string;
   startDate: string;
   endDate: string;
-  searchData: Array<{ carNumber: string; parkingDate: string; carState: string }>;
+  searchData: CarLog[];
   status: 'idle' | 'loading' | 'succeeded' | 'failed';
   error: string | null;
 }
@@ -33,23 +44,28 @@ export const fetchParkingData = createAsyncThunk('main/fetchParkingData', async 
 export const fetchSearchData = createAsyncThunk(
   'main/fetchSearchData',
   async ({ searchTerm, startDate, endDate }: { searchTerm: string; startDate: string; endDate: string }) => {
-    // API 요청을 대체하는 임시 데이터
+    // 예제 데이터 (API 요청 대신 사용)
     // const response = await fetch(`https://api.example.com/search?term=${searchTerm}&startDate=${startDate}&endDate=${endDate}`);
     // const data = await response.json();
-    const data = [
-        { carNumber: '123가 4568', parkingDate: '20240729', carState: '주차 중' },
-        { carNumber: '123가 4568', parkingDate: '20240728', carState: '출차 완료' },
-        { carNumber: '123가 4568', parkingDate: '20240728', carState: '출차 완료' },
-        { carNumber: '123가 4568', parkingDate: '20240727', carState: '출차 완료' },
-        { carNumber: '123가 4568', parkingDate: '20240727', carState: '출차 완료' },
-        { carNumber: '123가 4568', parkingDate: '20240727', carState: '출차 완료' },
-        { carNumber: '123가 4568', parkingDate: '20240726', carState: '출차 완료' },
-        { carNumber: '123가 4568', parkingDate: '20240725', carState: '출차 완료' },
-        { carNumber: '123가 4568', parkingDate: '20240725', carState: '출차 완료' },
-        { carNumber: '123가 4568', parkingDate: '20240724', carState: '출차 완료' },
-        { carNumber: '123가 4568', parkingDate: '20240724', carState: '출차 완료' },
-        { carNumber: '123가 4568', parkingDate: '20240724', carState: '출차 완료' },
-    ];
+    const data: CarLog[] = [
+      {
+        carNumber: '123가 4568',
+        parkingDate: '20240729',
+        carState: '주차 중',
+        entryTime: new Date(2024, 6, 29, 14, 15),
+        exitTime: undefined,
+        fee: 1000,
+        imageBase64: 'iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==',
+      },
+      {
+        carNumber: '123가 4568',
+        parkingDate: '20240728',
+        carState: '출차 완료',
+        entryTime: new Date(2024, 6, 28, 10, 15),
+        exitTime: new Date(2024, 6, 28, 11, 7),
+        fee: 1000
+      }
+    ]
     return data;
   }
 );
@@ -58,13 +74,13 @@ const mainSlice = createSlice({
   name: 'main',
   initialState,
   reducers: {
-    setSearchTerm: (state, action: PayloadAction<string>) => {
+    setSearchTerm(state, action: PayloadAction<string>) {
       state.searchTerm = action.payload;
     },
-    setStartDate: (state, action: PayloadAction<string>) => {
+    setStartDate(state, action: PayloadAction<string>) {
       state.startDate = action.payload;
     },
-    setEndDate: (state, action: PayloadAction<string>) => {
+    setEndDate(state, action: PayloadAction<string>) {
       state.endDate = action.payload;
     },
   },
