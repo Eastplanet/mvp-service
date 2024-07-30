@@ -1,4 +1,4 @@
-package com.mvp.vehicle.entity;
+package com.mvp.membership.entity;
 
 import jakarta.persistence.*;
 import lombok.Builder;

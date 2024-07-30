@@ -1,4 +1,4 @@
-package com.mvp.vehicle.dto;
+package com.mvp.membership.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

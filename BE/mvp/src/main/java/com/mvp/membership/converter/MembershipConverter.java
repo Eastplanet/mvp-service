@@ -1,7 +1,7 @@
-package com.mvp.vehicle.converter;
+package com.mvp.membership.converter;
 
-import com.mvp.vehicle.dto.MembershipDTO;
-import com.mvp.vehicle.entity.Membership;
+import com.mvp.membership.dto.MembershipDTO;
+import com.mvp.membership.entity.Membership;
 
 public class MembershipConverter {
 
