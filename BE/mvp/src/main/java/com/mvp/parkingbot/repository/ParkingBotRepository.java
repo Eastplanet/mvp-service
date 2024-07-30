@@ -8,5 +8,5 @@ import java.util.Optional;
 public interface ParkingBotRepository extends JpaRepository<ParkingBot, Long> {
     Optional<ParkingBot> findFirstByStatus(int status);
 
-    ParkingBot findBySerialNumber(Integer parkingBotSerialNumber);
+    ParkingBot findBySerialNumber(Integer serialNumber);
 }

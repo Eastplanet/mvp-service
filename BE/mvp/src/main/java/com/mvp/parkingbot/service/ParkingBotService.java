@@ -1,8 +1,7 @@
 package com.mvp.parkingbot.service;
 
-import com.mvp.parkingbot.dto.EnterRequestDTO;
-import com.mvp.parkingbot.dto.MoveRequestDTO;
-import com.mvp.parkingbot.dto.Task;
+import com.mvp.parkingbot.converter.ParkingBotConverter;
+import com.mvp.parkingbot.dto.*;
 import com.mvp.parkingbot.entity.ParkingBot;
 import com.mvp.parkingbot.repository.ParkingBotRepository;
 import com.mvp.utils.TaskQueue;
@@ -13,6 +12,7 @@ import com.mvp.vehicle.repository.ParkingLotSpotRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -178,5 +178,56 @@ public class ParkingBotService {
         }
 
         return task;
+    }
+
+    public ParkingBotDTO updateStatus(StatusRequestDTO statusRequestDTO) {
+        ParkingBot parkingBot = parkingBotRepository.findBySerialNumber(statusRequestDTO.getSerialNumber());
+
+        parkingBot = ParkingBot.builder()
+                .serialNumber(parkingBot.getSerialNumber())
+                .status(statusRequestDTO.getStatus())
+                .build();
+        parkingBotRepository.save(parkingBot);
+
+        return ParkingBotConverter.entityToDto(parkingBot);
+    }
+
+    public List<ParkingBotDTO> updateAllStatus(Integer status) {
+        List<ParkingBot> parkingBotList = parkingBotRepository.findAll();
+
+        for (ParkingBot parkingBot : parkingBotList) {
+            parkingBot = ParkingBot.builder()
+                    .serialNumber(parkingBot.getSerialNumber())
+                    .status(status)
+                    .build();
+            parkingBotRepository.save(parkingBot);
+        }
+
+        return ParkingBotConverter.entityToDtoList(parkingBotList);
+    }
+
+    public ParkingBotDTO createParkingBot(ParkingBotDTO parkingBotDTO) {
+        ParkingBot parkingBot = ParkingBot.builder()
+                .serialNumber(parkingBotDTO.getSerialNumber())
+                .status(0)
+                .build();
+        parkingBotRepository.save(parkingBot);
+
+        return ParkingBotConverter.entityToDto(parkingBot);
+    }
+
+    public boolean deleteParkingBot(Integer serialNumber) {
+        ParkingBot parkingBot = parkingBotRepository.findBySerialNumber(serialNumber);
+        if(parkingBot == null){
+            return false;
+        }
+
+        parkingBotRepository.delete(parkingBot);
+        return true;
+    }
+
+    public List<ParkingBotDTO> getParkingBotList() {
+        List<ParkingBot> parkingBotList = parkingBotRepository.findAll();
+        return ParkingBotConverter.entityToDtoList(parkingBotList);
     }
 }
