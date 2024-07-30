@@ -24,7 +24,7 @@ const Sidebar: React.FC<SidebarProps> = () => {
             <li><a href="/home"><img src={ homeIcon } alt="Home" /></a></li>
             <li><a href="/members"><img src={ membersIcon } alt="Members" /></a></li>
             <li><a href="/chart"><img src={ chartIcon } alt="Chart" /></a></li>
-            <li><a href="/settings"><img src={ settingIcon } alt="Settings" /></a></li>
+            <li><a href="/setting"><img src={ settingIcon } alt="Setting" /></a></li>
           </ul>
         </nav>
         <div className={styles.profile}>

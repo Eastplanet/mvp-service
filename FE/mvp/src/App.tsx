@@ -18,7 +18,10 @@ function App() {
           {isAuthenticated ? (
             <>
               <Route path="/home" element={<Main />} />
-              <Route path="/settings" element={<Set />} />
+              <Route path="/setting" element={<Set />} />
+              {/* <Route path="/member" element={<Member />} />
+              <Route path="/chart" element={<Chart />} /> */}
+              
               {/* 여기에 추가적인 라우트를 설정할 수 있습니다. */}
             </>
           ) : (

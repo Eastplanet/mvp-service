@@ -1,15 +1,15 @@
-.container {
+/* .container {
     display: flex;
     height: 100vh;
     background-color: #f9fafc;
   }
   
   .sidebarWrapper {
-    flex: 0 0 250px; /* 사이드바의 고정 폭 */
+    flex: 0 0 250px; 사이드바의 고정 폭
   }
   
   .page {
-    flex: 1; /* 남은 공간을 채우도록 설정 */
+    flex: 1; 남은 공간을 채우도록 설정
     padding: 20px;
     background-color: skyblue;
     border: 1px solid black;
@@ -37,4 +37,97 @@
   
 
 
+   */
+
+   .container {
+    display: flex;
+    /* height: 100vh; */
+    background-color: #f9fafc;
+  }
   
+  .page {
+    flex: 1; /* 남은 공간을 채우도록 설정 */
+    padding: 20px;
+    background-color: #f9fafc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .roundedBox {
+    background-color: #ffffff;
+    border-radius: 20px;
+    padding-left: 30px;
+    padding-right: 30px;
+    width: 100%;
+    max-width: 1200px; /* 최대 너비 설정 */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column; /* 항목들을 위에서 아래로 배치 */
+  }
+  
+  .section {
+    margin-bottom: 30px;
+    margin-left: 30px;
+    padding-bottom: 20px; /* 하단 패딩 추가 */
+    border-bottom: 1px solid #ccc; /* 하단 테두리 추가 */
+  }
+  
+  .title {
+    font-size: 24px;
+    margin-bottom: 40px;
+    text-align: left;
+    font-weight: bold;
+  }
+  
+ 
+  .rateSetting,
+  .ticketRates {
+    display: flex;
+    /* flex-direction: column; 세로 방향으로 Row를 배치 */
+    justify-content: space-between;
+  }
+
+  .timeSetting {
+    display: flex;
+    justify-content: space-between; /* 주일과 주말을 양쪽으로 배치 */
+    margin-right: 60px;
+  }
+
+  
+  .timeRow,
+  .rateRow,
+  .ticketRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* 수직 가운데 정렬 */
+    margin-bottom: 10px;
+  }
+  
+  .rateInput {
+    margin-left: 10px;
+    margin-right: 10px;
+    padding: 5px;
+  }
+
+  .timeInput{
+    font-size: 25px;
+    margin-left: 20px;
+    margin-right: 20px;
+    padding: 5px;
+  }
+  
+  .nocosttime{
+    font-size: 12px;
+    margin-bottom: 0px;
+    margin-left: 10px;
+  }
+
+
+
+.timeRow p,
+.rateRow span,
+.ticketRow span {
+  font-weight: bold; /* 글자를 볼드체로 설정 */
+  /* font-size: 20px;  */
+}
