@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class MembershipDTO {
 
-    private String licencePlate;
+    private String licensePlate;
     private LocalDateTime endDate;
     private String phoneNumber;
     private String name;
