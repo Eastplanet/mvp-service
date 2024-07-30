@@ -1,6 +1,5 @@
-// src/features/auth/authSlice.ts
-import { createSlice } from '@reduxjs/toolkit';
-// import { login, logout } from './authActions';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import axios from 'axios';
 
 interface AuthState {
   user: any;
@@ -17,6 +16,26 @@ const initialState: AuthState = {
   loading: false,
   error: null,
 };
+
+export const login = createAsyncThunk(
+  'auth/login',
+  async (credentials: { email: string; password: string }) => {
+    // const response = await axios.post('/api/login', credentials);
+    // return response.data;
+    return {
+      user: {
+        id: 1,
+        name: 'John Doe',
+        email: credentials.email,
+      },
+      token: 'dummy-token',
+    };
+  }
+);
+
+export const logout = createAsyncThunk('auth/logout', async () => {
+  await axios.post('/api/logout');
+});
 
 const authSlice = createSlice({
   name: 'auth',
