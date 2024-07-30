@@ -3,11 +3,13 @@ import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import authReducer from '../features/auth/authSlice';
 import mainReducer from '../features/main/mainSlice';
+import membersReducer from '../features/members/membersSlice';
 
 // 각 리듀서 결합
 const rootReducer = combineReducers({
   auth: authReducer,
   main: mainReducer,
+  members: membersReducer,
 });
 
 // persist 설정

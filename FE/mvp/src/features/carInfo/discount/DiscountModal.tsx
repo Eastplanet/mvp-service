@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import styles from './DiscountModal.module.css'; // 동일한 CSS 파일을 사용
-import { CarLog } from '../CarInfoModal'; // CarLog 인터페이스 임포트
+import styles from './DiscountModal.module.css';
+import { CarLog } from '../CarInfoModal';
 
 interface DiscountModalProps {
   carLog: CarLog;
