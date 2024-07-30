@@ -1,30 +1,36 @@
 package com.mvp.common.exception;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
+import com.mvp.common.ResponseDto;
+import com.mvp.parkinglot.dto.ParkingLotDTO;
+import com.mvp.parkinglot.dto.ParkingLotMapDTO;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.NoSuchElementException;
 
 @RestController
-@RequiredArgsConstructor
-@RequestMapping("/test")
+@RequestMapping("/exception")
 public class ExceptionTestController {
-
-
-    @GetMapping("/{var}")
-    public String getProduct(@PathVariable(name = "var")String var){
-        System.out.println("ExceptionTestController.getProduct");
-        if(var.equals("error")){
-            throw new NoSuchElementException();
+    
+    @GetMapping("/no/{msg}")
+    public ResponseEntity<ResponseDto> noSuch(@PathVariable(name = "msg") String msg){
+        if(msg.equals("error")){
+            throw new RestApiException(StatusCode.NO_SUCH_ELEMENT);
         }
+        else{
 
-        return "OK";
-    }
+            ParkingLotMapDTO map = ParkingLotMapDTO.builder()
+                    .mapInfo("맵인포테스트")
+                    .build();
+            ParkingLotDTO test = ParkingLotDTO.builder()
+                    .name("test")
+                    .parkingLotMap(map)
+                    .build();
 
-    @ExceptionHandler(NoSuchElementException.class)
-    public ResponseEntity<String> handleNoSuchElementFoundException(NoSuchElementException exception) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
+
+            return ResponseDto.response(StatusCode.SUCCESS,test);
+        }
     }
 }
