@@ -1,6 +1,7 @@
 package com.mvp.parkingbot.controller;
 
 import com.mvp.parkingbot.dto.EnterRequestDTO;
+import com.mvp.parkingbot.dto.MoveRequestDTO;
 import com.mvp.parkingbot.dto.ParkingBotDTO;
 import com.mvp.parkingbot.dto.Task;
 import com.mvp.parkingbot.service.ParkingBotService;
@@ -47,4 +48,13 @@ public class ParkingBotController {
         }
     }
 
+    @PostMapping("/move")
+    public ResponseEntity<Task> moveRequest(@RequestBody MoveRequestDTO moveRequestDTO) {
+        Task task = parkingBotService.handleMoveRequest(moveRequestDTO);
+        if(task != null){
+            return ResponseEntity.ok(task);
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
+    }
 }

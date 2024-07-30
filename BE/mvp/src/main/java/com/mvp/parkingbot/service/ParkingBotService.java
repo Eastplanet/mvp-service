@@ -1,6 +1,7 @@
 package com.mvp.parkingbot.service;
 
 import com.mvp.parkingbot.dto.EnterRequestDTO;
+import com.mvp.parkingbot.dto.MoveRequestDTO;
 import com.mvp.parkingbot.dto.Task;
 import com.mvp.parkingbot.entity.ParkingBot;
 import com.mvp.parkingbot.repository.ParkingBotRepository;
@@ -126,5 +127,56 @@ public class ParkingBotService {
                 .status(i)
                 .build();
         parkingBotRepository.save(parkingBot);
+    }
+
+    public Task handleMoveRequest(MoveRequestDTO moveRequestDTO) {
+        int start = moveRequestDTO.getStart();
+        int end = moveRequestDTO.getEnd();
+
+        ParkingLotSpot startSpot = parkingLotSpotRepository.findBySpotNumber(start);
+        ParkingLotSpot endSpot = parkingLotSpotRepository.findBySpotNumber(end);
+
+        if(startSpot == null || endSpot == null){
+            return null;
+        }
+        if(startSpot.getParkedVehicle() == null){
+            return null;
+        }
+        if(endSpot.getParkedVehicle() != null){
+            return null;
+        }
+
+        ParkedVehicle vehicle = startSpot.getParkedVehicle();
+        startSpot = ParkingLotSpot.builder()
+                .id(startSpot.getId())
+                .spotNumber(startSpot.getSpotNumber())
+                .parkedVehicle(null)
+                .status(0)
+                .build();
+
+        endSpot = ParkingLotSpot.builder()
+                .id(endSpot.getId())
+                .spotNumber(endSpot.getSpotNumber())
+                .parkedVehicle(vehicle)
+                .status(1)
+                .build();
+
+        parkingLotSpotRepository.save(startSpot);
+        parkingLotSpotRepository.save(endSpot);
+
+        ParkingBot availableBot = parkingBotRepository.findFirstByStatus(0).orElse(null);
+        Task task = Task.builder()
+                .parkingBotSerialNumber(availableBot != null ? availableBot.getSerialNumber() : null)
+                .start(start)
+                .end(end)
+                .build();
+
+        if(availableBot != null){
+            taskQueue.addTask(task);
+        } else{
+            taskQueue.addWaitingTask(task);
+        }
+
+        return task;
     }
 }
