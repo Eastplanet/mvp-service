@@ -16,6 +16,11 @@ import java.util.List;
 public class VehicleController {
     private final VehicleService vehicleService;
 
+    /**
+     * 주차된 차량 정보 조회
+     * @param vehicleId
+     * @return
+     */
     @GetMapping("/{vehicleId}")
     public ResponseEntity<ParkedVehicleDTO> getParkedVehicle(@PathVariable Long vehicleId){
         ParkedVehicleDTO parkedVehicleDTO = vehicleService.getParkedVehicle(vehicleId);
@@ -26,6 +31,10 @@ public class VehicleController {
         }
     }
 
+    /**
+     * 주차된 차량 목록 조회
+     * @return
+     */
     @GetMapping("/list")
     public ResponseEntity<List<ParkedVehicleDTO>> getParkedVehicleList(){
         List<ParkedVehicleDTO> parkedVehicleList = vehicleService.getParkedVehicleList();
@@ -37,6 +46,11 @@ public class VehicleController {
         }
     }
 
+    /**
+     * 주차된 차량 번호로 조회
+     * @param backNum
+     * @return
+     */
     @GetMapping
     public ResponseEntity<List<ParkedVehicleDTO>> getParkedVehicleByBackNum(@RequestParam String backNum){
         List<ParkedVehicleDTO> parkedVehicleList = vehicleService.getParkedVehicleListByBackNum(backNum);

@@ -14,6 +14,11 @@ import java.util.List;
 public class VehicleService {
     private final ParkedVehicleRepository parkedVehicleRepository;
 
+    /**
+     * 주차된 차량 정보 조회
+     * @param vehicleId
+     * @return
+     */
     public ParkedVehicleDTO getParkedVehicle(Long vehicleId) {
         ParkedVehicle parkedVehicle = parkedVehicleRepository.findById(vehicleId).orElse(null);
 
@@ -24,6 +29,10 @@ public class VehicleService {
         }
     }
 
+    /**
+     * 주차된 차량 목록 조회
+     * @return
+     */
     public List<ParkedVehicleDTO> getParkedVehicleList() {
         List<ParkedVehicle> parkedVehicleList = parkedVehicleRepository.findAll();
 
@@ -34,6 +43,11 @@ public class VehicleService {
         }
     }
 
+    /**
+     * 주차된 차량 번호로 조회
+     * @param backNum
+     * @return
+     */
     public List<ParkedVehicleDTO> getParkedVehicleListByBackNum(String backNum) {
         List<ParkedVehicle> parkedVehicleList = parkedVehicleRepository.findByLicensePlateEndingWith(backNum);
 
