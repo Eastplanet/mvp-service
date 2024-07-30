@@ -19,8 +19,8 @@ public class Membership {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "licence_plate", length = 255)
-    private String licencePlate;
+    @Column(name = "license_plate", length = 255)
+    private String licensePlate;
 
     @Column(name = "end_date")
     private LocalDateTime endDate;
