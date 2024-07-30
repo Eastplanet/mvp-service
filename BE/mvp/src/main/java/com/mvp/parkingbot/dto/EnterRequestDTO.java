@@ -7,6 +7,10 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+/**
+ * 입차 요청 DTO
+
+ */
 @Getter
 @Builder
 @NoArgsConstructor

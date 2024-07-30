@@ -6,6 +6,9 @@ import org.springframework.stereotype.Component;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+/**
+ * 작업 큐
+ */
 @Component
 public class TaskQueue {
     private final Queue<Task> taskQueue = new ConcurrentLinkedQueue<>();

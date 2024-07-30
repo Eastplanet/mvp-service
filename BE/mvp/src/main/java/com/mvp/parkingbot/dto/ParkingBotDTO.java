@@ -5,6 +5,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/**
+ * 주차봇 DTO
+
+ */
 @Getter
 @Builder
 @NoArgsConstructor

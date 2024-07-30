@@ -30,6 +30,7 @@ public class ParkingBotService {
      * @return
      */
     public Task handleEnterRequest(EnterRequestDTO enterRequestDTO) {
+        // 주차공간 확인
         Optional<ParkingLotSpot> availableSpot = parkingLotSpotRepository.findFirstByStatus(0);
 
         if (availableSpot.isEmpty()) {
@@ -54,6 +55,7 @@ public class ParkingBotService {
                 .build();
         parkingLotSpotRepository.save(spot);
 
+        // 주차봇 할당
         Optional<ParkingBot> availableBot = parkingBotRepository.findFirstByStatus(0);
         Task task;
         if (availableBot.isEmpty()) {
@@ -75,12 +77,19 @@ public class ParkingBotService {
         return task;
     }
 
+    /**
+     * 출차 처리
+     * @param licensePlate
+     * @return
+     */
     public boolean handleExitRequest(String licensePlate) {
+        // 차량 정보 확인
         ParkedVehicle parkedVehicle = parkedVehicleRepository.findByLicensePlate(licensePlate);
         if(parkedVehicle == null){
             return false;
         }
 
+        // 주차공간 상태변화
         ParkingLotSpot spot = parkingLotSpotRepository.findByParkedVehicleId(parkedVehicle.getId());
         if(spot != null){
             spot = ParkingLotSpot.builder()
@@ -92,10 +101,12 @@ public class ParkingBotService {
             parkingLotSpotRepository.save(spot);
         }
 
+        // 차량 정보 삭제
         parkedVehicleRepository.delete(parkedVehicle);
-
+        // 주차봇 할당
         Optional<ParkingBot> availableBot = parkingBotRepository.findFirstByStatus(0);
 
+        // 작업 추가
         Task task;
         if (availableBot.isEmpty()) {
             task = Task.builder()
@@ -116,19 +127,16 @@ public class ParkingBotService {
         return true;
     }
 
+    // 주차봇에게 할당된 작업을 가져옴
     public Task getTaskfromQueue() {
         return taskQueue.getNextTask();
     }
 
-    public void updateParingBotStatus(Integer parkingBotSerialNumber, int i) {
-        ParkingBot parkingBot = parkingBotRepository.findBySerialNumber(parkingBotSerialNumber);
-        parkingBot = ParkingBot.builder()
-                .serialNumber(parkingBot.getSerialNumber())
-                .status(i)
-                .build();
-        parkingBotRepository.save(parkingBot);
-    }
-
+    /**
+     * 임의 이동
+     * @param moveRequestDTO
+     * @return
+     */
     public Task handleMoveRequest(MoveRequestDTO moveRequestDTO) {
         int start = moveRequestDTO.getStart();
         int end = moveRequestDTO.getEnd();
@@ -136,6 +144,7 @@ public class ParkingBotService {
         ParkingLotSpot startSpot = parkingLotSpotRepository.findBySpotNumber(start);
         ParkingLotSpot endSpot = parkingLotSpotRepository.findBySpotNumber(end);
 
+        // 주차공간 확인
         if(startSpot == null || endSpot == null){
             return null;
         }
@@ -146,6 +155,7 @@ public class ParkingBotService {
             return null;
         }
 
+        // 주차공간 상태변화
         ParkedVehicle vehicle = startSpot.getParkedVehicle();
         startSpot = ParkingLotSpot.builder()
                 .id(startSpot.getId())
@@ -164,6 +174,7 @@ public class ParkingBotService {
         parkingLotSpotRepository.save(startSpot);
         parkingLotSpotRepository.save(endSpot);
 
+        // 주차봇 할당
         ParkingBot availableBot = parkingBotRepository.findFirstByStatus(0).orElse(null);
         Task task = Task.builder()
                 .parkingBotSerialNumber(availableBot != null ? availableBot.getSerialNumber() : null)
@@ -171,6 +182,7 @@ public class ParkingBotService {
                 .end(end)
                 .build();
 
+        // 작업 추가
         if(availableBot != null){
             taskQueue.addTask(task);
         } else{
@@ -180,18 +192,28 @@ public class ParkingBotService {
         return task;
     }
 
-    public ParkingBotDTO updateStatus(StatusRequestDTO statusRequestDTO) {
-        ParkingBot parkingBot = parkingBotRepository.findBySerialNumber(statusRequestDTO.getSerialNumber());
+    /**
+     * 주차봇 상태 변경
+     * @param serialNumber, status
+     * @return
+     */
+    public ParkingBotDTO updateStatus(Integer serialNumber, Integer status) {
+        ParkingBot parkingBot = parkingBotRepository.findBySerialNumber(serialNumber);
 
         parkingBot = ParkingBot.builder()
-                .serialNumber(parkingBot.getSerialNumber())
-                .status(statusRequestDTO.getStatus())
+                .serialNumber(serialNumber)
+                .status(status)
                 .build();
         parkingBotRepository.save(parkingBot);
 
         return ParkingBotConverter.entityToDto(parkingBot);
     }
 
+    /**
+     * 주차봇 전체 상태 변경
+     * @param status
+     * @return
+     */
     public List<ParkingBotDTO> updateAllStatus(Integer status) {
         List<ParkingBot> parkingBotList = parkingBotRepository.findAll();
 
@@ -206,6 +228,11 @@ public class ParkingBotService {
         return ParkingBotConverter.entityToDtoList(parkingBotList);
     }
 
+    /**
+     * 주차봇 생성
+     * @param parkingBotDTO
+     * @return
+     */
     public ParkingBotDTO createParkingBot(ParkingBotDTO parkingBotDTO) {
         ParkingBot parkingBot = ParkingBot.builder()
                 .serialNumber(parkingBotDTO.getSerialNumber())
@@ -216,6 +243,11 @@ public class ParkingBotService {
         return ParkingBotConverter.entityToDto(parkingBot);
     }
 
+    /**
+     * 주차봇 삭제
+     * @param serialNumber
+     * @return
+     */
     public boolean deleteParkingBot(Integer serialNumber) {
         ParkingBot parkingBot = parkingBotRepository.findBySerialNumber(serialNumber);
         if(parkingBot == null){
@@ -226,6 +258,10 @@ public class ParkingBotService {
         return true;
     }
 
+    /**
+     * 주차봇 리스트 조회
+     * @return
+     */
     public List<ParkingBotDTO> getParkingBotList() {
         List<ParkingBot> parkingBotList = parkingBotRepository.findAll();
         return ParkingBotConverter.entityToDtoList(parkingBotList);
