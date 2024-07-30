@@ -30,3 +30,20 @@ def handle_enter(image_path, license_plate, entrance_time):
 
 def handle_exit():
     print('출차 명령 전송 완료')
+
+# 차량 정보 가져오기
+def handle_get_vehicles(license_plate):
+    vehicles = [
+        {
+            'image_path': r'parking_kiosk\gui\res\test-image1.png',
+            'plate_number': '11가 1111',
+            'duration': '43분'
+        },
+        {
+            'image_path': r'parking_kiosk\gui\res\test-image2.png',
+            'plate_number': '12가 1111',
+            'duration': '1시간 7분'
+        },
+        # 다른 차량 정보를 추가하세요.
+    ]
+    return vehicles

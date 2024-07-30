@@ -1,10 +1,10 @@
 import requests
 
-image_path = "./tests/test-resources/image/test-vehicle-image.jpg"
+image_path = "parking_kiosk\gui\\res\\test.jpg"
 
 # TODO: 사진 찍어서 경로 전달
-def getVehicleImage():
+def get_vehicle_image():
     # 테스트 코드
     return image_path
 
-print(getVehicleImage())
+print(get_vehicle_image())
