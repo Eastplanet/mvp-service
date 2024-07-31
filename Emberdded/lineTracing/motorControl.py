@@ -4,8 +4,8 @@ from adafruit_servokit import ServoKit
 import board
 import busio
 
-initServoAngle = 95
-steerServoAngle = 45
+initServoAngle = 122
+steerServoAngle = 55
 leftServoMaxAngle = initServoAngle - steerServoAngle
 rightServoMaxAngle = initServoAngle + steerServoAngle
 
