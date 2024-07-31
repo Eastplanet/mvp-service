@@ -4,7 +4,7 @@ import lombok.*;
 
 @NoArgsConstructor
 @Builder
-@Getter
+@Data
 @AllArgsConstructor
 public class ManagerDTO {
     private String name;

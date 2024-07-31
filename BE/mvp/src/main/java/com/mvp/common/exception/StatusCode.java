@@ -18,7 +18,9 @@ public enum StatusCode {
     NOT_FOUND(HttpStatus.NOT_FOUND, "Not found."),
     METHOD_NOT_ALLOWED(HttpStatus.METHOD_NOT_ALLOWED, "허용되지 않은 Request Method 호출입니다."),
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "서버 오류"),
-    NO_SUCH_ELEMENT(HttpStatus.BAD_REQUEST,"존재하지 않는 요소입니다.");
+    NO_SUCH_ELEMENT(HttpStatus.BAD_REQUEST,"존재하지 않는 요소입니다."),
+    DUPLICATE_EMAIL(HttpStatus.BAD_REQUEST, "중복된 이메일 입니다."),
+    INVALID_EMAIL_OR_PASSWORD(HttpStatus.BAD_REQUEST,"이메일 혹은 비밀번호가 일치하지 않습니다");
 
     private final HttpStatus httpStatus;
     private final String message;
