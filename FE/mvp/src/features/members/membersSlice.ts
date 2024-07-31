@@ -39,7 +39,7 @@ export const fetchMembers = createAsyncThunk<Member[]>('members/fetchMembers', a
     { id: 3, name: '손우혁', car: '12다 3457', phone: '010-0000-0000', join_date: new Date('2024-05-31'), secession_date: new Date('2024-12-31') },
     { id: 4, name: '손원륜', car: '98라 9653', phone: '010-0000-0000', join_date: new Date('2024-03-31'), secession_date: new Date('2024-12-31') },
     { id: 5, name: '오동규', car: '77마 7777', phone: '010-0000-0000', join_date: new Date('2024-07-04'), secession_date: new Date('2024-07-31') },
-    { id: 6, name: '오동규', car: '77마 7777', phone: '010-0000-0000', join_date: new Date('2024-01-01'), secession_date: new Date('2024-12-31') }
+    { id: 6, name: '오동규', car: '77마 7777', phone: '010-0000-0000', join_date: new Date('2024-01-01'), secession_date: new Date('2024-12-31') },
   ];
 });
 
