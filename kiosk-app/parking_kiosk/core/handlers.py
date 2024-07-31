@@ -2,10 +2,11 @@
 
 import base64
 import json
+import os
 import requests
 
 def handle_enter(image_path, license_plate, entrance_time):
-    url = "http://localhost:8080/test/enter"  # 서버 엔드포인트 URL을 입력하세요
+    url = "http://192.168.30.151:8080/test/enter"  # 서버 엔드포인트 URL을 입력하세요
 
     # 이미지 파일을 읽어서 Base64로 인코딩
     with open(image_path, 'rb') as image_file:
@@ -27,6 +28,7 @@ def handle_enter(image_path, license_plate, entrance_time):
     
     print(f"Status Code: {response.status_code}")
     print(f"Response: {response.text}")
+    os.remove('./result/temp_image.jpeg')
 
 def handle_exit():
     print('출차 명령 전송 완료')

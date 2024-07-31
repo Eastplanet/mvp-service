@@ -37,10 +37,9 @@ class EnterNumberPlate(QWidget):
         layout1.setSpacing(5)
         layout2.setSpacing(5)
 
-        dummy_data = "11가-1111"
+        dummy_data = "12가3456"
         for i, char in enumerate(dummy_data):
-            if i != 3:
-                self.car_number_labels[i].setText(char)
+            self.car_number_labels[i].setText(char)
 
     def label_clicked(self):
         label = self.sender()
@@ -69,4 +68,14 @@ class EnterNumberPlate(QWidget):
         
     def get_all_label_text(self):
         return ''.join(label.text() for label in self.car_number_labels)
+    
+    def set_all_label_text(self, licensePlate):
+        data = licensePlate
+        
+        if len(licensePlate) > 8:
+            data = ""
+            data += " " * 8
+        
+        for i, char in enumerate(data):
+            self.car_number_labels[i].setText(char)
     

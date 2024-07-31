@@ -12,7 +12,7 @@ from gui.pages.exit_page import ExitPage
 from gui.pages.entry_page import EntryPage
 from gui.pages.vehicle_selection_page import VehicleSelectionPage
 from core.handlers import handle_enter, handle_exit, handle_get_vehicles
-from core.camera import get_vehicle_image
+from core.camera import Camera
 
 class MainWindow(QMainWindow):
     def __init__(self, mqtt_client):
@@ -20,6 +20,7 @@ class MainWindow(QMainWindow):
         self.setWindowTitle("주차장 키오스크")
         self.setGeometry(100, 100, 400, 600)
         self.setStyleSheet("background-color: #2E3348;")
+        self.camera = Camera()
 
         # 중앙 위젯 설정
         central_widget = QWidget(self)
@@ -47,6 +48,7 @@ class MainWindow(QMainWindow):
 
     # 입차 페이지
     def show_entry_page(self):
+        self.entry_page.number_plate_labels.set_all_label_text(self.camera.ocr_reader())
         self.stacked_widget.setCurrentWidget(self.entry_page)
 
     # 출차 페이지
@@ -56,7 +58,7 @@ class MainWindow(QMainWindow):
     # 입차 처리
     def confirm_enter(self, license_plate):
         self.show_gif_widget()
-        handle_enter(get_vehicle_image(), license_plate, datetime.datetime.now())
+        handle_enter("./result/temp_image.jpeg", license_plate, datetime.datetime.now())
        
     def confirm_exit(self, license_plate):
         pass
@@ -67,7 +69,7 @@ class MainWindow(QMainWindow):
         self.stacked_widget.setCurrentWidget(settlement_page)
         
     def show_gif_widget(self):
-        gif_widget = GifWidget("parking_kiosk\gui\\res\car-anime.gif", duration=3000, parent=self)
+        gif_widget = GifWidget("parking_kiosk/gui/res/car-anime.gif", duration=3000, parent=self)
         gif_widget.move(self.rect().center() - gif_widget.rect().center())
         gif_widget.start()
         QTimer.singleShot(3000, self.return_to_main)

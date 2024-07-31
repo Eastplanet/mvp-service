@@ -4,6 +4,7 @@ from gui.components.top_label import TopLabel
 from gui.components.enter_number_plate import EnterNumberPlate
 from gui.components.keypad import Keypad
 from gui.components.park_button import ParkButton
+from core.camera import Camera
 
 # 입차 페이지
 class EntryPage(QWidget):
@@ -11,7 +12,8 @@ class EntryPage(QWidget):
         # 초기화
         super(EntryPage, self).__init__(parent)
         self.main_window = main_window
-
+        self.camera = Camera()
+        
         # 레이아웃 설정
         layout = QVBoxLayout()
         self.setLayout(layout)
