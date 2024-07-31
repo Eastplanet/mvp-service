@@ -5,15 +5,18 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 /**
- * 주차봇 DTO
+ * 입차 요청 DTO
 
  */
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ParkingBotDTO {
-    private int serialNumber;
-    private int status;
+public class EnterRequestDTO {
+    private String licensePlate;
+    private LocalDateTime entranceTime;
+    private byte[] image;
 }

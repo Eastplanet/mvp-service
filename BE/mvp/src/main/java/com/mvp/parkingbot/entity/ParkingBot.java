@@ -13,7 +13,6 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class ParkingBot {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

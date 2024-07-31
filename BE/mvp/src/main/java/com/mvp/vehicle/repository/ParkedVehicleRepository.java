@@ -4,4 +4,5 @@ import com.mvp.vehicle.entity.ParkedVehicle;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ParkedVehicleRepository extends JpaRepository<ParkedVehicle, Long> {
+    ParkedVehicle findByLicensePlate(String licensePlate);
 }
