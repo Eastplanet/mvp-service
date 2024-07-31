@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom'; // Link 컴포넌트를 임포트합니다.
+// import { Link } from 'react-router-dom'; // Link 컴포넌트를 임포트합니다.
 import styles from './Sidebar.module.css';
 import logo2 from '../../assets/images/logos/logo2.png';
 import homeIcon from '../../assets/images/icons/home.png';
