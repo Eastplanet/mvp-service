@@ -42,9 +42,11 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     loginSuccess: (state) => {
+      state.user = {name: 'John Doe', email: 'dummy'}
       state.isAuthenticated = true;
     },
     logoutSuccess: (state) => {
+      state.user = {name: null, email: null}
       state.isAuthenticated = false;
     },
   },
