@@ -1,29 +1,37 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '../../store/store';
-import { fetchMembers, updateMember, deleteMembersFromServer } from './membersSlice';
+import { fetchMembers, updateMember, deleteMembersFromServer, deleteMember } from './membersSlice';
 import styles from './Members.module.css';
 import Sidebar from '../sidebar/Sidebar';
+import AddMembersModal from './add/AddMembersModal';
 
 interface Member {
   id: number;
   name: string;
   car: string;
   phone: string;
-  join_date: string;
-  secession_date?: string;
+  join_date: Date;
+  secession_date?: Date;
 }
 
 const Members: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const members = useSelector((state: RootState) => state.members.members);
-  const [selectedIds, setSelectedIds] = useState<number[]>([]); // 선택된 항목의 ID를 저장
+  const [selectedIds, setSelectedIds] = useState<number[]>([]);
   const [editingMemberId, setEditingMemberId] = useState<number | null>(null);
   const [editingData, setEditingData] = useState<Member | null>(null);
+  const [allSelected, setAllSelected] = useState<boolean>(false);
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     dispatch(fetchMembers());
   }, [dispatch]);
+
+  useEffect(() => {
+    setAllSelected(members.length > 0 && selectedIds.length === members.length);
+  }, [selectedIds, members]);
 
   const handleSelect = (id: number) => {
     setSelectedIds(prev => 
@@ -31,10 +39,30 @@ const Members: React.FC = () => {
     );
   };
 
+  const parseDate = (dateStr: string) => {
+    const date = new Date(dateStr);
+    return isNaN(date.getTime()) ? new Date() : date;
+  };
+
+  const formatDate = (date: Date) => {
+    return date.toISOString().split('T')[0];
+  };
+
+  const handleSelectAll = () => {
+    if (allSelected) {
+      setSelectedIds([]);
+    } else {
+      setSelectedIds(members.map(member => member.id));
+    }
+    setAllSelected(!allSelected);
+  };
+
   const handleDelete = () => {
     if (selectedIds.length > 0) {
-      dispatch(deleteMembersFromServer(selectedIds));
+      // dispatch(deleteMembersFromServer(selectedIds));
+      dispatch(deleteMember(selectedIds));
       setSelectedIds([]);
+      setAllSelected(false);
     }
   };
 
@@ -43,19 +71,47 @@ const Members: React.FC = () => {
     setEditingData({ ...member });
   };
 
-  const handleSave = async (id: number) => {
+  const handleSave = async () => {
     if (editingData) {
+      const { name, car, secession_date, join_date } = editingData;
+      if (!name || !car || !secession_date) {
+        setError('이름, 차량 번호, 만료 기간은 필수 항목입니다.');
+        return;
+      }
+  
       try {
+        // Date 타입으로 처리
         const dataToSave = {
           ...editingData,
-          secession_date: editingData.secession_date || ''
+          secession_date: secession_date instanceof Date ? secession_date : parseDate(secession_date as string),
+          join_date: join_date instanceof Date ? join_date : parseDate(join_date as string),
         };
+  
         await dispatch(updateMember(dataToSave));
         setEditingMemberId(null);
         setEditingData(null);
+        setError(null);
       } catch (error) {
         console.error('업데이트 중 오류 발생:', error);
       }
+    }
+  };
+
+  const handleAddMember = () => {
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>, field: keyof Member) => {
+    if (editingData) {
+      const value = (field === 'join_date' || field === 'secession_date')
+        ? new Date(e.target.value)
+        : e.target.value;
+        
+      setEditingData({ ...editingData, [field]: value });
     }
   };
 
@@ -123,7 +179,7 @@ const Members: React.FC = () => {
           <table>
             <thead>
               <tr>
-                <th><input type="checkbox" onChange={() => setSelectedIds(members.map(member => member.id))} /></th>
+                <th><input type="checkbox" checked={allSelected} onChange={handleSelectAll} /></th>
                 <th>Name</th>
                 <th>Car</th>
                 <th>Phone</th>
@@ -135,39 +191,57 @@ const Members: React.FC = () => {
             <tbody>
               {members.map((member) => (
                 <tr key={member.id}>
-                  <td><input type="checkbox" checked={selectedIds.includes(member.id)} onChange={() => handleSelect(member.id)} /></td>
+                  <td>
+                    <input type="checkbox" checked={selectedIds.includes(member.id)} onChange={() => handleSelect(member.id)} />
+                  </td>
                   <td>
                     {editingMemberId === member.id ? (
-                      <input type="text" value={editingData?.name} onChange={(e) => setEditingData({...editingData!, id: editingMemberId!, name: editingData?.name || '', car: editingData?.car || '', phone: editingData?.phone || '', secession_date: editingData?.secession_date || ''})} />
+                      <input 
+                        type="text" 
+                        value={editingData?.name || ''} 
+                        onChange={(e) => handleInputChange(e, 'name')} 
+                      />
                     ) : (
                       member.name
                     )}
                   </td>
                   <td>
                     {editingMemberId === member.id ? (
-                      <input type="text" value={editingData?.car} onChange={(e) => setEditingData({...editingData!, id: editingMemberId!, name: editingData?.name || '', car: editingData?.car || '', phone: editingData?.phone || '', secession_date: editingData?.secession_date || ''})} />
+                      <input 
+                        type="text" 
+                        value={editingData?.car || ''} 
+                        onChange={(e) => handleInputChange(e, 'car')} 
+                      />
                     ) : (
                       member.car
                     )}
                   </td>
                   <td>
                     {editingMemberId === member.id ? (
-                      <input type="text" value={editingData?.phone} onChange={(e) => setEditingData({...editingData!, id: editingMemberId!, name: editingData?.name || '', car: editingData?.car || '', phone: editingData?.phone || '', secession_date: editingData?.secession_date || ''})} />
+                      <input 
+                        type="text" 
+                        value={editingData?.phone || ''} 
+                        onChange={(e) => handleInputChange(e, 'phone')} 
+                      />
                     ) : (
                       member.phone
                     )}
                   </td>
-                  <td>{member.join_date}</td>
+                  <td>{formatDate(member.join_date)}</td>
                   <td>
                     {editingMemberId === member.id ? (
-                      <input type="text" value={editingData?.secession_date || ''} onChange={(e) => setEditingData({...editingData!, id: editingMemberId!, name: editingData?.name || '', car: editingData?.car || '', phone: editingData?.phone || '', secession_date: editingData?.secession_date || ''})} />
+                      <input 
+                        type="date" 
+                        value={editingData?.secession_date ? editingData.secession_date.toISOString().split('T')[0] : ''} 
+                        onChange={(e) => handleInputChange(e, 'secession_date')} 
+                      />
                     ) : (
-                      member.secession_date || 'N/A'
+                      member.secession_date ? formatDate(member.secession_date) : 'N/A'
                     )}
                   </td>
                   <td>
                     {editingMemberId === member.id ? (
-                      <button onClick={() => handleSave(member.id)}>Save</button>
+                      <button onClick={handleSave}>Save</button>
                     ) : (
                       <button onClick={() => handleEdit(member)}>Edit</button>
                     )}
@@ -176,12 +250,14 @@ const Members: React.FC = () => {
               ))}
             </tbody>
           </table>
+          {error && <div className={styles.error}>{error}</div>}
         </div>
         <div className={styles.actions}>
-          <button className={styles.addButton}>추가</button>
+          <button className={styles.addButton} onClick={handleAddMember}>추가</button>
           <button className={styles.deleteButton} onClick={handleDelete}>삭제</button>
         </div>
       </div>
+      {showModal && <AddMembersModal onClose={handleCloseModal} />}
     </div>
   );
 };

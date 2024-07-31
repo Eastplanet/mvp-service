@@ -114,7 +114,17 @@ const CarInfoModal: React.FC<CarInfoModalProps> = ({ carLog, onClose }) => {
             <div className={styles.buttonContainer}>
               <button className={styles.modalButton} style={{ backgroundColor: '#4CAF50' }} onClick={() => setShowExitModal(true)}>출차</button>
               <button className={styles.modalButton} style={{ backgroundColor: '#2196F3' }} onClick={() => setShowMoveModal(true)}>이동</button>
-              <button className={styles.modalButton} style={{ backgroundColor: '#FF9800' }} onClick={() => setShowDiscountModal(true)}>할인</button>
+              <button
+                className={styles.modalButton}
+                style={{
+                  backgroundColor: carLog.carState === '출차 완료' ? '#d3d3d3' : '#FF9800',
+                  cursor: carLog.carState === '출차 완료' ? 'not-allowed' : 'pointer'
+                }}
+                onClick={() => setShowDiscountModal(true)}
+                disabled={carLog.carState === '출차 완료'}
+              >
+                할인
+              </button>
             </div>
           </div>
         </div>

@@ -46,13 +46,16 @@ const DiscountModal: React.FC<DiscountModalProps> = ({ carLog, onClose, onApplyD
                 <div className={styles.detailRow}>
                   <div className={styles.dataName}>할인 요금</div>
                   <div className={styles.dataValue}>
-                    <input
-                      type="number"
-                      value={discountAmount}
-                      onChange={(e) => handleDiscount(Number(e.target.value))}
-                      className={styles.input}
-                      placeholder="0"
-                    />
+                  <input
+                    type="number"
+                    value={discountAmount}
+                    onChange={(e) => handleDiscount(Math.max(0, Math.min(Number(e.target.value), carLog.fee)))}
+                    className={styles.input}
+                    placeholder="0"
+                    min="0"
+                    max={carLog.fee}
+                    style={{ textAlign: 'right' }}
+                  />
                     원
                   </div>
                 </div>

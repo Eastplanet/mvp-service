@@ -7,8 +7,8 @@ interface Member {
   name: string;
   car: string;
   phone: string;
-  join_date: string;
-  secession_date: string;
+  join_date: Date;
+  secession_date: Date;
 }
 
 interface MembersState {
@@ -34,12 +34,12 @@ export const fetchMembers = createAsyncThunk<Member[]>('members/fetchMembers', a
   //   throw new Error('Failed to fetch members');
   // }
   return [
-    { id: 1, name: '김동현', car: '123가 4568', phone: '010-0000-0000', join_date: '2024-01-31', secession_date: '2024-12-31' },
-    { id: 2, name: '김세진', car: '11나 2233', phone: '010-0000-0000', join_date: '2024-07-20', secession_date: '2024-12-31' },
-    { id: 3, name: '손우혁', car: '12다 3457', phone: '010-0000-0000', join_date: '2024-05-31', secession_date: '2024-12-31' },
-    { id: 4, name: '손원륜', car: '98라 9653', phone: '010-0000-0000', join_date: '2024-03-31', secession_date: '2024-12-31' },
-    { id: 5, name: '오동규', car: '77마 7777', phone: '010-0000-0000', join_date: '2024-07-04', secession_date: '2024-07-31' },
-    { id: 6, name: '오동규', car: '77마 7777', phone: '010-0000-0000', join_date: '2024-01-01', secession_date: '2024-12-31' }
+    { id: 1, name: '김동현', car: '123가 4568', phone: '010-0000-0000', join_date: new Date('2024-01-31'), secession_date: new Date('2024-12-31') },
+    { id: 2, name: '김세진', car: '11나 2233', phone: '010-0000-0000', join_date: new Date('2024-07-20'), secession_date: new Date('2024-12-31') },
+    { id: 3, name: '손우혁', car: '12다 3457', phone: '010-0000-0000', join_date: new Date('2024-05-31'), secession_date: new Date('2024-12-31') },
+    { id: 4, name: '손원륜', car: '98라 9653', phone: '010-0000-0000', join_date: new Date('2024-03-31'), secession_date: new Date('2024-12-31') },
+    { id: 5, name: '오동규', car: '77마 7777', phone: '010-0000-0000', join_date: new Date('2024-07-04'), secession_date: new Date('2024-07-31') },
+    { id: 6, name: '오동규', car: '77마 7777', phone: '010-0000-0000', join_date: new Date('2024-01-01'), secession_date: new Date('2024-12-31') }
   ];
 });
 
@@ -79,6 +79,9 @@ const membersSlice = createSlice({
       .addCase(fetchMembers.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.error.message || 'Failed to fetch members';
+      })
+      .addCase(deleteMembersFromServer.fulfilled, (state, action) => {
+        state.members = state.members.filter(member => !action.meta.arg.includes(member.id));
       });
   }
 });

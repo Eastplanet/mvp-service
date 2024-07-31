@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '../../store/store'; // 올바른 경로 확인
-import { fetchParkingData, fetchSearchData, setSearchTerm, setStartDate, setEndDate } from './mainSlice';
+import { fetchParkingData, fetchSearchData, setSearchTerm, setStartDate, setEndDate, fetchCurrentParkedCars } from './mainSlice';
 import Sidebar from '../sidebar/Sidebar';
 import styles from './Main.module.css';
 import searchIcon from '../../assets/images/icons/searchIcon.png'
@@ -19,12 +19,14 @@ type CarLog = {
 
 const Main: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
-  const { todayIn, todayOut, todayIncome, searchTerm, startDate, endDate, searchData } = useSelector((state: RootState) => state.main);
+  const { todayIn, todayOut, todayIncome, searchTerm, startDate, endDate, searchData, currentParkedCars } = useSelector((state: RootState) => state.main);
+
 
   const [selectedCarLog, setSelectedCarLog] = useState<CarLog | null>(null);
 
   useEffect(() => {
     dispatch(fetchParkingData());
+    dispatch(fetchCurrentParkedCars());
   }, [dispatch]);
 
   const handleSearch = () => {
@@ -116,10 +118,10 @@ const Main: React.FC = () => {
               />
             </div>
           </div>
-          {searchData.length > 0 && (
+          {(searchData.length > 0 ? searchData : currentParkedCars).length > 0 && (
             <div className={styles.searchData}>
               <ul>
-              {searchData.map((carLog: CarLog, index: number) => (
+              {(searchData.length > 0 ? searchData : currentParkedCars).map((carLog: CarLog, index: number) => (
                 <li key={index} onClick={() => handleCarLogClick(carLog)}>
                   <div className={styles.leftData}>
                     <div className={styles.carNumber}>{carLog.carNumber}</div>
