@@ -15,6 +15,7 @@ public class ParkingLotConverter {
 
     public static ParkingLotDTO entityToDto(ParkingLot parkingLot) {
         return ParkingLotDTO.builder()
+                .id(parkingLot.getId())
                 .name(parkingLot.getName())
                 .address(parkingLot.getAddress())
                 .parkingLotSetting(ParkingLotSettingConverter.entityToDto(parkingLot.getParkingLotSetting()))
@@ -24,6 +25,7 @@ public class ParkingLotConverter {
 
     public static ParkingLot dtoDoEntity(ParkingLotDTO parkingLotDTO) {
         return ParkingLot.builder()
+                .id(parkingLotDTO.getId())
                 .name(parkingLotDTO.getName())
                 .address(parkingLotDTO.getAddress())
                 .parkingLotSetting(ParkingLotSettingConverter.dtoToEntity(parkingLotDTO.getParkingLotSetting()))
