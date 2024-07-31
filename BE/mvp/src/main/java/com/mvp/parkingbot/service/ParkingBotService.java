@@ -19,6 +19,12 @@ import java.util.Optional;
 @AllArgsConstructor
 // Parkingbotservice
 public class ParkingBotService {
+    // TODO : enum으로 변경
+    private final int BOT_IDLE = 0;
+    private final int BOT_BUSY = 1;
+    private final int LOT_EMPTY = 0;
+    private final int LOT_OCCUPIED = 1;
+
     private final ParkingLotSpotRepository parkingLotSpotRepository;
     private final ParkingBotRepository parkingBotRepository;
     private final ParkedVehicleRepository parkedVehicleRepository;
@@ -31,7 +37,7 @@ public class ParkingBotService {
      */
     public Task handleEnterRequest(EnterRequestDTO enterRequestDTO) {
         // 주차공간 확인
-        Optional<ParkingLotSpot> availableSpot = parkingLotSpotRepository.findFirstByStatus(0);
+        Optional<ParkingLotSpot> availableSpot = parkingLotSpotRepository.findFirstByStatus(LOT_EMPTY);
 
         if (availableSpot.isEmpty()) {
             throw new RuntimeException("주차장에 공간이 없습니다!!");
@@ -51,12 +57,12 @@ public class ParkingBotService {
                 .id(spot.getId())
                 .spotNumber(spot.getSpotNumber())
                 .parkedVehicle(vehicle)
-                .status(1)
+                .status(LOT_OCCUPIED)
                 .build();
         parkingLotSpotRepository.save(spot);
 
         // 주차봇 할당
-        Optional<ParkingBot> availableBot = parkingBotRepository.findFirstByStatus(0);
+        Optional<ParkingBot> availableBot = parkingBotRepository.findFirstByStatus(BOT_IDLE);
         Task task;
         if (availableBot.isEmpty()) {
             task = Task.builder()
@@ -96,7 +102,7 @@ public class ParkingBotService {
                     .id(spot.getId())
                     .spotNumber(spot.getSpotNumber())
                     .parkedVehicle(null)
-                    .status(0)
+                    .status(LOT_EMPTY)
                     .build();
             parkingLotSpotRepository.save(spot);
         }
@@ -104,7 +110,7 @@ public class ParkingBotService {
         // 차량 정보 삭제
         parkedVehicleRepository.delete(parkedVehicle);
         // 주차봇 할당
-        Optional<ParkingBot> availableBot = parkingBotRepository.findFirstByStatus(0);
+        Optional<ParkingBot> availableBot = parkingBotRepository.findFirstByStatus(BOT_IDLE);
 
         // 작업 추가
         Task task;
@@ -161,21 +167,21 @@ public class ParkingBotService {
                 .id(startSpot.getId())
                 .spotNumber(startSpot.getSpotNumber())
                 .parkedVehicle(null)
-                .status(0)
+                .status(LOT_EMPTY)
                 .build();
 
         endSpot = ParkingLotSpot.builder()
                 .id(endSpot.getId())
                 .spotNumber(endSpot.getSpotNumber())
                 .parkedVehicle(vehicle)
-                .status(1)
+                .status(LOT_EMPTY)
                 .build();
 
         parkingLotSpotRepository.save(startSpot);
         parkingLotSpotRepository.save(endSpot);
 
         // 주차봇 할당
-        ParkingBot availableBot = parkingBotRepository.findFirstByStatus(0).orElse(null);
+        ParkingBot availableBot = parkingBotRepository.findFirstByStatus(BOT_IDLE).orElse(null);
         Task task = Task.builder()
                 .parkingBotSerialNumber(availableBot != null ? availableBot.getSerialNumber() : null)
                 .start(start)
@@ -236,7 +242,7 @@ public class ParkingBotService {
     public ParkingBotDTO createParkingBot(ParkingBotDTO parkingBotDTO) {
         ParkingBot parkingBot = ParkingBot.builder()
                 .serialNumber(parkingBotDTO.getSerialNumber())
-                .status(0)
+                .status(BOT_IDLE)
                 .build();
         parkingBotRepository.save(parkingBot);
 

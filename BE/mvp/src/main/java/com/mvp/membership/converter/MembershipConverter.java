@@ -7,7 +7,7 @@ import java.util.List;
 
 public class MembershipConverter {
 
-    public MembershipDTO entityToDto(Membership membership) {
+    public static MembershipDTO entityToDto(Membership membership) {
         return MembershipDTO.builder()
                 .licensePlate(membership.getLicensePlate())
                 .endDate(membership.getEndDate())
@@ -16,7 +16,7 @@ public class MembershipConverter {
                 .build();
     }
 
-    public Membership dtoToEntity(MembershipDTO membershipDTO) {
+    public static Membership dtoToEntity(MembershipDTO membershipDTO) {
         return Membership.builder()
                 .licensePlate(membershipDTO.getLicensePlate())
                 .endDate(membershipDTO.getEndDate())
@@ -25,9 +25,9 @@ public class MembershipConverter {
                 .build();
     }
 
-    public List<MembershipDTO> entityToDtoList(List<Membership> membershipList) {
+    public static List<MembershipDTO> entityToDtoList(List<Membership> membershipList) {
         return membershipList.stream()
-                .map(this::entityToDto)
+                .map(MembershipConverter::entityToDto)
                 .toList();
     }
 }

@@ -13,12 +13,11 @@ import java.util.List;
 @AllArgsConstructor
 public class MembershipService {
     private final MembershipRepository membershipRepository;
-    private final MembershipConverter membershipConverter = new MembershipConverter();
 
     public MembershipDTO createMembership(MembershipDTO membershipDTO) {
-        Membership createdMembership = membershipRepository.save(membershipConverter.dtoToEntity(membershipDTO));
+        Membership createdMembership = membershipRepository.save(MembershipConverter.dtoToEntity(membershipDTO));
 
-        return membershipConverter.entityToDto(createdMembership);
+        return MembershipConverter.entityToDto(createdMembership);
     }
 
     public boolean deleteMembership(String licensePlate) {
@@ -32,8 +31,8 @@ public class MembershipService {
 
     public MembershipDTO updateMembership(MembershipDTO membershipDTO) {
         if(membershipRepository.existsByLicensePlate(membershipDTO.getLicensePlate())) {
-            Membership updatedMembership = membershipRepository.save(membershipConverter.dtoToEntity(membershipDTO));
-            return membershipConverter.entityToDto(updatedMembership);
+            Membership updatedMembership = membershipRepository.save(MembershipConverter.dtoToEntity(membershipDTO));
+            return MembershipConverter.entityToDto(updatedMembership);
         } else {
             return null;
         }
@@ -43,7 +42,7 @@ public class MembershipService {
         Membership membership = membershipRepository.findByLicensePlate(licensePlate);
 
         if(membership != null) {
-            return membershipConverter.entityToDto(membership);
+            return MembershipConverter.entityToDto(membership);
         } else {
             return null;
         }
@@ -52,6 +51,6 @@ public class MembershipService {
     public List<MembershipDTO> getMembershipList() {
         List<Membership> membershipList = membershipRepository.findAll();
 
-        return membershipConverter.entityToDtoList(membershipList);
+        return MembershipConverter.entityToDtoList(membershipList);
     }
 }
