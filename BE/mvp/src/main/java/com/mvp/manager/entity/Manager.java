@@ -1,5 +1,6 @@
 package com.mvp.manager.entity;
 
+import com.mvp.manager.dto.ManagerDTO;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -29,4 +30,11 @@ public class Manager {
 
     @Column(name = "phone_number", length = 255)
     private String phoneNumber;
+
+    public void update(ManagerDTO managerDTO){
+        this.name = managerDTO.getName();
+        this.password = managerDTO.getPassword();
+        this.email = managerDTO.getEmail();
+        this.phoneNumber = managerDTO.getPhoneNumber();
+    }
 }
