@@ -23,7 +23,7 @@ public class ParkedVehicle {
     private LocalDateTime entranceTime;
 
     @Lob
-    @Column(name = "image")
+    @Column(name = "image", columnDefinition = "LONGBLOB")
     private byte[] image;
 
     @Column(name = "license_plate", length = 255)
