@@ -1,18 +1,24 @@
 package com.mvp.vehicle.service;
 
 import com.mvp.vehicle.converter.ParkedVehicleConverter;
+import com.mvp.vehicle.converter.ParkingLotSpotConverter;
 import com.mvp.vehicle.dto.ParkedVehicleDTO;
+import com.mvp.vehicle.dto.ParkingLotSpotDTO;
 import com.mvp.vehicle.entity.ParkedVehicle;
+import com.mvp.vehicle.entity.ParkingLotSpot;
 import com.mvp.vehicle.repository.ParkedVehicleRepository;
+import com.mvp.vehicle.repository.ParkingLotSpotRepository;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class VehicleService {
     private final ParkedVehicleRepository parkedVehicleRepository;
+    private final ParkingLotSpotRepository parkingLotSpotRepository;
 
     /**
      * 주차된 차량 정보 조회
@@ -57,4 +63,11 @@ public class VehicleService {
             return null;
         }
     }
+
+    public List<ParkingLotSpotDTO> getAllParkingLotSpot(){
+        List<ParkingLotSpot> all = parkingLotSpotRepository.findAll();
+        List<ParkingLotSpotDTO> result = ParkingLotSpotConverter.entityListToDtoList(all);
+        return result;
+    }
+
 }
