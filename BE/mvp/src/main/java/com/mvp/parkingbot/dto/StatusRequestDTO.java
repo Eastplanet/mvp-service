@@ -6,14 +6,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 /**
- * 주차봇 DTO
+ * 주차봇 상태 요청 DTO
 
  */
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ParkingBotDTO {
-    private int serialNumber;
-    private int status;
+public class StatusRequestDTO {
+    private Integer serialNumber;
+    private Integer status;
 }

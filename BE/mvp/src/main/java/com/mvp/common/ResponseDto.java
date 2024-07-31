@@ -1,0 +1,28 @@
+package com.mvp.common;
+
+import com.mvp.common.exception.StatusCode;
+import lombok.Getter;
+import org.springframework.http.ResponseEntity;
+
+import java.time.LocalDateTime;
+
+@Getter
+public class ResponseDto {
+
+    private final Object data;
+    private final String message;
+    private final LocalDateTime timestamp = LocalDateTime.now();
+    private final int status;
+
+    public ResponseDto(StatusCode statusCode, Object data) {
+        this.status = statusCode.getHttpStatus().value();
+        this.message = statusCode.getMessage();
+        this.data = data;
+    }
+
+    public static ResponseEntity<ResponseDto> response(StatusCode statusCode, Object data) {
+        return ResponseEntity
+                .status(statusCode.getHttpStatus())
+                .body(new ResponseDto(statusCode, data));
+    }
+}

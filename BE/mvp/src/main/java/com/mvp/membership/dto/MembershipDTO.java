@@ -1,4 +1,4 @@
-package com.mvp.vehicle.dto;
+package com.mvp.membership.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class MembershipDTO {
 
-    private String licencePlate;
+    private String licensePlate;
     private LocalDateTime endDate;
     private String phoneNumber;
     private String name;
