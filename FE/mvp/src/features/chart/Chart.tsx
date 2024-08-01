@@ -21,7 +21,7 @@ const Set: React.FC = () => {
               <span>(천)원</span>
             </div>
             <div className={styles.data_left}>
-              <img src="" alt="화살표" />
+              <span>&#9650;</span>
               <span>1%</span> 
               <span className={styles.small_font}>지난 달 대비</span>
             </div>
