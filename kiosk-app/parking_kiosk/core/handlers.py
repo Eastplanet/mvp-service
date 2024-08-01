@@ -25,11 +25,16 @@ def handle_enter(image_path, license_plate, entrance_time):
 
     # POST 요청 전송
     response = requests.post(url, data=json.dumps(payload), headers=headers)
-    
+        
     print(f"Status Code: {response.status_code}")
     print(f"Response: {response.text}")
     os.remove('./result/temp_image.jpeg')
-
+    
+    if(response == 200):
+        return True
+    else:
+        return False
+    
 def handle_exit():
     print('출차 명령 전송 완료')
 

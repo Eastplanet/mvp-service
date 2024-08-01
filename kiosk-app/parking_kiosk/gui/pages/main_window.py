@@ -1,4 +1,5 @@
 import datetime
+import time
 from PyQt6.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QStackedWidget
 from PyQt6.QtCore import Qt, QTimer
 from gui.components.main_button import MainButton
@@ -13,6 +14,7 @@ from gui.pages.entry_page import EntryPage
 from gui.pages.vehicle_selection_page import VehicleSelectionPage
 from core.handlers import handle_enter, handle_exit, handle_get_vehicles
 from core.camera import Camera
+from core.parking_barrier.parking_barrier_controller import ParkingBarrierController
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -21,6 +23,7 @@ class MainWindow(QMainWindow):
         self.setGeometry(100, 100, 400, 600)
         self.setStyleSheet("background-color: #2E3348;")
         self.camera = Camera()
+        self.parking_barrier = ParkingBarrierController()
 
         # 중앙 위젯 설정
         central_widget = QWidget(self)
@@ -58,7 +61,12 @@ class MainWindow(QMainWindow):
     # 입차 처리
     def confirm_enter(self, license_plate):
         self.show_gif_widget()
-        handle_enter("./result/temp_image.jpeg", license_plate, datetime.datetime.now())
+        success = handle_enter("./result/temp_image.jpeg", license_plate, datetime.datetime.now())
+        if success:
+            self.parking_barrier.open_barrier()
+            time.sleep(3)
+            self.parking_barrier.close_barrier()
+            
        
     def confirm_exit(self, license_plate):
         pass
