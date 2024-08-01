@@ -28,7 +28,7 @@
     "test": "react-app-rewired test",
     "eject": "react-scripts eject"
   },
-  "proxy": "http://www.mvp-project.shop:8081",
+  "proxy": "http://localhost:8081",
   "eslintConfig": {
     "extends": [
       "react-app",
