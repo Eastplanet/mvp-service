@@ -9,11 +9,16 @@ import java.util.stream.Collectors;
 public class ParkedVehicleConverter {
 
     public static ParkedVehicleDTO entityToDto(ParkedVehicle parkedVehicle) {
-        return ParkedVehicleDTO.builder()
-                .entranceTime(parkedVehicle.getEntranceTime())
-                .image(parkedVehicle.getImage())
-                .licensePlate(parkedVehicle.getLicensePlate())
-                .build();
+        if (parkedVehicle == null) {
+            return null;
+        }
+        else{
+            return ParkedVehicleDTO.builder()
+                    .entranceTime(parkedVehicle.getEntranceTime())
+                    .image(parkedVehicle.getImage())
+                    .licensePlate(parkedVehicle.getLicensePlate())
+                    .build();
+        }
     }
 
     public static ParkedVehicle dtoToEntity(ParkedVehicleDTO parkedVehicleDTO) {
