@@ -5,6 +5,7 @@ import com.mvp.logs.dto.VehicleLogDTO;
 import com.mvp.logs.entity.VehicleLog;
 import com.mvp.logs.repository.VehicleLogRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -23,5 +24,11 @@ public class LogsService {
     public List<VehicleLogDTO> findAllByExitTimeBetween(LocalDateTime start, LocalDateTime end) {
         List<VehicleLog> allByExitTimeBetween = vehicleLogRepository.findAllByExitTimeBetween(start, end);
         return VehicleLogConverter.entityListToDtoList(allByExitTimeBetween);
+    }
+
+
+    public List<VehicleLogDTO> findByEntranceTimeBetween(LocalDateTime start, LocalDateTime end, String licensePlate) {
+        List<VehicleLog> byLicensePlate = vehicleLogRepository.findByLicensePlate(start, end, licensePlate);
+        return VehicleLogConverter.entityListToDtoList(byLicensePlate);
     }
 }
