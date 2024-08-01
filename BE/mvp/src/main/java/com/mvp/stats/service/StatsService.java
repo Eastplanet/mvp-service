@@ -75,11 +75,11 @@ public class StatsService {
             stats.setCarState(dto.getStatus());
             stats.setExitTime(null);
             if(dto.getParkedVehicle() != null){
-                stats.setCarNumber(dto.getParkedVehicle().getLicensePlate());
+                stats.setLicensePlate(dto.getParkedVehicle().getLicensePlate());
                 stats.setParkingDate(dto.getParkedVehicle().getEntranceTime());
-                stats.setEntryTime(dto.getParkedVehicle().getEntranceTime());
+                stats.setEntranceTime(dto.getParkedVehicle().getEntranceTime());
                 stats.setFee(calculatePrice(dto.getParkedVehicle()));
-                stats.setImageBase64(dto.getParkedVehicle().getImage());
+                stats.setImage(dto.getParkedVehicle().getImage());
             }
             list.add(stats);
         }

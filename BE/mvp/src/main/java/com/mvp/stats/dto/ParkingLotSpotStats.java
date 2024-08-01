@@ -13,11 +13,11 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class ParkingLotSpotStats {
     private Integer parkingLotSpotNumber;
-    private String carNumber;
+    private String licensePlate;
     private LocalDateTime parkingDate;
     private Integer carState;
-    private LocalDateTime entryTime;
+    private LocalDateTime entranceTime;
     private LocalDateTime exitTime;
     private Integer fee;
-    private byte[] imageBase64;
+    private byte[] image;
 }
