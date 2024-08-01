@@ -1,14 +1,11 @@
-import json
+from config.config import MQTT_BROKER, MQTT_PORT, MQTT_TOPIC_PUB, MQTT_TOPIC_SUB
 from mqtt.mqtt_client import MQTTClient
 from bot.controller import BotController
 
-if __name__ == "__main__":
-    broker = "localhost"  # 브로커의 IP 주소
-    port = 1883
-    topic = "/parking/command"
-
-    bot_controller = BotController()
-    mqtt_client = MQTTClient(broker, port, topic, MQTTClient.on_message)
+def main():
+    bot_controller = BotController(None) # 컨트롤러 객체
+    mqtt_client = MQTTClient(MQTT_BROKER, MQTT_PORT, MQTT_TOPIC_PUB, MQTT_TOPIC_SUB, bot_controller) # MQTT 클라이언트 객체
+    bot_controller.mqtt_client = mqtt_client
     mqtt_client.connect()
 
     try:
@@ -17,3 +14,6 @@ if __name__ == "__main__":
     except KeyboardInterrupt:
         print("Disconnecting from broker")
         mqtt_client.disconnect()
+
+if __name__ == "__main__":
+    main()
