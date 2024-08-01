@@ -1,5 +1,6 @@
 package com.mvp.vehicle.entity;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,5 +27,6 @@ public class ParkingLotSpot {
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "parked_vehicle_id", referencedColumnName = "id")
+    @Nullable
     private ParkedVehicle parkedVehicle;
 }
