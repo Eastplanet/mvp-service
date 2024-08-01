@@ -1,9 +1,22 @@
+import time
+
 class BotController:
-    def __init__(self):
-        # 초기화 코드
-        pass
+    def __init__(self, mqtt_client):
+        self.mqtt_client = mqtt_client
 
     def start_driving(self, message):
-        # 주행 시작 로직
-        print(f"Received driving command: {message}")
-        # 여기서 실제 주행 로직을 추가합니다.
+        start = message.get("start")
+        end = message.get("end")
+        print("Driving from {} to {}".format(start, end))
+        time.sleep(2)
+        self.complete_driving()
+        
+    def complete_driving(self):
+        message = {
+            "parkingBotSerialNumber": "1001",
+            "status": "complete"
+        }
+        self.mqtt_client.publish(message)
+        
+        
+        
