@@ -74,7 +74,7 @@ const Main: React.FC = () => {
           </div>
           <div className={styles.dataTables}>
             <div className={styles.todayIn}>
-              <p className={styles.dataName}>당일 입차대수</p>
+              <p className={styles.dataName}>금일 입차대수</p>
               <p className={styles.dataValue}>{todayIn}대</p>
             </div>
             <div className={styles.todayOut}>
