@@ -93,7 +93,7 @@ public class StatsService {
     }
 
     public List<ParkingLogRes> getParkingLot(ParkingLogReq parkingLogReq){
-        List<VehicleLogDTO> find = logsService.findByEntranceTimeBetween(parkingLogReq.getStartDate(), parkingLogReq.getEndDate(), parkingLogReq.getSearchKeyword());
+        List<VehicleLogDTO> find = logsService.findByEntranceTimeBetween(parkingLogReq.getStartDate(), parkingLogReq.getEndDate(), parkingLogReq.getLicensePlate());
 
         List<ParkingLogRes> list = new ArrayList<>();
         for(VehicleLogDTO vehicleLogDTO : find){

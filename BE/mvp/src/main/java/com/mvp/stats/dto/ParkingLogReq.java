@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 @Data
 public class ParkingLogReq {
-    private String searchKeyword;
+    private String licensePlate;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
 }

@@ -28,7 +28,7 @@ public class LogsService {
 
 
     public List<VehicleLogDTO> findByEntranceTimeBetween(LocalDateTime start, LocalDateTime end, String licensePlate) {
-        List<VehicleLog> byLicensePlate = vehicleLogRepository.findByLicensePlate(start, end, licensePlate);
+        List<VehicleLog> byLicensePlate = vehicleLogRepository.findByLicensePlateEntranceTimeBetween(start, end, licensePlate);
         return VehicleLogConverter.entityListToDtoList(byLicensePlate);
     }
 }
