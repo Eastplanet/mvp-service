@@ -1,5 +1,7 @@
+import asyncio
 import sys
 from PyQt6.QtWidgets import QApplication
+from qasync import QEventLoop
 from gui.pages.main_window import MainWindow
 from core.mqtt_client import MQTTClient  # MQTT 클라이언트 임포트
 from config.mqtt_broker import MQTTBroker
@@ -10,6 +12,8 @@ def main():
     mosquitto_process = MQTTBroker.start_mosquitto()
     
     app = QApplication(sys.argv)
+    loop = QEventLoop(app)
+    asyncio.set_event_loop(loop)
     
     # MQTT 클라이언트 초기화
     mqtt_client = MQTTClient(broker=MQTT_BROKER_IP, port=MQTT_PORT, sub_topic=MQTT_TOPIC_SUB, pub_topic=MQTT_TOPIC_PUB)
@@ -27,8 +31,9 @@ def main():
         MQTTBroker.stop_mosquitto(mosquitto_process)
     
     app.aboutToQuit.connect(on_exit)
-    
-    sys.exit(app.exec())
 
+    with loop:
+        sys.exit(loop.run_forever())
+    
 if __name__ == '__main__':
     main()

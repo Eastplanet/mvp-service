@@ -3,6 +3,7 @@ import datetime
 import time
 from PyQt6.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QStackedWidget
 from PyQt6.QtCore import Qt, QTimer
+from qasync import asyncSlot
 from gui.components.main_button import MainButton
 from gui.components.top_label import TopLabel
 from gui.components.enter_number_plate import EnterNumberPlate
@@ -38,7 +39,7 @@ class MainWindow(QMainWindow):
 
         # 메인 버튼 페이지
         self.main_button = MainButton(self)
-        self.main_button.entry_button.clicked.connect(self.show_entry_page)
+        self.main_button.entry_button.clicked.connect(self.start_entry_process)
         self.main_button.exit_button.clicked.connect(self.show_exit_page)
         self.stacked_widget.addWidget(self.main_button)
 
@@ -51,22 +52,41 @@ class MainWindow(QMainWindow):
         self.stacked_widget.addWidget(self.exit_page)
 
     # 입차 페이지
-    def show_entry_page(self):
-        self.entry_page.number_plate_labels.set_all_label_text(self.camera.ocr_reader())
-        self.stacked_widget.setCurrentWidget(self.entry_page)
+    # def show_entry_page(self):
+    #     self.entry_page.number_plate_labels.set_all_label_text(self.camera.ocr_reader())
+    #     self.stacked_widget.setCurrentWidget(self.entry_page)
 
     # 출차 페이지
     def show_exit_page(self):
         self.stacked_widget.setCurrentWidget(self.exit_page)
+    
+    # 비동기 차량 번호판 분석
+    def start_entry_process(self):
+        self.show_waiting_screen()
+        asyncio.create_task(self.async_handle_entry())
         
-        
-        
+    async def async_handle_entry(self):
+        await asyncio.sleep(0)
+        # OCR API
+        # ocr_result = await asyncio.get_event_loop().run_in_executor(None, self.camera.ocr_reader)
+        ocr_result = await self.camera.ocr_reader()
+        # OCR 결과 처리 후 입차 화면으로 전환
+        self.entry_page.number_plate_labels.set_all_label_text(ocr_result)
+        self.stacked_widget.setCurrentWidget(self.entry_page)
+    
+    # 대기 화면
+    def show_waiting_screen(self):
+        self.gif_widget = GifWidget("parking_kiosk/gui/res/test.gif", duration=3000, parent=self)
+        self.gif_widget.move(self.rect().center() - self.gif_widget.rect().center())
+        self.gif_widget.start()
+    
+    
     async def async_handle_enter(self, license_plate):
         # 비동기 입차 처리
-        loop = asyncio.get_event_loop()
-        success = await loop.run_in_executor(None, handle_enter, "./result/temp_image.jpeg", license_plate, datetime.datetime.now())
+        success = await asyncio.get_event_loop().run_in_executor(None, handle_enter, "./result/temp_image.jpeg", license_plate, datetime.datetime.now())
         if success:
             await self.async_barrier_control()
+        self.return_to_main()
     
     async def async_barrier_control(self):
         # 비동기 차단막 제어
@@ -77,8 +97,7 @@ class MainWindow(QMainWindow):
     # 입차 처리
     def confirm_enter(self, license_plate):
         # TODO : 비동기적으로 수행되게
-        loop = asyncio.get_event_loop()
-        loop.create_task(self.async_handle_enter(license_plate))
+        asyncio.create_task(self.async_handle_enter(license_plate))
         self.show_gif_widget()
        
     def confirm_exit(self, license_plate):

@@ -1,4 +1,5 @@
 import os
+from aiohttp import ClientSession
 import requests
 import base64
 import cv2
@@ -10,10 +11,6 @@ class Camera:
     def __init__(self):
         pass
     
-    def get_vehicle_image(self):
-        # 테스트 코드
-        return image_path
-
     def capture_image(self):
         file_path = './result/captured_img.jpeg'
         cap = cv2.VideoCapture(0)
@@ -30,8 +27,8 @@ class Camera:
         image_base64 = base64.b64encode(image_buffer).decode('utf-8')
         return image_base64
 
-    def ocr_reader(self):
-        self.capture_image()
+    async def ocr_reader(self):
+        file_path = self.capture_image()
         
         url = 'https://apis.openapi.sk.com/sigmeta/lpr/v1'
         headers = {
@@ -39,27 +36,28 @@ class Camera:
             'appKey': 'l7xx846db5f3bc1e48d29b7275a745d501c8'
         }
 
-
+        # 이미지 리사이즈
         image = cv2.imread('./result/captured_img.jpeg')
         resized_img = self.resize_image(image)
 
         temp_file_path = './result/temp_image.jpeg'
         cv2.imwrite(temp_file_path, resized_img)
 
-        with open(temp_file_path,'rb') as image_file:
-            files = {
-                'File': ('captured_img.jpeg', image_file, 'image/jpeg')
-            }
-            
-            response = requests.post(url, headers=headers, files=files)
-            
-            response_json = response.json()
-            if 'result' in response_json and 'objects' in response_json['result']:
-                lp_string = response_json['result']['objects'][0]['lp_string']
+        async with ClientSession() as session:
+            with open(temp_file_path,'rb') as image_file:
+                files = {
+                    'File': ('captured_img.jpeg', image_file, 'image/jpeg')
+                }
                 
-                with open(temp_file_path, 'rb') as img_file:
-                    base64_encoded_img = base64.b64encode(img_file.read()).decode('utf-8')
+                response = requests.post(url, headers=headers, files=files)
                 
+                response_json = response.json()
+                if 'result' in response_json and 'objects' in response_json['result']:
+                    lp_string = response_json['result']['objects'][0]['lp_string']
+                    
+                    with open(temp_file_path, 'rb') as img_file:
+                        base64_encoded_img = base64.b64encode(img_file.read()).decode('utf-8')
+                    
         # os.remove(temp_file_path)
         print(lp_string)
         print(base64_encoded_img)
