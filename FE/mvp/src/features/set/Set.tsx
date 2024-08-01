@@ -6,7 +6,6 @@ const Set: React.FC = () => {
   return (
     <div className={styles.container}>
       <Sidebar />
-
       <div className={styles.page}>
         <div className={styles.roundedBox}>
           {/* 시간별 금액 설정 */}
