@@ -1,66 +1,69 @@
 .parkingLotContainer {
-    display: flex;
-    width: 80%;
-    height: 80%;
-    background-color: #333; /* 전체 회색 배경 */
-    box-sizing: border-box;
-    margin: auto; /* 부모 컨테이너 내에서 중앙 정렬 */
-    justify-content: center; /* 중앙 도로를 가운데에 배치 */
-    padding: 0; /* 여백 제거 */
-  }
-  
-  .parkingLot {
-    display: flex;
-    width: 100%;
-    height: 100%;
-    background-color: #333; /* 도로 배경색을 회색으로 통일 */
-  }
-  
-  .road {
-    width: 40%; /* 도로의 너비 */
-  }
-  
-  .side {
-    width: 30%;
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-  }
-  
-  .leftSide {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between; /* 주차 공간 사이의 균등한 분배 */
-  }
-  
-  .rightSide {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between; /* 주차 공간 사이의 균등한 분배 */
-  }
-  
-  .parkingSpace {
-    width: 100%;
-    background-color: white; /* 주차 공간 배경 색상 */
-    border: 1px solid #ccc; /* 주차 공간을 구분하는 연한 회색 테두리 */
-    box-sizing: border-box;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-grow: 1; /* 주차 공간이 가능한 한 많이 커지도록 설정 */
-  }
-  
-  .occupied {
-    background-color: #f0f0f0; /* 약간 다른 배경색으로 주차 중인 공간 표시 */
-  }
-  
-  .empty {
-    background-color: transparent; /* 빈 공간은 투명 배경 */
-  }
-  
-  .parkingSpace img {
-    max-width: 90%;
-    max-height: 80px; /* 차량 이미지의 최대 높이 */
-    object-fit: contain;
-  }
-  
+  display: flex;
+  width: 70%;
+  height: 80%;
+  background-color: #333;
+  box-sizing: border-box;
+  margin: auto;
+  justify-content: center;
+  padding: 0;
+}
+
+.parkingLot {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  background-color: #333;
+}
+
+.road {
+  width: 40%;
+}
+
+.side {
+  width: 30%;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.leftSide {
+  display: flex;
+  flex-direction: column;
+}
+
+.rightSide {
+  display: flex;
+  flex-direction: column;
+}
+
+.parkingSpace {
+  width: 100%;
+  background-color: #333;
+  border: 2px solid #fff;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+}
+
+.empty {
+  background-color: transparent;
+}
+
+.emptySpace {
+  background-color: #333;
+  border: 1px solid #333;
+  flex: 1;
+}
+
+.parkingSpace img {
+  max-width: 90%;
+  max-height: 80px;
+  object-fit: contain;
+}
+
+.rotatedCar {
+  transform: rotate(180deg);
+}
