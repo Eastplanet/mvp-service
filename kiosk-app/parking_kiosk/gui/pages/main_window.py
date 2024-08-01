@@ -15,7 +15,7 @@ from core.handlers import handle_enter, handle_exit, handle_get_vehicles
 from core.camera import Camera
 
 class MainWindow(QMainWindow):
-    def __init__(self, mqtt_client):
+    def __init__(self):
         super(MainWindow, self).__init__()
         self.setWindowTitle("주차장 키오스크")
         self.setGeometry(100, 100, 400, 600)
