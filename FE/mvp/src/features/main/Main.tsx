@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { RootState, AppDispatch } from '../../store/store'; // 올바른 경로 확인
+import { RootState, AppDispatch } from '../../store/store';
 import { fetchParkingData, fetchSearchData, setSearchTerm, setStartDate, setEndDate, fetchCurrentParkedCars } from './mainSlice';
 import Sidebar from '../sidebar/Sidebar';
 import styles from './Main.module.css';
 import searchIcon from '../../assets/images/icons/searchIcon.png'
 import CarInfo from '../carInfo/CarInfoModal';
+import ParkingLot from '../parkingLot/ParkingLot';
 
 type CarLog = {
   carNumber: string;
@@ -69,7 +70,7 @@ const Main: React.FC = () => {
       <div className={styles.mainContent}>
         <div className={styles.parkingInfo}>
           <div className={styles.parkingMap}>
-            {/* 주차장 지도 */}
+            <ParkingLot parkingData={currentParkedCars} onCarLogClick={handleCarLogClick} />
           </div>
           <div className={styles.dataTables}>
             <div className={styles.todayIn}>

@@ -28,6 +28,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
+  "proxy": "http://mvp-project.shop:8081",
   "eslintConfig": {
     "extends": [
       "react-app",
