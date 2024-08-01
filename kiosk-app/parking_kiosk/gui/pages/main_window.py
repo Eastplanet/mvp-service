@@ -1,3 +1,4 @@
+import asyncio
 import datetime
 import time
 from PyQt6.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QStackedWidget
@@ -58,15 +59,26 @@ class MainWindow(QMainWindow):
     def show_exit_page(self):
         self.stacked_widget.setCurrentWidget(self.exit_page)
         
+        
+        
+    async def async_handle_enter(self, license_plate):
+        # 비동기 입차 처리
+        loop = asyncio.get_event_loop()
+        success = await loop.run_in_executor(None, handle_enter, "./result/temp_image.jpeg", license_plate, datetime.datetime.now())
+        if success:
+            await self.async_barrier_control()
+    
+    async def async_barrier_control(self):
+        # 비동기 차단막 제어
+        self.parking_barrier.upBarrier()
+        await asyncio.sleep(3)
+        self.parking_barrier.downBarrier()
+        
     # 입차 처리
     def confirm_enter(self, license_plate):
+        # TODO : 비동기적으로 수행되게
+        asyncio.create_task(self.async_handle_enter(license_plate))
         self.show_gif_widget()
-        success = handle_enter("./result/temp_image.jpeg", license_plate, datetime.datetime.now())
-        if success:
-            self.parking_barrier.upBarrier()
-            time.sleep(3)
-            self.parking_barrier.downBarrier()
-            
        
     def confirm_exit(self, license_plate):
         pass
