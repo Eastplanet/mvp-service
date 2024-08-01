@@ -6,6 +6,9 @@ module.exports = function override(config, env) {
       disableHostCheck: true,
       allowedHosts: 'all',
     };
+    console.log('-------------------------------------------------');
+    console.log('devServer configuration:', config.devServer);
+    console.log('-------------------------------------------------');
     return config;
   };
   
