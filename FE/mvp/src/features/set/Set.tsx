@@ -207,7 +207,7 @@ const Set: React.FC = () => {
           </div>
 
           {/* 시스템 상태 조정 섹션 */}
-          <div className={styles.section_bottom}>
+          <div className={styles.sectionBottom}>
             <p className={styles.title}>시스템 정지</p>
             <div className={styles.system_button}>
               <button
