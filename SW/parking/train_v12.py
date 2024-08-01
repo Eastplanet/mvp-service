@@ -8,6 +8,7 @@ from stable_baselines3.common.callbacks import BaseCallback
 from gymnasium.envs.registration import register
 import matplotlib.pyplot as plt
 import pickle
+from tqdm import tqdm
 
 # GPU 사용
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -21,7 +22,7 @@ print(f"Using device: {device}")
 register(
     id='CustomParkingEnv_Kimura_v12',
     entry_point='env:ParkingEnv',  # entry_point 설정
-    max_episode_steps=1000, # 시뮬레이션 주파수와 에피소드 지속시간의 곱(duration)
+    max_episode_steps=1500, # 시뮬레이션 주파수와 에피소드 지속시간의 곱(duration)
 )
 
 # 환경 생성
@@ -34,25 +35,25 @@ class SuccessRateCallback(BaseCallback):
         self.success_count = 0
         self.episode_count = 0
         self.episode_rewards = []
+        self.progress_bar = tqdm(total=int(2e6))
 
     def _on_step(self) -> bool:
-        done = self.locals.get('dones')
-        info = self.locals.get('infos')
+        done = self.locals.get('dones')[0]
+        info = self.locals.get('infos')[0]
 
-        if done and done[0]:
+        if done:
             self.episode_count += 1
-            episode_rewards = self.locals.get('rewards')
-            total_reward = np.sum(episode_rewards) if episode_rewards else 0
+            # total_reward = self.locals.get('rewards')[0]
+            total_reward = sum(self.locals.get('rewards'))
             self.episode_rewards.append(total_reward)
-            if info and info[0].get('is_success'):
+            if info.get('is_success'):
                 self.success_count += 1
 
-            success_rate = (self.success_count / self.episode_count) * 100
-            print(f"Episode: {self.episode_count}, Reward: {total_reward}, Success Rate: {success_rate:.2f}%")
-
+        self.progress_bar.update(1)
         return True
 
     def _on_training_end(self) -> None:
+        self.progress_bar.close()
         with open('episode_rewards.pkl', 'wb') as f:
             pickle.dump(self.episode_rewards, f)
 
@@ -62,7 +63,7 @@ model = SAC(
     env,
     replay_buffer_class=HerReplayBuffer,
     replay_buffer_kwargs=dict(
-        n_sampled_goal=4,
+        n_sampled_goal=8,
         goal_selection_strategy="future",
     ),
     verbose=0,
@@ -70,13 +71,14 @@ model = SAC(
     learning_rate= 1e-3,
     gamma=0.99,
     batch_size=516,
-    policy_kwargs=dict(net_arch=[256, 256, 256], activation_fn=ReLU),
+    policy_kwargs=dict(net_arch=[512, 512, 256], activation_fn=ReLU, use_sde=True),
     learning_starts=10000,
-    device=device  
+    device=device,
+    sde_sample_freq=4
 )
 
 # 10만번 학습(1e5~1e6)
-model.learn(int(1e6), callback=SuccessRateCallback())
+model.learn(int(1000), callback=SuccessRateCallback())
 
 # Save the trained agent
 model.save('her_sac_highway')

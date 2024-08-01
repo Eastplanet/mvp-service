@@ -18,7 +18,6 @@ from highway_env.vehicle.objects import Landmark, Obstacle
 """
 ver12
 -시뮬 최종 환경 조성
-
 """
 
 # Clipping rewards(보상값을 일정 값으로 제한)
@@ -78,7 +77,7 @@ class ParkingEnv(AbstractEnv, GoalEnv):
                 "action": {"type": "ContinuousAction"},
                 # 각 보상
                 "reward_weights": [1, 0.3, 0, 0, 0.02, 0.02],
-                "success_goal_reward": 0.12,
+                "success_goal_reward": 5,
                 "collision_reward": -5,
                 "steering_range": np.deg2rad(20),
                 "simulation_frequency": 10,  # 0.1초마다 시뮬레이션 상태 업데이트
@@ -98,6 +97,10 @@ class ParkingEnv(AbstractEnv, GoalEnv):
                 "acc_max": 2.0,  # 최대 가속도 설정 6에서 2
                 "comfort_acc_max": 1.0,  # 편안한 최대 가속도 설정 3에서 1
                 "comfort_acc_min": -2.0,  # 편안한 최대 감속도 설정 -5에서 -2
+
+                # 목표에 대한 큰 보상
+                "success_goal_reward": 0.12,
+                "goal_reached_reward": 10,
 
             }
         )
@@ -290,23 +293,33 @@ class ParkingEnv(AbstractEnv, GoalEnv):
         info: dict,
         p: float = 0.5,
     ) -> float:
-        return -np.power(
-            np.dot(
-                np.abs(achieved_goal - desired_goal),
-                np.array(self.config["reward_weights"]),
-            ),
-            p,
-        )
+        # 목표와 현재 위치 사이의 절대 차이 계산
+        distance = np.abs(achieved_goal - desired_goal)
+        
+        # 가중합 계산
+        weighted_distance = np.dot(distance, np.array(self.config["reward_weights"]))
+        
+        # 기본 보상 계산
+        reward = -np.power(weighted_distance, p)
+        
+        # 목표에 도달했을 때 추가 보상
+        if weighted_distance < self.config["success_goal_reward"]:
+            reward += self.config["goal_reached_reward"]  # 큰 보상 추가
+        
+        return reward
 
     def _reward(self, action: np.ndarray) -> float:
+        # 관찰 값 얻기
         obs = self.observation_type_parking.observe()
         obs = obs if isinstance(obs, tuple) else (obs,)
+        # 각 에이전트의 보상 계산
         reward = sum(
             self.compute_reward(
                 agent_obs["achieved_goal"], agent_obs["desired_goal"], {}
             )
             for agent_obs in obs
         )
+        # 충돌 페널티 적용
         reward += self.config["collision_reward"] * sum(
             v.crashed for v in self.controlled_vehicles
         )
@@ -335,7 +348,7 @@ class ParkingEnv(AbstractEnv, GoalEnv):
 
 class ParkingEnvActionRepeat(ParkingEnv):
     def __init__(self):
-        super().__init__({"policy_frequency": 1, "duration": 100})
+        super().__init__({"policy_frequency": 1, "duration": 150})
 
 class ParkingEnvParkedVehicles(ParkingEnv):
     def __init__(self):
