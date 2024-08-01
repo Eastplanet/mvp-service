@@ -77,7 +77,8 @@ class MainWindow(QMainWindow):
     # 입차 처리
     def confirm_enter(self, license_plate):
         # TODO : 비동기적으로 수행되게
-        asyncio.create_task(self.async_handle_enter(license_plate))
+        loop = asyncio.get_event_loop()
+        loop.create_task(self.async_handle_enter(license_plate))
         self.show_gif_widget()
        
     def confirm_exit(self, license_plate):
