@@ -38,6 +38,7 @@ const initialState: MainState = {
   error: null,
 };
 
+// 주차 통계 정보
 export const fetchParkingData = createAsyncThunk('main/fetchParkingData', async () => {
   const response = await fetch('https://api.example.com/parking-data');
   const data = await response.json();
@@ -48,6 +49,60 @@ export const fetchCurrentParkedCars = createAsyncThunk('main/fetchCurrentParkedC
   // const response = await axios.get<CarLog[]>('https://api.example.com/currentParkedCars');
   // return response.data;
   const data: CarLog[] = [
+    {
+      carNumber: '123가 4568',
+      parkingDate: '20240729',
+      carState: '주차 중',
+      entryTime: new Date(2024, 6, 29, 14, 15),
+      exitTime: undefined,
+      fee: 1000,
+      imageBase64: 'iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==',
+    },
+    {
+      carNumber: '123가 4568',
+      parkingDate: '20240729',
+      carState: '주차 중',
+      entryTime: new Date(2024, 6, 29, 14, 15),
+      exitTime: undefined,
+      fee: 1000,
+      imageBase64: 'iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==',
+    },
+    {
+      carNumber: '123가 4568',
+      parkingDate: '20240729',
+      carState: '주차 중',
+      entryTime: new Date(2024, 6, 29, 14, 15),
+      exitTime: undefined,
+      fee: 1000,
+      imageBase64: 'iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==',
+    },
+    {
+      carNumber: '123가 4568',
+      parkingDate: '20240729',
+      carState: '주차 중',
+      entryTime: new Date(2024, 6, 29, 14, 15),
+      exitTime: undefined,
+      fee: 1000,
+      imageBase64: 'iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==',
+    },
+    {
+      carNumber: '123가 4568',
+      parkingDate: '20240729',
+      carState: '주차 중',
+      entryTime: new Date(2024, 6, 29, 14, 15),
+      exitTime: undefined,
+      fee: 1000,
+      imageBase64: 'iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==',
+    },
+    {
+      carNumber: '123가 4568',
+      parkingDate: '20240729',
+      carState: '주차 중',
+      entryTime: new Date(2024, 6, 29, 14, 15),
+      exitTime: undefined,
+      fee: 1000,
+      imageBase64: 'iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==',
+    },
     {
       carNumber: '123가 4568',
       parkingDate: '20240729',
