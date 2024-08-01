@@ -30,7 +30,7 @@ def handle_enter(image_path, license_plate, entrance_time):
     print(f"Response: {response.text}")
     os.remove('./result/temp_image.jpeg')
     
-    if(response == 200):
+    if(response.status_code == 200):
         return True
     else:
         return False

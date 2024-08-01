@@ -63,9 +63,9 @@ class MainWindow(QMainWindow):
         self.show_gif_widget()
         success = handle_enter("./result/temp_image.jpeg", license_plate, datetime.datetime.now())
         if success:
-            self.parking_barrier.open_barrier()
+            self.parking_barrier.upBarrier()
             time.sleep(3)
-            self.parking_barrier.close_barrier()
+            self.parking_barrier.downBarrier()
             
        
     def confirm_exit(self, license_plate):

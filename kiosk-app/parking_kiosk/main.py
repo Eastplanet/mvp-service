@@ -15,7 +15,7 @@ def main():
     mqtt_client = MQTTClient(broker=MQTT_BROKER_IP, port=MQTT_PORT, sub_topic=MQTT_TOPIC_SUB, pub_topic=MQTT_TOPIC_PUB)
     
     # 데몬 프로세스 시작
-    polling_daemon = PollingDaemon(mqtt_client, server_url="http://localhost:8080/parking-bot/poll", poll_interval=5)
+    polling_daemon = PollingDaemon(mqtt_client, server_url="http://192.168.30.151:8080/parking-bot/poll", poll_interval=5)
     polling_daemon.start()
     
     window = MainWindow()
