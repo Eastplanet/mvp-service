@@ -37,6 +37,17 @@ const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
+    loginSuccess: (state) => {
+      state.user = {
+        name: 'John Doe',
+        email: 'johndoe@example.com',
+        phoneNumber: '123-456-7890'
+      };
+      state.token = 'dummy-token';
+      state.isAuthenticated = true;
+      state.loading = false;
+      state.error = null;
+    },
     logoutSuccess: (state) => {
       state.user = {name: null, email: null}
       state.isAuthenticated = false;
@@ -70,6 +81,6 @@ const authSlice = createSlice({
   },
 });
 
-export const { logoutSuccess } = authSlice.actions;
+export const { loginSuccess, logoutSuccess } = authSlice.actions;
 
 export default authSlice.reducer;
