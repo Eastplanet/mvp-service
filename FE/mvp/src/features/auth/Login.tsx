@@ -13,8 +13,8 @@ const Login: React.FC = () => {
   const { error, loading } = useSelector((state: RootState) => state.auth);
 
   const handleLogin = () => {
-    // dispatch(login({ email, password }));
-    dispatch(loginSuccess());
+    dispatch(login({ email, password }));
+    // dispatch(loginSuccess());
   };
 
   return (
