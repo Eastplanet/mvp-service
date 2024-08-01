@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import styles from './DiscountModal.module.css'; // 동일한 CSS 파일을 사용
-import { CarLog } from '../CarInfoModal'; // CarLog 인터페이스 임포트
+import styles from './DiscountModal.module.css';
+import { CarLog } from '../CarInfoModal';
 
 interface DiscountModalProps {
   carLog: CarLog;
@@ -46,13 +46,16 @@ const DiscountModal: React.FC<DiscountModalProps> = ({ carLog, onClose, onApplyD
                 <div className={styles.detailRow}>
                   <div className={styles.dataName}>할인 요금</div>
                   <div className={styles.dataValue}>
-                    <input
-                      type="number"
-                      value={discountAmount}
-                      onChange={(e) => handleDiscount(Number(e.target.value))}
-                      className={styles.input}
-                      placeholder="0"
-                    />
+                  <input
+                    type="number"
+                    value={discountAmount}
+                    onChange={(e) => handleDiscount(Math.max(0, Math.min(Number(e.target.value), carLog.fee)))}
+                    className={styles.input}
+                    placeholder="0"
+                    min="0"
+                    max={carLog.fee}
+                    style={{ textAlign: 'right' }}
+                  />
                     원
                   </div>
                 </div>

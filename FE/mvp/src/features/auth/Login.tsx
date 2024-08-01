@@ -1,20 +1,20 @@
-// src/features/auth/Login.tsx
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-// import { login } from './authActions';
+import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../store/store';
 import styles from './Login.module.css';
 import logo from '../../assets/images/logos/logo.png'
-import { loginSuccess } from './authSlice';
+import { login } from './authSlice';
+import { RootState } from '../../store/store';
 
 const Login: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const { error, loading } = useSelector((state: RootState) => state.auth);
 
   const handleLogin = () => {
-    // dispatch(login({ email, password }));
-    dispatch(loginSuccess());
+    dispatch(login({ email, password }));
+    // dispatch(loginSuccess());
   };
 
   return (
@@ -39,6 +39,8 @@ const Login: React.FC = () => {
           <button onClick={handleLogin} className={styles.button}>
             Login
           </button>
+          {loading && <p>Loading...</p>}
+          {error && <p className={styles.error}>{error}</p>}
         </div>
       </div>
       <div className={styles.right}></div>
