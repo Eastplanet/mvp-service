@@ -9,8 +9,6 @@ const Set: React.FC = () => {
 
       <div className={styles.page}>
         <div className={styles.roundedBox}>
-
-
           {/* 시간별 금액 설정 */}
           <div className={styles.section}>
             <p className={styles.title}>시간별 금액 설정</p>
@@ -28,7 +26,6 @@ const Set: React.FC = () => {
               </div>
             </div>
           </div>
-
           {/* 주차권 금액 */}
           <div className={styles.section}>
             <p className={styles.title}>주차권 금액</p>
@@ -52,8 +49,8 @@ const Set: React.FC = () => {
           <div className={styles.section_bottom}>
             <p className={styles.title}>시스템 정지</p>
             <div className={styles.system_button}>
-                <button>시스템 비활성화 </button>
-                <button>시스템 활성화</button>
+                <button className={styles.button_deactivate}>시스템 비활성화 </button>
+                <button className={styles.button_activate}>시스템 활성화</button>
         
             </div>
           </div>
