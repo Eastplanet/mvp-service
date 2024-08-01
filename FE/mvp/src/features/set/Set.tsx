@@ -1,29 +1,3 @@
-// import React from 'react';
-// import Sidebar from '../sidebar/Sidebar';
-// import styles from './Set.module.css';
-
-// const Set: React.FC = () => {
-//   return (
-//     <div className={styles.container}>
-//       <div className={styles.sidebarWrapper}>
-//         <Sidebar />
-//       </div>
-//       <div className={styles.page}>
-//         <div className={styles.runtime}>
-//           <p className={styles.title}>관리 운영 시간</p>
-//           <p>주일</p>
-//           <div className={styles.timeInputs}>
-//             <input type="time" className={styles.timeInput} /> ~
-//             <input type="time" className={styles.timeInput} />
-//           </div>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default Set;
-
 import React from 'react';
 import Sidebar from '../sidebar/Sidebar';
 import styles from './Set.module.css';
@@ -35,23 +9,6 @@ const Set: React.FC = () => {
 
       <div className={styles.page}>
         <div className={styles.roundedBox}>
-          {/* 관리 운영 시간 */}
-          <div className={styles.section}>
-            <p className={styles.title}>관리 운영 시간</p>
-            <div className={styles.timeSetting}>
-              <div className={styles.timeRow}>
-                <p>주일</p>
-                <input type="time" className={styles.timeInput} /> ~
-                <input type="time" className={styles.timeInput} />
-              </div>
-              <div className={styles.timeRow}>
-                <p>주말 및 공휴일</p>
-                <input type="time" className={styles.timeInput} /> ~
-                <input type="time" className={styles.timeInput} />
-              </div>
-            </div>
-          </div>
-
           {/* 시간별 금액 설정 */}
           <div className={styles.section}>
             <p className={styles.title}>시간별 금액 설정</p>
@@ -69,7 +26,6 @@ const Set: React.FC = () => {
               </div>
             </div>
           </div>
-
           {/* 주차권 금액 */}
           <div className={styles.section}>
             <p className={styles.title}>주차권 금액</p>
@@ -88,6 +44,17 @@ const Set: React.FC = () => {
               </div>
             </div>
           </div>
+
+          {/* 시스템 중지 */}
+          <div className={styles.section_bottom}>
+            <p className={styles.title}>시스템 정지</p>
+            <div className={styles.system_button}>
+                <button className={styles.button_deactivate}>시스템 비활성화 </button>
+                <button className={styles.button_activate}>시스템 활성화</button>
+        
+            </div>
+          </div>
+          <button className={styles.save}>저장</button>
         </div>
       </div>
     </div>
