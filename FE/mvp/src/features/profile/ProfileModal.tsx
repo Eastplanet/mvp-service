@@ -33,15 +33,17 @@ const ProfileModal: React.FC<ProfileModalProps> = ({ onClose }) => {
         <div className={styles.modalBody}>
           <div className={styles.infoRow}>
             <div className={styles.label}>관리자 정보</div>
+            {/* <div className={styles.line}></div> */}
             <div className={styles.value}>{user.name}</div>
           </div>
           <div className={styles.infoRow}>
             <div className={styles.label}>이메일</div>
+            {/* <div className={styles.line}></div> */}
             <div className={styles.value}>{user.email}</div>
           </div>
         </div>
         <div className={styles.logoutButtonContainer}>
-          <button className={styles.logoutButton} onClick={handleLogout}>로그아웃</button>
+          <button className={styles.logoutButton} onClick={handleLogout}>Log Out</button>
         </div>
       </div>
     </div>
