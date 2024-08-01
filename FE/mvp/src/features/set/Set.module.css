@@ -1,0 +1,234 @@
+  .container {
+  display: flex;
+  /* height: 100vh; */
+  background-color: #f9fafc;
+}
+
+.page {
+  flex: 1; /* 남은 공간을 채우도록 설정 */
+  padding: 20px;
+  background-color: #f9fafc;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.roundedBox {
+  background-color: #ffffff;
+  border-radius: 20px; 
+  padding-left: 30px;
+  padding-right: 30px;
+  width: 100%;
+  max-width: 1200px; /* 최대 너비 설정 */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column; 
+}
+
+.section {
+  margin-top: 10px;
+  /* margin-left: 30px; */
+  padding-bottom: 20px; /* 하단 패딩 추가 */
+  border-bottom: 1px solid #ccc; /* 하단 테두리 추가 */
+}
+
+.button_deactivate{
+  padding: 20px;
+  margin: 10px 150px 10px 150px;
+  color: white;
+  font-size: large;
+  font-weight: bold;
+  background-color: #ff0000;
+  border-radius: 20px;
+  border: rgb(99, 0, 0) 3px solid;
+  box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.25);
+}
+.button_activate{
+  padding: 20px;
+  margin: 10px 200px 10px 0px;
+  color: rgb(255, 0, 0);
+  font-size: large;
+  font-weight: bold;
+  background-color: #ffffff;
+  border-radius: 20px;
+  border: rgb(99, 0, 0) 3px solid;
+  box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.25);
+}
+
+.save{
+  width: 10%;
+  margin-left: auto ;
+  margin-right: 50px;
+  margin-bottom: 30px;
+  padding: 10px;
+  text-align: center;
+  font: bold 20px arial;
+  color: white;
+  background-color: #7391e9;
+  border-radius: 20px;
+  border: none;
+  box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.25);
+}
+
+.title {
+  font-size: 24px;
+  margin-bottom: 40px;
+  margin-left: 30px;
+  text-align: left;
+  font-weight: bold;
+}
+
+
+.rateSetting,
+.ticketRates {
+  display: flex;
+  margin-left: 30px;
+  /* flex-direction: column; 세로 방향으로 Row를 배치 */
+  justify-content: space-between;
+}
+
+.timeSetting {
+  display: flex;
+  /* justify-content: space-between; 주일과 주말을 양쪽으로 배치 */
+  margin-right: 50px;
+}
+
+
+.timeRow,
+.rateRow,
+.ticketRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center; /* 수직 가운데 정렬 */
+  margin-bottom: 10px;
+  margin-right: 30px;
+}
+.rateInputTime {
+  margin-left: 10px;
+  margin-right: 10px;
+  padding: 10px 5px;
+  width: 120px;
+  text-align: right;
+  font-size: 15px;
+
+  background-color: #eff1f8;
+  border-radius: 20px;
+  border: none;
+  box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.25);
+}
+
+.rateInput {
+  margin-left: 10px;
+  margin-right: 10px;
+  padding: 10px 5px;
+  width: auto;
+  text-align: right;
+  font-size: 15px;
+
+  background-color: #eff1f8;
+  border-radius: 20px;
+  border: none;
+  box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.25);
+}
+
+
+.nocosttime{
+  font-size: 12px;
+  margin-bottom: 0px;
+  margin-left: 10px;
+}
+
+.timeRow p,
+.rateRow span,
+.ticketRow span {
+font-weight: bold; /* 글자를 볼드체로 설정 */
+/* font-size: 20px;  */
+}
+
+
+
+/* GPT 추가내용 */
+
+
+.button_deactivate {
+  padding: 20px;
+  margin: 10px 150px;
+  color: white;
+  font-size: large;
+  font-weight: bold;
+  background-color: #f44336; /* 빨간색 배경 */
+  border-radius: 20px;
+  border: rgb(99, 0, 0) 3px solid;
+  box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.25);
+}
+
+.button_deactivate:active {
+  background-color: #c62828; /* 클릭 시 어두운 빨간색 */
+}
+
+.button_activate {
+  padding: 20px;
+  margin: 10px 150px 10px 0;
+  color: #fff;
+  font-size: large;
+  font-weight: bold;
+  background-color: #4caf50; /* 초록색 배경 */
+  border-radius: 20px;
+  border: rgb(99, 0, 0) 3px solid;
+  box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.25);
+}
+
+.button_activate:active {
+  background-color: #388e3c; /* 클릭 시 어두운 초록색 */
+}
+
+/* 기본 회색 상태 */
+.save {
+  width: 10%;
+  margin-left: auto;
+  margin-right: 50px;
+  margin-bottom: 30px;
+  padding: 10px;
+  text-align: center;
+  font: bold 20px arial;
+  color: white;
+  background-color: #e0e0e0; /* 기본 회색 배경 */
+  border-radius: 20px;
+  border: none;
+  box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.25);
+  cursor: not-allowed;
+  transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+.save.active {
+  background-color: #2196f3; /* 변경된 상태의 파란색 배경 */
+  cursor: pointer;
+}
+
+
+/* 저장 버튼 비활성화 상태 */
+.disabled {
+  background-color: #e0e0e0; /* 회색 배경 */
+  color: #bdbdbd; /* 연한 회색 글자 */
+  cursor: not-allowed;
+}
+
+
+.statusMessage {
+  font-size: 16px;
+  margin-top: 10px;
+  padding: 5px;
+  color: #ffffff;
+  background-color: #373D5C;
+  width: 300px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* 공통 버튼 스타일 */
+.button {
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s, box-shadow 0.3s;
+}

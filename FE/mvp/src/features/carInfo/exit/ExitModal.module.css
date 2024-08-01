@@ -1,0 +1,61 @@
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modalContent {
+    background: white;
+    padding: 20px;
+    border-radius: 15px; /* 모서리 둥글게 */
+    text-align: center;
+    width: 300px;
+}
+
+.carNumber {
+    font-size: 24px;
+    color: blue;
+    margin-bottom: 10px;
+}
+
+.message {
+    font-size: 18px;
+    color: black;
+    margin-bottom: 20px;
+}
+
+.buttons {
+    display: flex;
+    justify-content: space-around;
+}
+
+.confirmButton {
+    background-color: blue;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.cancelButton {
+    background-color: white;
+    color: red;
+    border: 1px solid red;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.confirmButton:hover, .cancelButton:hover {
+    opacity: 0.8;
+}
