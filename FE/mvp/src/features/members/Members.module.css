@@ -7,15 +7,15 @@
 
 .content {
     flex: 1;
-    padding: 20px;
-    background-color: #f7f8fc;
+    padding: 20px 150px;
+    background-color: #f9fafc;
 }
 
 .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+    /* margin-bottom: 20px; */
 }
 
 .search {
@@ -39,38 +39,84 @@
 
 .summary {
     display: flex;
+    margin-bottom: 10px;
     justify-content: space-between;
-    margin-bottom: 20px;
 }
 
 .summaryItem {
-    flex: 1;
+    display: flex;
+    flex: 0 1 150px;
     background: white;
     border-radius: 10px;
-    padding: 15px;
-    text-align: center;
-    margin-right: 10px;
-}
-
-.summaryItem:last-child {
-    margin-right: 0;
+    padding: 0px 10px;  
+    margin: 0px 50px;
+    box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.25);
+    border:black solid 1px;
+    align-items: center; /* 세로 가운데 정렬 */
+    justify-content: space-between; /* 수평 가운데 정렬 */
 }
 
 .icon {
-    font-size: 24px;
-    margin-bottom: 5px;
+    font-size: 34px;
+    vertical-align: center;
+}
+.item {
+    font-size: 20px;
+    color: rgb(191, 191, 191);
+}
+
+.stat{
+    font-size: 30px;
+    text-align: left;
 }
 
 .membersTable {
-    background: white;
+    background: none;
     border-radius: 10px;
     overflow: hidden;
 }
 
-.membersTable table {
-    width: 100%;
-    border-collapse: collapse;
+.tableHead{
+    display: flex;
+    background: none;
+    padding: 5px
 }
+
+.tableBody{
+    display: flex;
+    border-radius: 10px;
+    background: white;
+    box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.25);
+    margin-bottom: 10px;
+    padding: 5px;
+    font-size: 18px;
+}
+
+.tableBody input {
+    border: none;
+    background: none;
+    font-size: 18px;
+    color: rgb(178, 178, 178);
+    padding: 0;
+    margin: 0;
+    /* width: 100%; */
+}
+
+.name{
+    margin-left: 20px;
+    width: 100px;
+}
+
+.car{
+    width: 150px;
+}
+.phone{
+    width: 250px;
+}
+.date{
+    width: 200px;
+}
+
 
 .membersTable th, .membersTable td {
     padding: 10px;
@@ -92,13 +138,15 @@
 .actions {
     display: flex;
     justify-content: flex-end;
-    margin-top: 20px;
+    /* margin-top: 20px; */
 }
 
 .addButton {
     background-color: #007bff;
     color: white;
-    border: none;
+    font-size: 18px;
+    font-weight: bold;
+    border: #007bff solid 1px;;
     border-radius: 5px;
     padding: 10px 20px;
     cursor: pointer;
@@ -106,11 +154,73 @@
 }
 
 .deleteButton {
-    background-color: #dc3545;
-    color: white;
-    border: none;
+    background-color: #ffffff;
+    color: #dc3545;
+    font-size: 18px;
+    font-weight: bold;
+    border: #dc3545 solid 1px;
     border-radius: 5px;
     padding: 10px 20px;
     cursor: pointer;
 }
+  
+
+
+/* .pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  
+  .pagination button {
+    border: 1px solid #ddd;
+    background: #f8f8f8;
+    padding: 5px 10px;
+    margin: 0 2px;
+    cursor: pointer;
+  }
+  
+  .pagination button:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+  
+  .pagination .activePage {
+    font-weight: bold;
+    color: #333;
+  } */
+
+  .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+  }
+  
+  .pagination button {
+    border: 1px solid #ddd;
+    background: #f8f8f8;
+    padding: 5px 10px;
+    margin: 0 2px;
+    cursor: pointer;
+  }
+  
+  .pagination button:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+  
+  .pagination .activePage {
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .pagination span {
+    margin: 0 5px;
+  }
+  
+
+
+
+
   
