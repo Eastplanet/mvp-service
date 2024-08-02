@@ -198,7 +198,7 @@ public class ParkingBotService {
                 .id(endSpot.getId())
                 .spotNumber(endSpot.getSpotNumber())
                 .parkedVehicle(vehicle)
-                .status(LOT_EMPTY)
+                .status(LOT_OCCUPIED)
                 .build();
 
         parkingLotSpotRepository.save(startSpot);
