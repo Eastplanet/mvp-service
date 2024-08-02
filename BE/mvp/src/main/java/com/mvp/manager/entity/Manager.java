@@ -19,16 +19,16 @@ public class Manager {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name", length = 255)
+    @Column(name = "name", length = 255, nullable = false)
     private String name;
 
-    @Column(name = "password", length = 255)
+    @Column(name = "password", length = 255, nullable = false)
     private String password;
 
-    @Column(name = "email", length = 255)
+    @Column(name = "email", length = 255, nullable = false)
     private String email;
 
-    @Column(name = "phone_number", length = 255)
+    @Column(name = "phone_number", length = 255, nullable = false)
     private String phoneNumber;
 
     public void update(ManagerDTO managerDTO){
