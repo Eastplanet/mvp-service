@@ -24,16 +24,15 @@ public class ManagerController {
 
     @PostMapping()
     public ResponseEntity<ResponseDto> createManager(@RequestBody(required = true) ManagerDTO managerDTO) {
-        if(managerDTO.getName() == null ||
-           managerDTO.getEmail()== null ||
-           managerDTO.getPhoneNumber()==null ||
-           managerDTO.getPassword()==null) {
+        if (managerDTO.getName() == null ||
+                managerDTO.getEmail() == null ||
+                managerDTO.getPhoneNumber() == null ||
+                managerDTO.getPassword() == null) {
             throw new RestApiException(StatusCode.BAD_REQUEST);
         }
 
-
         ManagerDTO manager = managerService.createManager(managerDTO);
-        if(manager == null) {
+        if (manager == null) {
             throw new RestApiException(StatusCode.BAD_REQUEST);
         }
 
@@ -42,8 +41,8 @@ public class ManagerController {
 
     @PostMapping("/login")
     public ResponseEntity<ResponseDto> login(@RequestBody ManagerDTO managerDTO) {
-        if(managerDTO.getEmail() == null ||
-        managerDTO.getPassword()==null) {
+        if (managerDTO.getEmail() == null ||
+                managerDTO.getPassword() == null) {
             throw new RestApiException(StatusCode.BAD_REQUEST);
         }
 
@@ -55,14 +54,14 @@ public class ManagerController {
     @PutMapping("/{email}")
     public ResponseEntity<ResponseDto> updateManager(@PathVariable String email, @RequestBody ManagerDTO managerDTO) {
         managerDTO.setEmail(email);
-        if(managerDTO.getPassword() == null ||
-            managerDTO.getName() == null ||
-            managerDTO.getPhoneNumber() == null) {
+        if (managerDTO.getPassword() == null ||
+                managerDTO.getName() == null ||
+                managerDTO.getPhoneNumber() == null) {
             throw new RestApiException(StatusCode.BAD_REQUEST);
         }
 
         ManagerDTO result = managerService.updateManager(managerDTO);
-        if(result == null) {
+        if (result == null) {
             throw new RestApiException(StatusCode.INTERNAL_SERVER_ERROR);
         }
 
@@ -72,15 +71,14 @@ public class ManagerController {
 
     @DeleteMapping("/{email}")
     public ResponseEntity<ResponseDto> deleteManager(@RequestBody ManagerDTO managerDTO) {
-        if(managerDTO.getEmail() == null) {
+        if (managerDTO.getEmail() == null) {
             throw new RestApiException(StatusCode.BAD_REQUEST);
         }
 
         boolean result = managerService.deleteManager(managerDTO);
-        if(result){
-            return ResponseDto.response(StatusCode.SUCCESS,null);
-        }
-        else{
+        if (result) {
+            return ResponseDto.response(StatusCode.SUCCESS, null);
+        } else {
             throw new RestApiException(StatusCode.INTERNAL_SERVER_ERROR);
         }
     }
