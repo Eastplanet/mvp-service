@@ -8,10 +8,7 @@ import com.mvp.stats.dto.ParkingLogRes;
 import com.mvp.stats.service.StatsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -29,7 +26,8 @@ public class StatsController {
     }
 
     @GetMapping("/parking-log")
-    public ResponseEntity<ResponseDto> parkingLog(@RequestBody ParkingLogReq parkingLogReq){
+    public ResponseEntity<ResponseDto> parkingLog(@ModelAttribute ParkingLogReq parkingLogReq){
+        System.out.println("parkingLogReq = " + parkingLogReq);
         List<ParkingLogRes> parkingLot = statsService.getParkingLot(parkingLogReq);
         return ResponseDto.response(StatusCode.SUCCESS, parkingLot);
     }

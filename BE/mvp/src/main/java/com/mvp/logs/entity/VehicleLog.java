@@ -20,7 +20,7 @@ public class VehicleLog {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "license_plate", length = 16)
+    @Column(name = "license_plate", length = 16, nullable = false)
     private String licensePlate;
 
     @Column(name = "entrance_time")
@@ -35,5 +35,8 @@ public class VehicleLog {
     @Lob
     @Column(name = "image", columnDefinition = "LONGBLOB")
     private byte[] image;
+
+    @Column(name = "type")
+    private Integer type;
 
 }

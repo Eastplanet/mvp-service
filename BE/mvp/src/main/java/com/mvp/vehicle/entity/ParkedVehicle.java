@@ -19,13 +19,13 @@ public class ParkedVehicle {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "entrance_time")
+    @Column(name = "entrance_time", nullable = false)
     private LocalDateTime entranceTime;
 
     @Lob
-    @Column(name = "image", columnDefinition = "LONGBLOB")
+    @Column(name = "image", columnDefinition = "LONGBLOB", nullable = false)
     private byte[] image;
 
-    @Column(name = "license_plate", length = 255)
+    @Column(name = "license_plate", length = 255, nullable = false)
     private String licensePlate;
 }

@@ -19,15 +19,18 @@ public class Membership {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "license_plate", length = 255)
+    @Column(name = "license_plate", length = 255, nullable = false)
     private String licensePlate;
 
-    @Column(name = "end_date")
+    @Column(name = "start_date", nullable = false)
+    private LocalDateTime startDate;
+
+    @Column(name = "end_date", nullable = false)
     private LocalDateTime endDate;
 
-    @Column(name = "phone_number", length = 255)
+    @Column(name = "phone_number", length = 255, nullable = false)
     private String phoneNumber;
 
-    @Column(name = "name", length = 255)
+    @Column(name = "name", length = 255, nullable = false)
     private String name;
 }
