@@ -1,5 +1,8 @@
 package com.mvp.vehicle.controller;
 
+import com.mvp.common.ResponseDto;
+import com.mvp.common.exception.RestApiException;
+import com.mvp.common.exception.StatusCode;
 import com.mvp.vehicle.dto.ParkedVehicleDTO;
 import com.mvp.vehicle.entity.ParkedVehicle;
 import com.mvp.vehicle.service.VehicleService;
@@ -22,12 +25,12 @@ public class VehicleController {
      * @return
      */
     @GetMapping("/{vehicleId}")
-    public ResponseEntity<ParkedVehicleDTO> getParkedVehicle(@PathVariable Long vehicleId){
+    public ResponseEntity<ResponseDto> getParkedVehicle(@PathVariable Long vehicleId){
         ParkedVehicleDTO parkedVehicleDTO = vehicleService.getParkedVehicle(vehicleId);
         if(parkedVehicleDTO != null){
-            return ResponseEntity.ok(parkedVehicleDTO);
+            return ResponseDto.response(StatusCode.SUCCESS, parkedVehicleDTO);
         } else {
-            return ResponseEntity.notFound().build();
+            throw new RestApiException(StatusCode.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -36,13 +39,13 @@ public class VehicleController {
      * @return
      */
     @GetMapping("/list")
-    public ResponseEntity<List<ParkedVehicleDTO>> getParkedVehicleList(){
+    public ResponseEntity<ResponseDto> getParkedVehicleList(){
         List<ParkedVehicleDTO> parkedVehicleList = vehicleService.getParkedVehicleList();
 
         if(!parkedVehicleList.isEmpty()){
-            return ResponseEntity.ok(parkedVehicleList);
+            return ResponseDto.response(StatusCode.SUCCESS, parkedVehicleList);
         } else {
-            return ResponseEntity.notFound().build();
+            throw new RestApiException(StatusCode.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -52,13 +55,15 @@ public class VehicleController {
      * @return
      */
     @GetMapping
-    public ResponseEntity<List<ParkedVehicleDTO>> getParkedVehicleByBackNum(@RequestParam String backNum){
+    public ResponseEntity<ResponseDto> getParkedVehicleByBackNum(@RequestParam String backNum){
         List<ParkedVehicleDTO> parkedVehicleList = vehicleService.getParkedVehicleListByBackNum(backNum);
 
         if(!parkedVehicleList.isEmpty()){
-            return ResponseEntity.ok(parkedVehicleList);
+            return ResponseDto.response(StatusCode.SUCCESS, parkedVehicleList);
         } else {
-            return ResponseEntity.notFound().build();
+            throw new RestApiException(StatusCode.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @
 }
