@@ -12,7 +12,7 @@ const DiscountModal: React.FC<DiscountModalProps> = ({ carLog, onClose, onApplyD
   const [discountAmount, setDiscountAmount] = useState(0);
 
   const handleDiscount = (amount: number) => {
-    setDiscountAmount(amount);
+    setDiscountAmount(Math.min(amount, carLog.fee));
   };
 
   const applyDiscount = () => {

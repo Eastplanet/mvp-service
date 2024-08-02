@@ -3,21 +3,28 @@ import styles from './ParkingLot.module.css';
 import parkingCar from '../../assets/images/icons/parking_car.png';
 
 type CarLog = {
-  carNumber: string;
+  licensePlate: string;
   parkingDate: string;
   carState: string;
-  entryTime: Date;
-  exitTime?: Date;
+  entryTime: string;
+  exitTime?: string;
   fee: number;
   imageBase64?: string;
 };
 
 type ParkingLotProps = {
   parkingData: CarLog[];
-  onCarLogClick: (carLog: CarLog) => void;
+  onCarLogClick?: (carLog: CarLog) => void;
+  mode: 'main' | 'move';
 };
 
-const ParkingLot: React.FC<ParkingLotProps> = ({ parkingData, onCarLogClick }) => {
+const ParkingLot: React.FC<ParkingLotProps> = ({ parkingData, onCarLogClick, mode }) => {
+  const handleCarLogClick = (carLog: CarLog) => {
+    if (mode === 'main' && onCarLogClick && carLog.licensePlate) {
+      onCarLogClick(carLog);
+    }
+  };
+
   return (
     <div className={styles.parkingLotContainer}>
       <div className={styles.parkingLot}>
@@ -26,9 +33,9 @@ const ParkingLot: React.FC<ParkingLotProps> = ({ parkingData, onCarLogClick }) =
             <div
               key={index}
               className={styles.parkingSpace}
-              onClick={() => onCarLogClick(carLog)}
+              onClick={() => handleCarLogClick(carLog)}
             >
-              {carLog.carNumber && <img src={parkingCar} alt={carLog.carNumber} className={styles.rotatedCar} />}
+              {carLog.licensePlate && <img src={parkingCar} alt={carLog.licensePlate} className={styles.rotatedCar} />}
             </div>
           ))}
           <div className={`${styles.parkingSpace} ${styles.emptySpace}`}></div>
@@ -39,9 +46,9 @@ const ParkingLot: React.FC<ParkingLotProps> = ({ parkingData, onCarLogClick }) =
             <div
               key={index}
               className={styles.parkingSpace}
-              onClick={() => onCarLogClick(carLog)}
+              onClick={() => handleCarLogClick(carLog)}
             >
-              {carLog.carNumber && <img src={parkingCar} alt={carLog.carNumber} />}
+              {carLog.licensePlate && <img src={parkingCar} alt={carLog.licensePlate} />}
             </div>
           ))}
         </div>

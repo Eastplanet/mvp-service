@@ -1,6 +1,7 @@
 import React from 'react';
-import styles from './Modal.module.css'; // 각 모달에 대한 CSS 파일
+import styles from './MoveModal.module.css';
 import { CarLog } from '../CarInfoModal';
+import ParkingLot from '../../parkingLot/ParkingLot';
 
 interface MoveModalProps {
   carLog: CarLog;
@@ -13,7 +14,7 @@ const MoveModal: React.FC<MoveModalProps> = ({ carLog, onClose }) => {
       <div className={styles.modalContent}>
         <button className={styles.closeButton} onClick={onClose} aria-label="Close">X</button>
         <h2>이동 정보</h2>
-        {/* 이동 모달 내용 추가 */}
+        {/* <ParkingLot parkingData={} mode='move'/> */}
       </div>
     </div>
   );

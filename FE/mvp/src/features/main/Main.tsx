@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '../../store/store';
-import { fetchParkingData, fetchSearchData, setSearchTerm, setStartDate, setEndDate, fetchCurrentParkedCars } from './mainSlice';
+import { fetchParkingData, fetchSearchData, setlicensePlate, setStartDate, setEndDate } from './mainSlice';
 import Sidebar from '../sidebar/Sidebar';
 import styles from './Main.module.css';
 import searchIcon from '../../assets/images/icons/searchIcon.png'
@@ -9,29 +9,33 @@ import CarInfo from '../carInfo/CarInfoModal';
 import ParkingLot from '../parkingLot/ParkingLot';
 
 type CarLog = {
-  carNumber: string;
+  licensePlate: string;
   parkingDate: string;
   carState: string;
-  entryTime: Date;
-  exitTime?: Date;
+  entryTime: string;
+  exitTime?: string;
   fee: number;
   imageBase64?: string;
 };
 
 const Main: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
-  const { todayIn, todayOut, todayIncome, searchTerm, startDate, endDate, searchData, currentParkedCars } = useSelector((state: RootState) => state.main);
-
-
+  const { todayIn, todayOut, todayIncome, licensePlate, startDate, endDate, searchData, currentParkedCars } = useSelector((state: RootState) => state.main);
   const [selectedCarLog, setSelectedCarLog] = useState<CarLog | null>(null);
+  const [searchPerformed, setSearchPerformed] = useState(false);
 
   useEffect(() => {
     dispatch(fetchParkingData());
-    dispatch(fetchCurrentParkedCars());
   }, [dispatch]);
 
+  useEffect(() => {
+    console.log('searchData:', searchData);
+    console.log('currentParkedCars:', currentParkedCars);
+  }, [searchData, currentParkedCars]);
+
   const handleSearch = () => {
-    dispatch(fetchSearchData({ searchTerm, startDate, endDate }));
+    dispatch(fetchSearchData({ licensePlate, startDate, endDate }));
+    setSearchPerformed(true);
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -41,9 +45,15 @@ const Main: React.FC = () => {
   };
 
   const formatDate = (dateString: string) => {
-    const year = dateString.substring(0, 4);
-    const month = dateString.substring(4, 6);
-    const day = dateString.substring(6, 8);
+    if (!dateString) {
+      return '';
+    }
+    
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    
     return `${year}.${month}.${day}`;
   };
 
@@ -64,13 +74,15 @@ const Main: React.FC = () => {
     setSelectedCarLog(carLog);
   };
 
+  const carLogsToDisplay = searchPerformed && searchData.length === 0 ? [] : (searchData.length > 0 ? searchData : currentParkedCars);
+
   return (
     <div className={styles.main}>
       <Sidebar />
       <div className={styles.mainContent}>
         <div className={styles.parkingInfo}>
           <div className={styles.parkingMap}>
-            <ParkingLot parkingData={currentParkedCars} onCarLogClick={handleCarLogClick} />
+            <ParkingLot parkingData={currentParkedCars} onCarLogClick={handleCarLogClick} mode='main'/>
           </div>
           <div className={styles.dataTables}>
             <div className={styles.todayIn}>
@@ -95,8 +107,8 @@ const Main: React.FC = () => {
                 className={styles.searchInput} 
                 type="text" 
                 placeholder="Search Car Number" 
-                value={searchTerm}
-                onChange={(e) => dispatch(setSearchTerm(e.target.value))}
+                value={licensePlate}
+                onChange={(e) => dispatch(setlicensePlate(e.target.value))}
                 onKeyDown={handleKeyDown}
                 maxLength={10}
               />
@@ -119,20 +131,27 @@ const Main: React.FC = () => {
               />
             </div>
           </div>
-          {(searchData.length > 0 ? searchData : currentParkedCars).length > 0 && (
+          {searchPerformed && searchData.length === 0 && (
+            <div className={styles.noResults}>
+              <p>검색 결과가 없습니다.</p>
+            </div>
+          )}
+          {carLogsToDisplay.length > 0 && (
             <div className={styles.searchData}>
               <ul>
-              {(searchData.length > 0 ? searchData : currentParkedCars).map((carLog: CarLog, index: number) => (
-                <li key={index} onClick={() => handleCarLogClick(carLog)}>
-                  <div className={styles.leftData}>
-                    <div className={styles.carNumber}>{carLog.carNumber}</div>
-                    <div className={styles.parkingDate}>{formatDate(carLog.parkingDate)}</div>
-                  </div>
-                  <div className={getCarStateClass(carLog.carState)}>
-                    {carLog.carState}
-                  </div>
-                </li>
-              ))}
+                {carLogsToDisplay
+                  .filter(carLog => carLog.licensePlate)
+                  .map((carLog: CarLog, index: number) => (
+                    <li key={index} onClick={() => handleCarLogClick(carLog)}>
+                      <div className={styles.leftData}>
+                        <div className={styles.licensePlate}>{carLog.licensePlate}</div>
+                        <div className={styles.parkingDate}>{formatDate(carLog.parkingDate)}</div>
+                      </div>
+                      <div className={getCarStateClass(carLog.carState)}>
+                        {carLog.carState}
+                      </div>
+                    </li>
+                  ))}
               </ul>
             </div>
           )}
