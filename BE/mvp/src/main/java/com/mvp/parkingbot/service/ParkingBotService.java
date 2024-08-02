@@ -2,11 +2,16 @@ package com.mvp.parkingbot.service;
 
 import com.mvp.common.exception.RestApiException;
 import com.mvp.common.exception.StatusCode;
+import com.mvp.logs.dto.EntranceLogDTO;
+import com.mvp.logs.dto.ExitLogDTO;
+import com.mvp.logs.service.LogsService;
 import com.mvp.parkingbot.converter.ParkingBotConverter;
 import com.mvp.parkingbot.dto.*;
 import com.mvp.parkingbot.entity.ParkingBot;
 import com.mvp.parkingbot.repository.ParkingBotRepository;
+import com.mvp.stats.service.StatsService;
 import com.mvp.utils.TaskQueue;
+import com.mvp.vehicle.converter.ParkedVehicleConverter;
 import com.mvp.vehicle.entity.ParkedVehicle;
 import com.mvp.vehicle.entity.ParkingLotSpot;
 import com.mvp.vehicle.repository.ParkedVehicleRepository;
@@ -30,6 +35,8 @@ public class ParkingBotService {
     private final ParkingLotSpotRepository parkingLotSpotRepository;
     private final ParkingBotRepository parkingBotRepository;
     private final ParkedVehicleRepository parkedVehicleRepository;
+    private final LogsService logsService;
+    private final StatsService statsService;
     private TaskQueue taskQueue;
 
     /**
@@ -82,6 +89,13 @@ public class ParkingBotService {
             taskQueue.addTask(task);
         }
 
+        EntranceLogDTO logDto = EntranceLogDTO.builder()
+                .licensePlate(enterRequestDTO.getLicensePlate())
+                .image(enterRequestDTO.getImage())
+                .entranceTime(enterRequestDTO.getEntranceTime())
+                .build();
+        logsService.createEntryLog(logDto);
+
         return task;
     }
 
@@ -131,6 +145,14 @@ public class ParkingBotService {
                     .build();
             taskQueue.addTask(task);
         }
+
+        int price = statsService.calculatePrice(ParkedVehicleConverter.entityToDto(parkedVehicle));
+        ExitLogDTO logDto = ExitLogDTO.builder()
+                .licensePlate(parkedVehicle.getLicensePlate())
+                .image(parkedVehicle.getImage())
+                .fee(price)
+                .build();
+        logsService.createExitLog(logDto);
 
         return true;
     }

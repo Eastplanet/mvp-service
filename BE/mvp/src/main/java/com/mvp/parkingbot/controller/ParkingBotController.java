@@ -8,11 +8,13 @@ import com.mvp.parkingbot.service.ParkingBotService;
 import com.mvp.vehicle.dto.ParkedVehicleDTO;
 import com.mvp.vehicle.repository.ParkedVehicleRepository;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/parking-bot")
 @AllArgsConstructor
@@ -25,12 +27,12 @@ public class ParkingBotController {
      * @return
      */
     @PostMapping("/enter")
-    public ResponseEntity<Task> enterRequest(@RequestBody EnterRequestDTO enterRequestDTO) {
+    public ResponseEntity<ResponseDto> enterRequest(@RequestBody EnterRequestDTO enterRequestDTO) {
         Task task = parkingBotService.handleEnterRequest(enterRequestDTO);
         if(task != null){
-            return ResponseEntity.ok(task);
+            return ResponseDto.response(StatusCode.SUCCESS,task);
         } else {
-            return ResponseEntity.badRequest().build();
+            throw new RestApiException(StatusCode.BAD_REQUEST);
         }
     }
 
@@ -40,12 +42,12 @@ public class ParkingBotController {
      * @return
      */
     @DeleteMapping("/exit/{licensePlate}")
-    public ResponseEntity<Void> exitRequest(@PathVariable String licensePlate) {
+    public ResponseEntity<ResponseDto> exitRequest(@PathVariable String licensePlate) {
         boolean success = parkingBotService.handleExitRequest(licensePlate);
         if(success){
-            return ResponseEntity.ok().build();
+            return ResponseDto.response(StatusCode.SUCCESS,null);
         } else {
-            return ResponseEntity.badRequest().build();
+            throw new RestApiException(StatusCode.BAD_REQUEST);
         }
     }
 
