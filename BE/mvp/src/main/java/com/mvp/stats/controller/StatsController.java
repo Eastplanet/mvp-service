@@ -27,6 +27,7 @@ public class StatsController {
 
     @GetMapping("/parking-log")
     public ResponseEntity<ResponseDto> parkingLog(@ModelAttribute ParkingLogReq parkingLogReq){
+        System.out.println("parkingLogReq = " + parkingLogReq);
         List<ParkingLogRes> parkingLot = statsService.getParkingLot(parkingLogReq);
         return ResponseDto.response(StatusCode.SUCCESS, parkingLot);
     }
