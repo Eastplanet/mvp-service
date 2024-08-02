@@ -1,3 +1,4 @@
+import base64
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton, QSpacerItem, QSizePolicy, QHBoxLayout
 from PyQt6.QtGui import QPixmap
 from PyQt6.QtCore import Qt
@@ -24,8 +25,17 @@ class SettlementPage(QWidget):
         container_layout = QVBoxLayout(container_widget)
 
         # 차량 이미지 및 정보
+        if vehicle_info['image']:
+            image_data = base64.b64decode(vehicle_info['image'])
+            pixmap = QPixmap()
+            pixmap.loadFromData(image_data)
+        else:
+            pixmap = QPixmap('parking_kiosk/gui/res/placeholder.png')  # 대체 이미지 경로
+
+        pixmap = pixmap.scaled(80, 80, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
+
+
         header_layout = QHBoxLayout()
-        pixmap = QPixmap(vehicle_info['image_path']).scaled(80, 80, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
         image_label = QLabel(self)
         image_label.setPixmap(pixmap)
         image_label.setFixedSize(100, 100)
@@ -33,7 +43,7 @@ class SettlementPage(QWidget):
         header_layout.addWidget(image_label)
 
         info_layout = QVBoxLayout()
-        plate_label = QLabel(vehicle_info['plate_number'], self)
+        plate_label = QLabel(vehicle_info['license_plate'], self)
         plate_label.setStyleSheet("font-size: 18px; color: black; font-weight: bold;")
         duration_label = QLabel(vehicle_info['duration'], self)
         duration_label.setStyleSheet("font-size: 16px; color: black;")
@@ -49,7 +59,7 @@ class SettlementPage(QWidget):
         details = [
             ("입차일시", vehicle_info['entry_time']),
             ("출차일시", vehicle_info['exit_time']),
-            ("주차시간", vehicle_info['parking_duration']),
+            ("주차시간", vehicle_info['duration']),
             ("요금종별", vehicle_info['fee_type']),
             ("주차요금", vehicle_info['parking_fee']),
             ("할인요금", vehicle_info['discount_fee']),

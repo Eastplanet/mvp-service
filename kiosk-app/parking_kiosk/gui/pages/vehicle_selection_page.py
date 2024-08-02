@@ -17,7 +17,7 @@ class VehicleSelectionPage(QWidget):
 
         # 차량 리스트 항목 추가
         for vehicle in vehicles:
-            item = VehicleListItem(vehicle['image_path'], vehicle['plate_number'], vehicle['duration'], main_window, self)
+            item = VehicleListItem(vehicle['image'], vehicle['licensePlate'], vehicle['entranceTime'], main_window, self)
             layout.addWidget(item)
             layout.addSpacing(10)  # 항목 간의 간격 추가
 

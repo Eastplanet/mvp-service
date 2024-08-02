@@ -1,12 +1,24 @@
+import base64
+from datetime import datetime
 from PyQt6.QtWidgets import QWidget, QHBoxLayout, QLabel, QVBoxLayout, QSpacerItem, QSizePolicy
 from PyQt6.QtGui import QPixmap
 from PyQt6.QtCore import Qt
 
 class VehicleListItem(QWidget):
-    def __init__(self, image_path, plate_number, duration, main_window, parent=None):
+    def __init__(self, imageBase64, licensePlate, entranceTimeStr, main_window, parent=None):
         super(VehicleListItem, self).__init__(parent)
         self.main_window = main_window
-
+        self.imageBase64 = imageBase64
+        self.licensePlate = licensePlate
+        try:
+            self.entranceTime = datetime.strptime(entranceTimeStr, '%Y-%m-%dT%H:%M:%S.%f')
+        except ValueError:
+            self.entranceTime = datetime.strptime(entranceTimeStr, '%Y-%m-%dT%H:%M:%S')
+        
+        # 입차 시간과 현재 시간의 차이 계산
+        self.duration = datetime.now() - self.entranceTime
+        duration_str = str(self.duration).split('.')[0]
+        
         # 흰색 배경의 빈 위젯 생성
         container_widget = QWidget(self)
         container_widget.setStyleSheet("background-color: white; border-radius: 15px; border: 1px solid white;")  # 테두리 색상을 흰색으로 설정
@@ -16,19 +28,37 @@ class VehicleListItem(QWidget):
         container_widget.setLayout(outer_layout)
         
         # 차량 이미지
-        pixmap = QPixmap(image_path).scaled(80, 80, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
+        # pixmap = QPixmap(imageBase64).scaled(80, 80, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
+        # image_label = QLabel(self)
+        # image_label.setPixmap(pixmap)
+        # image_label.setFixedSize(100, 100)
+        # image_label.setStyleSheet("border-radius: 10px; background-color: white;")
+        # outer_layout.addWidget(image_label)
+        
+        # 차량 이미지 v2
+        # Base64 이미지를 QPixmap으로 변환 또는 대체 이미지 사용
+        if imageBase64:
+            image_data = base64.b64decode(imageBase64)
+            pixmap = QPixmap()
+            pixmap.loadFromData(image_data)
+        else:
+            pixmap = QPixmap('parking_kiosk/gui/res/placeholder.png')  # 대체 이미지 경로
+
+        pixmap = pixmap.scaled(80, 80, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
+
+        # 차량 이미지
         image_label = QLabel(self)
         image_label.setPixmap(pixmap)
         image_label.setFixedSize(100, 100)
         image_label.setStyleSheet("border-radius: 10px; background-color: white;")
         outer_layout.addWidget(image_label)
-
+        
         # 차량 정보 레이아웃
         info_layout = QVBoxLayout()
         info_layout.setContentsMargins(10, 0, 10, 0)
-        plate_label = QLabel(plate_number, self)
+        plate_label = QLabel(licensePlate, self)
         plate_label.setStyleSheet("font-size: 18px; color: black; font-weight: bold;")
-        duration_label = QLabel(duration, self)
+        duration_label = QLabel(duration_str, self)
         duration_label.setStyleSheet("font-size: 16px; color: black;")
         info_layout.addWidget(plate_label)
         info_layout.addWidget(duration_label)
@@ -45,12 +75,11 @@ class VehicleListItem(QWidget):
         
         # vehicle info
         self.vehicle_info = {
-            'image_path': 'parking_kiosk\\gui\\res\\test-image1.png',
-            'plate_number': '19오 7777',
-            'duration': '43분',
-            'entry_time': '07-23 20:03',
-            'exit_time': '07-23 20:46',
-            'parking_duration': '00:43',
+            'image': imageBase64,
+            'license_plate': licensePlate,
+            'duration': duration_str,
+            'entry_time': entranceTimeStr,
+            'exit_time': datetime.now().isoformat(),
             'fee_type': '일반',
             'parking_fee': '3,500원',
             'discount_fee': '-1,000원',

@@ -76,8 +76,6 @@ class MainWindow(QMainWindow):
         time.sleep(3)
         self.parking_barrier.downBarrier()
         
-
-        
     def show_settlement_page(self, vehicle_info):
         settlement_page = SettlementPage(vehicle_info, self)
         self.stacked_widget.addWidget(settlement_page)
