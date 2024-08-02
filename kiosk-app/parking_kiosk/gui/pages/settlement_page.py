@@ -4,11 +4,13 @@ from PyQt6.QtGui import QPixmap
 from PyQt6.QtCore import Qt
 from PyQt6.QtCore import QTimer
 from gui.components.gif_widget import GifWidget
+from core.handlers import handle_exit
 
 class SettlementPage(QWidget):
     def __init__(self, vehicle_info, main_window, parent=None):
         super(SettlementPage, self).__init__(parent)
         self.main_window = main_window
+        self.vehicle_info = vehicle_info
 
         layout = QVBoxLayout()
         self.setLayout(layout)
@@ -92,7 +94,7 @@ class SettlementPage(QWidget):
             font-size: 20px; 
             border-radius: 5px;
         """)
-        settle_button.clicked.connect(self.show_gif_widget)
+        settle_button.clicked.connect(self.confirm_settle)
         layout.addWidget(settle_button, alignment=Qt.AlignmentFlag.AlignCenter)
 
         # 뒤로가기 버튼
@@ -107,14 +109,15 @@ class SettlementPage(QWidget):
         # back_button.clicked.connect(self.go_back)
         # layout.addWidget(back_button, alignment=Qt.AlignmentFlag.AlignRight)
 
+    def confirm_settle(self):
+        # 정산 핸들러 실행
+        success = handle_exit(self.vehicle_info['license_plate'])
+        # 정산 완료 시 메인페이지로 전환
+        if success:
+            self.return_to_main()
+
     def go_back(self):
         self.parent().stacked_widget.setCurrentWidget(self.parent().exit_page)
-        
-    def show_gif_widget(self):
-        gif_widget = GifWidget("parking_kiosk/gui/res/car-anime.gif", duration=3000, parent=self)
-        gif_widget.move(self.rect().center() - gif_widget.rect().center())
-        gif_widget.start()
-        QTimer.singleShot(3000, self.return_to_main)
         
     def return_to_main(self):
         self.main_window.stacked_widget.setCurrentWidget(self.main_window.main_button)

@@ -37,8 +37,14 @@ def handle_enter(image_path, license_plate, entrance_time):
     else:
         return False
     
-def handle_exit():
-    print('출차 명령 전송 완료')
+def handle_exit(licensePlate):
+    url = SERVER_URL + "/parking-bot/exit/" + licensePlate
+    response = requests.delete(url)
+    
+    if response.status_code == 200:
+        return True
+    else:
+        return False
 
 # 차량 정보 가져오기
 def handle_get_vehicles(license_plate):
