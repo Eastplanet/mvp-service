@@ -1,5 +1,7 @@
 package com.mvp.parkingbot.service;
 
+import com.mvp.common.exception.RestApiException;
+import com.mvp.common.exception.StatusCode;
 import com.mvp.parkingbot.converter.ParkingBotConverter;
 import com.mvp.parkingbot.dto.*;
 import com.mvp.parkingbot.entity.ParkingBot;
@@ -199,6 +201,34 @@ public class ParkingBotService {
     }
 
     /**
+     * 차량 위치 변경 handleMoveRequest을 사용 
+     * moveVehicleRequestDTO -> MoveRequestDTO로 변환한 뒤 handleMoveRequest 사용
+     * @param moveVehicleRequestDTO
+     * @return
+     */
+    public Task handleMoveVehicleRequest(MoveVehicleRequestDTO moveVehicleRequestDTO) {
+        //MoveVehicleRequestDTO -> moveRequestDTO
+        ParkingLotSpot parkingLotSpot = parkingLotSpotRepository.findByParkedVehicle_LicensePlate(moveVehicleRequestDTO.getLicensePlate());
+
+        if(parkingLotSpot == null || parkingLotSpot.getId() == null){
+            throw new RestApiException(StatusCode.NO_SUCH_ELEMENT);
+        }
+
+        ParkedVehicle parkedVehicle = parkingLotSpot.getParkedVehicle();
+
+        if(parkedVehicle == null || parkedVehicle.getId() == null){
+            throw new RestApiException(StatusCode.NO_SUCH_ELEMENT);
+        }
+
+        MoveRequestDTO dto = MoveRequestDTO.builder()
+                .start(parkingLotSpot.getSpotNumber())
+                .end(moveVehicleRequestDTO.getEndSpot())
+                .build();
+
+        return handleMoveRequest(dto);
+    }
+
+    /**
      * 주차봇 상태 변경
      * @param serialNumber, status
      * @return
@@ -272,4 +302,6 @@ public class ParkingBotService {
         List<ParkingBot> parkingBotList = parkingBotRepository.findAll();
         return ParkingBotConverter.entityToDtoList(parkingBotList);
     }
+
+
 }

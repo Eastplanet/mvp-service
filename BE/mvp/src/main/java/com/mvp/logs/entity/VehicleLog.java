@@ -32,4 +32,8 @@ public class VehicleLog {
     @Column(name = "fee")
     private Integer fee;
 
+    @Lob
+    @Column(name = "image", columnDefinition = "LONGBLOB")
+    private byte[] image;
+
 }

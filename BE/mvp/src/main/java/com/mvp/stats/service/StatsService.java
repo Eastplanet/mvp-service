@@ -3,9 +3,12 @@ package com.mvp.stats.service;
 import com.mvp.logs.dto.VehicleLogDTO;
 import com.mvp.logs.repository.VehicleLogRepository;
 import com.mvp.logs.service.LogsService;
+import com.mvp.parkinglot.dto.ParkingLotDTO;
 import com.mvp.parkinglot.dto.ParkingLotSettingDTO;
 import com.mvp.parkinglot.service.ParkingLotService;
 import com.mvp.stats.dto.HomePageInitDto;
+import com.mvp.stats.dto.ParkingLogReq;
+import com.mvp.stats.dto.ParkingLogRes;
 import com.mvp.stats.dto.ParkingLotSpotStats;
 import com.mvp.stats.repository.StatsRepository;
 import com.mvp.vehicle.dto.ParkedVehicleDTO;
@@ -87,6 +90,33 @@ public class StatsService {
         homePageInitDto.setParkingLots(list);
 
         return homePageInitDto;
+    }
+
+    public List<ParkingLogRes> getParkingLot(ParkingLogReq parkingLogReq){
+        List<VehicleLogDTO> find = logsService.findByEntranceTimeBetween(parkingLogReq.getStartDate(), parkingLogReq.getEndDate(), parkingLogReq.getLicensePlate());
+
+        List<ParkingLogRes> list = new ArrayList<>();
+        for(VehicleLogDTO vehicleLogDTO : find){
+
+            int state;
+            if(vehicleLogDTO.getEntranceTime() != null){
+                state = 1;
+            }
+            else{
+                state = 0;
+            }
+            ParkingLogRes build = ParkingLogRes.builder()
+                    .licensePlate(vehicleLogDTO.getLicensePlate())
+                    .parkingDate(vehicleLogDTO.getEntranceTime())
+                    .parkingState(state)
+                    .entranceTime(vehicleLogDTO.getEntranceTime())
+                    .exitTime(vehicleLogDTO.getExitTime())
+                    .fee(vehicleLogDTO.getFee())
+                    .image(vehicleLogDTO.getImage())
+                    .build();
+            list.add(build);
+        }
+        return list;
     }
 
 }

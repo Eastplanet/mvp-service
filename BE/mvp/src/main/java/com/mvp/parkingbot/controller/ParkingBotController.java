@@ -1,5 +1,8 @@
 package com.mvp.parkingbot.controller;
 
+import com.mvp.common.ResponseDto;
+import com.mvp.common.exception.RestApiException;
+import com.mvp.common.exception.StatusCode;
 import com.mvp.parkingbot.dto.*;
 import com.mvp.parkingbot.service.ParkingBotService;
 import com.mvp.vehicle.dto.ParkedVehicleDTO;
@@ -75,6 +78,24 @@ public class ParkingBotController {
             return ResponseEntity.badRequest().build();
         }
     }
+
+    /**
+     * 차량 지정 이동
+     * @param moveVehicleRequestDTO
+     * @return
+     */
+    @PostMapping("/move-vehicle")
+    public ResponseEntity<ResponseDto> moveVehicle(@RequestBody MoveVehicleRequestDTO moveVehicleRequestDTO) {
+
+        Task task = parkingBotService.handleMoveVehicleRequest(moveVehicleRequestDTO);
+        if(task != null){
+            return ResponseDto.response(StatusCode.SUCCESS,task);
+        } else {
+            throw new RestApiException(StatusCode.BAD_REQUEST);
+        }
+    }
+
+
 
     /**
      * 주차봇 상태 변경

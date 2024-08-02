@@ -9,4 +9,5 @@ public interface ParkingLotSpotRepository extends JpaRepository<ParkingLotSpot, 
     ParkingLotSpot findByParkedVehicleId(Long id);
     Optional<ParkingLotSpot> findFirstByStatus(int status);
     ParkingLotSpot findBySpotNumber(int start);
+    ParkingLotSpot findByParkedVehicle_LicensePlate(String licensePlate);
 }
