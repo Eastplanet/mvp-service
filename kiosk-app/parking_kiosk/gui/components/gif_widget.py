@@ -3,7 +3,7 @@ from PyQt6.QtCore import Qt, QTimer, QSize
 from PyQt6.QtGui import QMovie, QColor
 
 class GifWidget(QWidget):
-    def __init__(self, gif_path, duration=3000, parent=None):
+    def __init__(self, gif_path, duration=0, parent=None):
         super(GifWidget, self).__init__(parent)
         self.setFixedSize(300, 400)  # 큰 박스 크기
         self.setWindowFlags(Qt.WindowType.FramelessWindowHint | Qt.WindowType.WindowStaysOnTopHint)
@@ -32,3 +32,6 @@ class GifWidget(QWidget):
     def start(self):
         self.movie.start()
         self.show()
+        
+    def stop(self):
+        self.movie.stop()

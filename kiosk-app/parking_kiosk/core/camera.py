@@ -27,7 +27,7 @@ class Camera:
         image_base64 = base64.b64encode(image_buffer).decode('utf-8')
         return image_base64
 
-    async def ocr_reader(self):
+    def ocr_reader(self):
         file_path = self.capture_image()
         
         url = 'https://apis.openapi.sk.com/sigmeta/lpr/v1'
@@ -43,20 +43,19 @@ class Camera:
         temp_file_path = './result/temp_image.jpeg'
         cv2.imwrite(temp_file_path, resized_img)
 
-        async with ClientSession() as session:
-            with open(temp_file_path,'rb') as image_file:
-                files = {
-                    'File': ('captured_img.jpeg', image_file, 'image/jpeg')
-                }
+        with open(temp_file_path,'rb') as image_file:
+            files = {
+                'File': ('captured_img.jpeg', image_file, 'image/jpeg')
+            }
+            
+            response = requests.post(url, headers=headers, files=files)
+            
+            response_json = response.json()
+            if 'result' in response_json and 'objects' in response_json['result']:
+                lp_string = response_json['result']['objects'][0]['lp_string']
                 
-                response = requests.post(url, headers=headers, files=files)
-                
-                response_json = response.json()
-                if 'result' in response_json and 'objects' in response_json['result']:
-                    lp_string = response_json['result']['objects'][0]['lp_string']
-                    
-                    with open(temp_file_path, 'rb') as img_file:
-                        base64_encoded_img = base64.b64encode(img_file.read()).decode('utf-8')
+                with open(temp_file_path, 'rb') as img_file:
+                    base64_encoded_img = base64.b64encode(img_file.read()).decode('utf-8')
                     
         # os.remove(temp_file_path)
         print(lp_string)
