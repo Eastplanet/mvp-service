@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { fetchParkingData } from '../main/mainSlice';
 import styles from './CarInfoModal.module.css';
 import axios from 'axios';
 import ExitModal from './exit/ExitModal';
 import MoveModal from './move/MoveModal';
 import DiscountModal from './discount/DiscountModal';
-import {AppDispatch} from '../../store/store';
+import { RootState, AppDispatch } from '../../store/store';
 
 export interface CarLog {
   licensePlate: string;
@@ -28,6 +28,7 @@ const CarInfoModal: React.FC<CarInfoModalProps> = ({ carLog, onClose }) => {
   const [showExitModal, setShowExitModal] = useState(false);
   const [showMoveModal, setShowMoveModal] = useState(false);
   const [showDiscountModal, setShowDiscountModal] = useState(false);
+  const currentParkedCars = useSelector((state: RootState) => state.main.currentParkedCars);
 
   const handleConfirmExit = () => {
     axios.delete(`http://mvp-project.shop:8081/parking-bot/exit/${carLog.licensePlate}`)
@@ -163,7 +164,13 @@ const CarInfoModal: React.FC<CarInfoModalProps> = ({ carLog, onClose }) => {
             onConfirm={handleConfirmExit}
           />
         )}
-        {showMoveModal && <MoveModal carLog={carLog} onClose={() => setShowMoveModal(false)} />}
+        {showMoveModal && 
+          <MoveModal
+            carLog={carLog}
+            currentParkedCars={currentParkedCars}
+            onClose={() => setShowMoveModal(false)} 
+          />
+        }
         {showDiscountModal && (
           <DiscountModal
             carLog={carLog}

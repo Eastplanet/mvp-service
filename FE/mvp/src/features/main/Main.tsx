@@ -29,8 +29,6 @@ const Main: React.FC = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    console.log('searchData:', searchData);
-    console.log('currentParkedCars:', currentParkedCars);
   }, [searchData, currentParkedCars]);
 
   const handleSearch = () => {

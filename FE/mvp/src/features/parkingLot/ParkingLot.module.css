@@ -67,3 +67,7 @@
 .rotatedCar {
   transform: rotate(180deg);
 }
+
+.selectedParkingSpace {
+  background-color: yellow;
+}
