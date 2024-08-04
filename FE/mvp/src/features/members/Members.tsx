@@ -148,44 +148,48 @@ const Members: React.FC = () => {
     };
   };
 
-  // 페이지넘버
-  const paginatedMembers = members.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+  // 페이지 컴포넌트
   const totalPages = Math.ceil(members.length / itemsPerPage);
+
+  // 현재 페이지 주변으로 표시할 페이지 수
+  const pagesToShow = 5;
+  const halfPagesToShow = Math.floor(pagesToShow / 2);
+
+  // 페이지 버튼 범위를 계산
+  const startPage = Math.max(1, currentPage - halfPagesToShow);
+  const endPage = Math.min(totalPages, currentPage + halfPagesToShow);
+
+  const paginatedMembers = members.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
-  
-  
-
 
   const Pagination = () => (
     <div className={styles.pagination}>
       <button 
-        onClick={() => handlePageChange(currentPage - 1)} 
+        onClick={() => handlePageChange(Math.max(1, startPage - pagesToShow))}
         disabled={currentPage === 1}
       >
         &lt;
       </button>
-      {Array.from({ length: totalPages }, (_, index) => (
+      {Array.from({ length: endPage - startPage + 1 }, (_, index) => (
         <button 
-          key={index + 1}
-          onClick={() => handlePageChange(index + 1)}
-          className={currentPage === index + 1 ? styles.activePage : ''}
+          key={startPage + index}
+          onClick={() => handlePageChange(startPage + index)}
+          className={currentPage === startPage + index ? styles.activePage : ''}
         >
-          {index + 1}
+          {startPage + index}
         </button>
       ))}
       <button 
-        onClick={() => handlePageChange(currentPage + 1)} 
+        onClick={() => handlePageChange(Math.min(totalPages, endPage + pagesToShow))}
         disabled={currentPage === totalPages}
       >
         &gt;
       </button>
     </div>
   );
-
-  
 
   const stats = getStatistics();
 
@@ -195,6 +199,7 @@ const Members: React.FC = () => {
       <div className={styles.content}>
         <div className={styles.header}>
           <h1>Members</h1>
+          <input className={styles.search} type="number" placeholder='Car Number'/> 
         </div>
         <div className={styles.summary}>
           <div className={styles.summaryItem}>
@@ -207,22 +212,22 @@ const Members: React.FC = () => {
           <div className={styles.summaryItem}>
             <div className={styles.icon}>🆕</div>
             <div>
-              <p>신규 회원</p>
-              <p>{stats.newMembers}</p>
+              <p className={styles.item}>신규 회원</p>
+              <p className={styles.stat}>{stats.newMembers}</p>
             </div>
           </div>
           <div className={styles.summaryItem}>
             <div className={styles.icon}>🕒</div>
             <div>
-              <p>최근 만료</p>
-              <p>{stats.recentExpired}</p>
+              <p className={styles.item}>최근 만료</p>
+              <p className={styles.stat}>{stats.recentExpired}</p>
             </div>
           </div>
           <div className={styles.summaryItem}>
             <div className={styles.icon}>🔄</div>
             <div>
-              <p>만료 예정</p>
-              <p>{stats.expiringSoon}</p>
+              <p className={styles.item}>만료 예정</p>
+              <p className={styles.stat}>{stats.expiringSoon}</p>
             </div>
           </div>
         </div>
@@ -303,7 +308,10 @@ const Members: React.FC = () => {
           
           {error && <div className={styles.error}>{error}</div>}
         </div>
+        <div>
+        
         <Pagination />
+        </div>
         <div className={styles.actions}>
           <button className={styles.addButton} onClick={handleAddMember}>추가</button>
           <button className={styles.deleteButton} onClick={handleDelete}>삭제</button>
