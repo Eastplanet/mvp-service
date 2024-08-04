@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -28,4 +30,8 @@ public class ParkedVehicle {
 
     @Column(name = "license_plate", length = 255, nullable = false)
     private String licensePlate;
+
+    @Column(name = "discount")
+    @ColumnDefault("0")
+    private Integer discount;
 }

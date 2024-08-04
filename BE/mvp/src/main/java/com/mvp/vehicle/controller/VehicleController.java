@@ -3,6 +3,7 @@ package com.mvp.vehicle.controller;
 import com.mvp.common.ResponseDto;
 import com.mvp.common.exception.RestApiException;
 import com.mvp.common.exception.StatusCode;
+import com.mvp.vehicle.dto.DiscountDTO;
 import com.mvp.vehicle.dto.ParkedVehicleDTO;
 import com.mvp.vehicle.service.VehicleService;
 import lombok.AllArgsConstructor;
@@ -63,5 +64,14 @@ public class VehicleController {
         }
     }
 
+    @PostMapping("/discount")
+    public ResponseEntity<ResponseDto> giveDiscount(@RequestBody DiscountDTO discountDTO){
+        ParkedVehicleDTO parkedVehicleDTO = vehicleService.giveDiscount(discountDTO);
 
+        if(parkedVehicleDTO != null){
+            return ResponseDto.response(StatusCode.SUCCESS, parkedVehicleDTO);
+        } else {
+            throw new RestApiException(StatusCode.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
