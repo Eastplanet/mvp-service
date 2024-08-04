@@ -8,13 +8,8 @@ import com.mvp.parkinglot.dto.ParkingLotMapDTO;
 import com.mvp.parkinglot.dto.ParkingLotSettingDTO;
 import com.mvp.parkinglot.service.ParkingLotService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.function.EntityResponse;
-
-import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/parking-lots")
@@ -36,7 +31,7 @@ public class ParkingLotController {
     }
 
     @PostMapping()
-    public ResponseEntity<?> createParkingLot(@RequestBody ParkingLotDTO parkingLotDTO) {
+    public ResponseEntity<ResponseDto> createParkingLot(@RequestBody ParkingLotDTO parkingLotDTO) {
         // 공통 예외 처리 필요
         ParkingLotDTO result = parkingLotService.createParkingLot(parkingLotDTO);
         if(result == null){
@@ -48,7 +43,7 @@ public class ParkingLotController {
     }
 
     @PutMapping()
-    public ResponseEntity<?> updateParkingLot(@RequestBody ParkingLotDTO parkingLotDTO) {
+    public ResponseEntity<ResponseDto> updateParkingLot(@RequestBody ParkingLotDTO parkingLotDTO) {
         ParkingLotDTO result = parkingLotService.updateParkingLot(parkingLotDTO);
         if(result == null){
             throw new RestApiException(StatusCode.BAD_REQUEST);
@@ -59,7 +54,7 @@ public class ParkingLotController {
     }
 
     @GetMapping("/map")
-    public ResponseEntity<?> getMap(){
+    public ResponseEntity<ResponseDto> getMap(){
         // 공통 예외처리 필요
         ParkingLotMapDTO result = parkingLotService.getMap();
         if(result == null){
@@ -71,7 +66,7 @@ public class ParkingLotController {
     }
 
     @PutMapping("/map")
-    public ResponseEntity<?> updateMap(@RequestBody ParkingLotMapDTO parkingLotMapDTO) {
+    public ResponseEntity<ResponseDto> updateMap(@RequestBody ParkingLotMapDTO parkingLotMapDTO) {
         // 공통 예외처리 필요
         ParkingLotMapDTO result = parkingLotService.updateMap(parkingLotMapDTO);
         if(result == null){
@@ -85,7 +80,7 @@ public class ParkingLotController {
 
 
     @GetMapping("/setting")
-    public ResponseEntity<?> getSetting(){
+    public ResponseEntity<ResponseDto> getSetting(){
         // 공통 예외처리 필요
         ParkingLotSettingDTO result = parkingLotService.getSetting();
         if(result == null){
@@ -97,7 +92,7 @@ public class ParkingLotController {
     }
 
     @PutMapping("/setting")
-    public ResponseEntity<?> updateSetting(@RequestBody ParkingLotSettingDTO parkingLotSettingDTO){
+    public ResponseEntity<ResponseDto> updateSetting(@RequestBody ParkingLotSettingDTO parkingLotSettingDTO){
         // 공통 예외처리 필요
         ParkingLotSettingDTO result = parkingLotService.updateSetting(parkingLotSettingDTO);
         if(result == null){

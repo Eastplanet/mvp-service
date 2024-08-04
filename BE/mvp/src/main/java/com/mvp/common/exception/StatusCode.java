@@ -11,7 +11,7 @@ import java.util.NoSuchElementException;
 
 public enum StatusCode {
 
-    SUCCESS(HttpStatus.ACCEPTED, "정상적으로 요청이 완료되었습니다."),
+    SUCCESS(HttpStatus.OK, "정상적으로 요청이 완료되었습니다."),
     BAD_REQUEST(HttpStatus.BAD_REQUEST, "잘못된 요청입니다."),
     UNAUTHORIZED_REQUEST(HttpStatus.UNAUTHORIZED, "인증되지 않은 사용자입니다."),
     FORBIDDEN_ACCESS(HttpStatus.FORBIDDEN, "권한이 없는 사용자입니다."),

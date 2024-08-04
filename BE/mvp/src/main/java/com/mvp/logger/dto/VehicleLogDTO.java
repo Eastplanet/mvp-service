@@ -1,13 +1,9 @@
-package com.mvp.logs.dto;
+package com.mvp.logger.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
+import lombok.*;
 import java.time.LocalDateTime;
 
-@Getter
+@Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -17,4 +13,5 @@ public class VehicleLogDTO {
     private LocalDateTime exitTime;
     private Integer fee;
     private byte[] image;
+    private Integer type;
 }

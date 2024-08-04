@@ -1,7 +1,9 @@
-package com.mvp.logs.converter;
+package com.mvp.logger.converter;
 
-import com.mvp.logs.dto.VehicleLogDTO;
-import com.mvp.logs.entity.VehicleLog;
+import com.mvp.logger.dto.EntranceLogDTO;
+import com.mvp.logger.dto.ExitLogDTO;
+import com.mvp.logger.dto.VehicleLogDTO;
+import com.mvp.logger.entity.VehicleLog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +23,7 @@ public class VehicleLogConverter {
         return VehicleLog.builder()
                 .licensePlate(vehicleLogDTO.getLicensePlate())
                 .entranceTime(vehicleLogDTO.getEntranceTime())
+                .type(vehicleLogDTO.getType())
                 .exitTime(vehicleLogDTO.getExitTime())
                 .fee(vehicleLogDTO.getFee())
                 .build();
@@ -38,5 +41,21 @@ public class VehicleLogConverter {
             dtoList.add(dto);
         }
         return dtoList;
+    }
+
+    public static VehicleLogDTO entranceDtoToVehicleLogDTO(EntranceLogDTO entranceLogDTO) {
+        return VehicleLogDTO.builder()
+                .licensePlate(entranceLogDTO.getLicensePlate())
+                .image(entranceLogDTO.getImage())
+                .entranceTime(entranceLogDTO.getEntranceTime())
+                .build();
+    }
+
+    public static VehicleLogDTO exitDtoToVehicleLogDTO(ExitLogDTO exitLogDTO) {
+        return VehicleLogDTO.builder()
+                .licensePlate(exitLogDTO.getLicensePlate())
+                .fee(exitLogDTO.getFee())
+                .image(exitLogDTO.getImage())
+                .build();
     }
 }

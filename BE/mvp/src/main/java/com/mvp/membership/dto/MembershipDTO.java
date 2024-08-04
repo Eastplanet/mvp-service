@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 public class MembershipDTO {
 
     private String licensePlate;
+    private LocalDateTime startDate;
     private LocalDateTime endDate;
     private String phoneNumber;
     private String name;
