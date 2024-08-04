@@ -8,12 +8,13 @@ import com.mvp.parkingbot.service.ParkingBotService;
 import com.mvp.vehicle.dto.ParkedVehicleDTO;
 import com.mvp.vehicle.repository.ParkedVehicleRepository;
 import lombok.AllArgsConstructor;
-import org.apache.coyote.Response;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/parking-bot")
 @AllArgsConstructor
