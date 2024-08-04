@@ -1,21 +1,33 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import axios from 'axios';
 import styles from './AddMembersModal.module.css';
+import { fetchMembers } from '../membersSlice';
+import { AppDispatch } from '../../../store/store';
 
 interface AddMemberModalProps {
   onClose: () => void;
 }
 
 const AddMemberModal: React.FC<AddMemberModalProps> = ({ onClose }) => {
+  const dispatch = useDispatch<AppDispatch>();
   const [name, setName] = useState('');
   const [licensePlate, setLicensePlate] = useState('');
-  const [phone, setPhone] = useState('');
-  const [expiryDate, setExpiryDate] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [endDate, setEndDate] = useState('');
+
+  const getISODateString = (date: string) => {
+    const dateObject = new Date(date);
+    return dateObject.toISOString();
+  };
 
   const handleSubmit = async () => {
+    const startDate = getISODateString(new Date().toISOString());
+    const formattedEndDate = getISODateString(endDate);
     try {
-      await axios.post('/api/members', { name, licensePlate, phone, expiryDate });
-      onClose(); // 성공 시 모달 닫기
+      await axios.post('https://mvp-project.shop/api/memberships', { name, licensePlate, phoneNumber, endDate: formattedEndDate, startDate });
+      dispatch(fetchMembers());
+      onClose();
     } catch (error) {
       console.error('회원 추가 중 오류 발생:', error);
     }
@@ -50,8 +62,8 @@ const AddMemberModal: React.FC<AddMemberModalProps> = ({ onClose }) => {
           <label className={styles.label}>연락처</label>
           <input 
             type="text" 
-            value={phone} 
-            onChange={(e) => setPhone(e.target.value)} 
+            value={phoneNumber} 
+            onChange={(e) => setPhoneNumber(e.target.value)} 
             className={styles.input}
             placeholder="연락처" 
           />
@@ -60,8 +72,8 @@ const AddMemberModal: React.FC<AddMemberModalProps> = ({ onClose }) => {
           <label className={styles.label}>만료일</label>
           <input 
             type="date" 
-            value={expiryDate} 
-            onChange={(e) => setExpiryDate(e.target.value)} 
+            value={endDate} 
+            onChange={(e) => setEndDate(e.target.value)} 
             className={styles.input}
           />
         </div>
