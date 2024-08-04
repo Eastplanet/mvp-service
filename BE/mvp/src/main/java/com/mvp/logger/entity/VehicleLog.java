@@ -1,4 +1,4 @@
-package com.mvp.logs.entity;
+package com.mvp.logger.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

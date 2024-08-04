@@ -1,8 +1,8 @@
 package com.mvp.stats.service;
 
-import com.mvp.logs.dto.VehicleLogDTO;
-import com.mvp.logs.repository.VehicleLogRepository;
-import com.mvp.logs.service.LogsService;
+import com.mvp.logger.dto.VehicleLogDTO;
+import com.mvp.logger.repository.VehicleLogRepository;
+import com.mvp.logger.service.LoggerService;
 import com.mvp.parkinglot.dto.ParkingLotDTO;
 import com.mvp.parkinglot.dto.ParkingLotSettingDTO;
 import com.mvp.parkinglot.service.ParkingLotService;
@@ -28,7 +28,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class StatsService {
     private final VehicleService vehicleService;
-    private final LogsService logsService;
+    private final LoggerService loggerService;
     private final ParkingLotService parkingLotService;
 
     public Integer calculatePrice(ParkedVehicleDTO parkedVehicleDTO) {
@@ -53,10 +53,10 @@ public class StatsService {
 
         HomePageInitDto homePageInitDto = new HomePageInitDto();
 
-        List<VehicleLogDTO> enterCnt = logsService.findAllByEntranceTimeBetween(todayStart, todayEnd);
+        List<VehicleLogDTO> enterCnt = loggerService.findAllByEntranceTimeBetween(todayStart, todayEnd);
         homePageInitDto.setTodayIn(enterCnt.size());
 
-        List<VehicleLogDTO> exitCnt = logsService.findAllByExitTimeBetween(todayStart, todayEnd);
+        List<VehicleLogDTO> exitCnt = loggerService.findAllByExitTimeBetween(todayStart, todayEnd);
         homePageInitDto.setTodayOut(exitCnt.size());
 
         int incomeSum = 0;
@@ -93,7 +93,7 @@ public class StatsService {
     }
 
     public List<ParkingLogRes> getParkingLot(ParkingLogReq parkingLogReq){
-        List<VehicleLogDTO> find = logsService.findByEntranceTimeBetween(parkingLogReq.getStartDate(), parkingLogReq.getEndDate(), parkingLogReq.getLicensePlate());
+        List<VehicleLogDTO> find = loggerService.findByEntranceTimeBetween(parkingLogReq.getStartDate(), parkingLogReq.getEndDate(), parkingLogReq.getLicensePlate());
 
         List<ParkingLogRes> list = new ArrayList<>();
         for(VehicleLogDTO vehicleLogDTO : find){

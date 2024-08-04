@@ -1,6 +1,6 @@
-package com.mvp.logs.repository;
+package com.mvp.logger.repository;
 
-import com.mvp.logs.entity.VehicleLog;
+import com.mvp.logger.entity.VehicleLog;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
