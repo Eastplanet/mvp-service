@@ -55,7 +55,7 @@ export const fetchParkingData = createAsyncThunk('main/fetchParkingData', async 
   const parkingLots = data.parkingLots.map((lot: any) => ({
     licensePlate: lot.licensePlate,
     parkingDate: lot.parkingDate,
-    carState: lot.carState === 1 ? '주차 중' : lot.carState === 0 ? '출차 완료' : '이동 중',
+      carState: lot.carState === 1 ? '주차 중' : lot.carState === 0 ? '출차 완료' : '이동 중',
     entryTime: new Date(lot.entranceTime).toISOString(),
     exitTime: lot.exitTime ? new Date(lot.exitTime).toISOString() : undefined,
     fee: lot.fee,
@@ -90,7 +90,7 @@ export const fetchSearchData = createAsyncThunk(
     const parkingLots = data.map((lot: any) => ({
       licensePlate: lot.licensePlate,
       parkingDate: lot.parkingDate,
-      carState: lot.carState === 1 ? '주차 중' : lot.carState === 0 ? '출차 완료' : '이동 중',
+      carState: lot.parkingState === 1 ? '주차 중' : lot.carState === 0 ? '출차 완료' : '이동 중',
       entryTime: new Date(lot.entranceTime).toISOString(),
       exitTime: lot.exitTime ? new Date(lot.exitTime).toISOString() : undefined,
       fee: lot.fee,
@@ -104,7 +104,7 @@ const mainSlice = createSlice({
   name: 'main',
   initialState,
   reducers: {
-    setlicensePlate(state, action: PayloadAction<string>) {
+    setLicensePlate(state, action: PayloadAction<string>) {
       state.licensePlate = action.payload;
     },
     setStartDate(state, action: PayloadAction<string>) {
@@ -144,6 +144,6 @@ const mainSlice = createSlice({
   },
 });
 
-export const { setlicensePlate, setStartDate, setEndDate } = mainSlice.actions;
+export const { setLicensePlate, setStartDate, setEndDate } = mainSlice.actions;
 
 export default mainSlice.reducer;
