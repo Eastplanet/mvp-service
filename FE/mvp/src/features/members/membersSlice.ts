@@ -25,7 +25,7 @@ const initialState: MembersState = {
 
 export const fetchMembers = createAsyncThunk<Member[]>('members/fetchMembers', async () => {
   try {
-    const response = await axios.get<Member[]>('http://mvp-project.shop:8081/memberships/list');
+    const response = await axios.get<Member[]>('https://mvp-project.shop/api/memberships/list');
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error) && error.response) {
