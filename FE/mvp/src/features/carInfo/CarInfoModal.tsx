@@ -51,7 +51,7 @@ const CarInfoModal: React.FC<CarInfoModalProps> = ({ carLog, onClose }) => {
     })
     .then(response => {
       console.log('할인 적용 완료:', response.data);
-      setShowDiscountModal(false); // 모달 닫기
+      setShowDiscountModal(false);
     })
     .catch(error => {
       console.error('할인 적용 중 오류 발생:', error);
@@ -62,7 +62,7 @@ const CarInfoModal: React.FC<CarInfoModalProps> = ({ carLog, onClose }) => {
 
   const formatDateTime = (dateString: string) => {
     if (dateString === null) {
-        return ''; // null일 경우 빈 문자열 반환
+        return '';
     }
     const date = new Date(dateString);
     return date.toLocaleString('ko-KR', { dateStyle: 'short', timeStyle: 'short' });

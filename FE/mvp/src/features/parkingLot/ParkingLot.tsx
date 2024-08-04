@@ -1,7 +1,6 @@
 import React from 'react';
 import styles from './ParkingLot.module.css';
 import parkingCar from '../../assets/images/icons/parking_car.png';
-import axios from 'axios';
 
 type CarLog = {
   licensePlate: string;
@@ -18,29 +17,23 @@ type ParkingLotProps = {
   onCarLogClick?: (carLog: CarLog) => void;
   mode: 'main' | 'move';
   selectedCarLog?: CarLog;
+  onEmptySlotClick?: (slotId: number) => void;
 };
 
-const ParkingLot: React.FC<ParkingLotProps> = ({ parkingData, onCarLogClick, selectedCarLog, mode }) => {
-  const handleCarLogClick = (carLog: CarLog) => {
-    if (mode === 'main' && onCarLogClick && carLog.licensePlate) {
-      onCarLogClick(carLog);
+const ParkingLot: React.FC<ParkingLotProps> = ({ parkingData, onCarLogClick, selectedCarLog, mode, onEmptySlotClick }) => {
+  const handleSlotClick = (slotId: number) => {
+    if (mode === 'move' && onEmptySlotClick) {
+      onEmptySlotClick(slotId);
     }
   };
 
-  const handleEmptySpaceClick = (index: number) => {
-    if (mode === 'move' && selectedCarLog) {
-      const requestData = {
-        licensePlate: selectedCarLog.licensePlate,
-        endSpot: index
-      };
-      console.log('Request Data:', requestData);
-      axios.post('http://mvp-project.shop:8081/parking-bot/move-vehicle', requestData)
-        .then(response => {
-          console.log('이동 요청 성공:', response);
-        })
-        .catch(error => {
-          console.error('이동 요청 실패:', error);
-        });
+  const handleCarLogClick = (carLog: CarLog, slotId: number) => {
+    if (carLog.licensePlate) {
+      if (onCarLogClick) {
+        onCarLogClick(carLog);
+      }
+    } else if (mode === 'move' && onEmptySlotClick) {
+      onEmptySlotClick(slotId);
     }
   };
 
@@ -52,12 +45,17 @@ const ParkingLot: React.FC<ParkingLotProps> = ({ parkingData, onCarLogClick, sel
             <div
               key={index + 1}
               className={`${styles.parkingSpace} ${mode === 'move' && selectedCarLog && carLog.licensePlate === selectedCarLog.licensePlate ? styles.selectedParkingSpace : ''}`}
-              onClick={() => carLog.licensePlate ? handleCarLogClick(carLog) : handleEmptySpaceClick(index + 1)}
+              onClick={() => handleCarLogClick(carLog, index + 1)}
             >
               {carLog.licensePlate && <img src={parkingCar} alt={carLog.licensePlate} className={styles.rotatedCar} />}
             </div>
           ))}
-          <div className={`${styles.parkingSpace} ${styles.emptySpace}`}></div>
+          <div
+            className={`${styles.parkingSpace} ${styles.emptySpace}`}
+            onClick={() => {
+              if (mode === 'move') handleSlotClick(4);
+            }}
+          ></div>
         </div>
         <div className={styles.road}></div>
         <div className={`${styles.side} ${styles.rightSide}`}>
@@ -65,7 +63,7 @@ const ParkingLot: React.FC<ParkingLotProps> = ({ parkingData, onCarLogClick, sel
             <div
               key={index + 4}
               className={`${styles.parkingSpace} ${mode === 'move' && selectedCarLog && carLog.licensePlate === selectedCarLog.licensePlate ? styles.selectedParkingSpace : ''}`}
-              onClick={() => carLog.licensePlate ? handleCarLogClick(carLog) : handleEmptySpaceClick(index + 4)}
+              onClick={() => handleCarLogClick(carLog, index + 4)}
             >
               {carLog.licensePlate && <img src={parkingCar} alt={carLog.licensePlate} />}
             </div>
