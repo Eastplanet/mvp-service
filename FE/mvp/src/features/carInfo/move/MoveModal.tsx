@@ -19,7 +19,7 @@ const MoveModal: React.FC<MoveModalProps> = ({ carLog, currentParkedCars, onClos
 
   const handleEmptySlotClick = async (slotId: number) => {
     try {
-      const response = await axios.post('http://mvp-project.shop:8081/parking-bot/move-vehicle', {
+      const response = await axios.post('https://mvp-project.shop:8081/parking-bot/move-vehicle', {
         licensePlate: carLog.licensePlate,
         endSpot: slotId,
       });
