@@ -2,9 +2,9 @@ package com.mvp.parkingbot.service;
 
 import com.mvp.common.exception.RestApiException;
 import com.mvp.common.exception.StatusCode;
-import com.mvp.logs.dto.EntranceLogDTO;
-import com.mvp.logs.dto.ExitLogDTO;
-import com.mvp.logs.service.LogsService;
+import com.mvp.logger.dto.EntranceLogDTO;
+import com.mvp.logger.dto.ExitLogDTO;
+import com.mvp.logger.service.LoggerService;
 import com.mvp.parkingbot.converter.ParkingBotConverter;
 import com.mvp.parkingbot.dto.*;
 import com.mvp.parkingbot.entity.ParkingBot;
@@ -35,7 +35,7 @@ public class ParkingBotService {
     private final ParkingLotSpotRepository parkingLotSpotRepository;
     private final ParkingBotRepository parkingBotRepository;
     private final ParkedVehicleRepository parkedVehicleRepository;
-    private final LogsService logsService;
+    private final LoggerService LoggerService;
     private final StatsService statsService;
     private TaskQueue taskQueue;
 
@@ -94,7 +94,7 @@ public class ParkingBotService {
                 .image(enterRequestDTO.getImage())
                 .entranceTime(enterRequestDTO.getEntranceTime())
                 .build();
-        logsService.createEntryLog(logDto);
+        LoggerService.createEntryLog(logDto);
 
         return task;
     }
@@ -152,7 +152,7 @@ public class ParkingBotService {
                 .image(parkedVehicle.getImage())
                 .fee(price)
                 .build();
-        logsService.createExitLog(logDto);
+        LoggerService.createExitLog(logDto);
 
         return true;
     }

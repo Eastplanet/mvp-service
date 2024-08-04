@@ -1,7 +1,6 @@
-package com.mvp.logs.dto;
+package com.mvp.logger.dto;
 
 import lombok.*;
-
 import java.time.LocalDateTime;
 
 @Data

@@ -1,13 +1,13 @@
-package com.mvp.logs.service;
+package com.mvp.logger.service;
 
 import com.mvp.common.exception.RestApiException;
 import com.mvp.common.exception.StatusCode;
-import com.mvp.logs.converter.VehicleLogConverter;
-import com.mvp.logs.dto.EntranceLogDTO;
-import com.mvp.logs.dto.ExitLogDTO;
-import com.mvp.logs.dto.VehicleLogDTO;
-import com.mvp.logs.entity.VehicleLog;
-import com.mvp.logs.repository.VehicleLogRepository;
+import com.mvp.logger.converter.VehicleLogConverter;
+import com.mvp.logger.dto.EntranceLogDTO;
+import com.mvp.logger.dto.ExitLogDTO;
+import com.mvp.logger.dto.VehicleLogDTO;
+import com.mvp.logger.entity.VehicleLog;
+import com.mvp.logger.repository.VehicleLogRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +16,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class LogsService {
+public class LoggerService {
 
     // @TODO : Enum으로 바꾸기
     private final int ENTER_TYPE = 0;

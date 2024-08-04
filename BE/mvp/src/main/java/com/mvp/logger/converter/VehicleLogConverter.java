@@ -1,9 +1,9 @@
-package com.mvp.logs.converter;
+package com.mvp.logger.converter;
 
-import com.mvp.logs.dto.EntranceLogDTO;
-import com.mvp.logs.dto.ExitLogDTO;
-import com.mvp.logs.dto.VehicleLogDTO;
-import com.mvp.logs.entity.VehicleLog;
+import com.mvp.logger.dto.EntranceLogDTO;
+import com.mvp.logger.dto.ExitLogDTO;
+import com.mvp.logger.dto.VehicleLogDTO;
+import com.mvp.logger.entity.VehicleLog;
 
 import java.util.ArrayList;
 import java.util.List;
