@@ -49,104 +49,23 @@ const getDefaultDateRange = () => {
   return { startDate, endDate };
 };
 
-// export const fetchParkingData = createAsyncThunk('main/fetchParkingData', async () => {
-//   const response = await axios.get('http://mvp-project.shop:8081/stats/home-init');
-//   const data = response.data.data;
-//   const parkingLots = data.parkingLots.map((lot: any) => ({
-//     licensePlate: lot.licensePlate,
-//     parkingDate: lot.parkingDate,
-//       carState: lot.carState === 1 ? '주차 중' : lot.carState === 0 ? '출차 완료' : '이동 중',
-//     entryTime: new Date(lot.entranceTime).toISOString(),
-//     exitTime: lot.exitTime ? new Date(lot.exitTime).toISOString() : undefined,
-//     fee: lot.fee,
-//     imageBase64: lot.image,
-//   }));
-  
-//   return {
-//     todayIn: data.todayIn,
-//     todayOut: data.todayOut,
-//     todayIncome: data.todayIncome,
-//     currentParkedCars: parkingLots,
-//   };
-// });
-
 export const fetchParkingData = createAsyncThunk('main/fetchParkingData', async () => {
-  // 실제 API 요청을 주석 처리합니다.
-  // const response = await axios.get('http://mvp-project.shop:8081/stats/home-init');
-  // const data = response.data.data;
-
-  // 임시 데이터
-  const parkingLots = [
-    {
-      licensePlate: 'ABC123',
-      parkingDate: '2024-08-04T12:00:00Z',
-      carState: '주차 중',
-      entryTime: new Date().toISOString(),
-      exitTime: undefined,
-      fee: 1000,
-      imageBase64: '',
-    },
-    {
-      licensePlate: 'XYZ789',
-      parkingDate: '2024-08-04T08:00:00Z',
-      carState: '출차 완료',
-      entryTime: new Date(new Date().setHours(new Date().getHours() - 6)).toISOString(),
-      exitTime: new Date().toISOString(),
-      fee: 500,
-      imageBase64: '',
-    },
-    {
-      licensePlate: 'LMN456',
-      parkingDate: '2024-08-04T09:00:00Z',
-      carState: '이동 중',
-      entryTime: new Date(new Date().setHours(new Date().getHours() - 5)).toISOString(),
-      exitTime: undefined,
-      fee: 750,
-      imageBase64: '',
-    },
-    {
-      licensePlate: 'QWE234',
-      parkingDate: '2024-08-03T15:00:00Z',
-      carState: '주차 중',
-      entryTime: new Date(new Date().setDate(new Date().getDate() - 1)).toISOString(),
-      exitTime: undefined,
-      fee: 1200,
-      imageBase64: '',
-    },
-    {
-      licensePlate: 'RTY567',
-      parkingDate: '2024-08-02T14:00:00Z',
-      carState: '출차 완료',
-      entryTime: new Date(new Date().setDate(new Date().getDate() - 2)).toISOString(),
-      exitTime: new Date(new Date().setDate(new Date().getDate() - 1)).toISOString(),
-      fee: 900,
-      imageBase64: '',
-    },
-    {
-      licensePlate: 'UIO890',
-      parkingDate: '2024-08-01T10:00:00Z',
-      carState: '이동 중',
-      entryTime: new Date(new Date().setDate(new Date().getDate() - 3)).toISOString(),
-      exitTime: undefined,
-      fee: 600,
-      imageBase64: '',
-    },
-    {
-      licensePlate: 'PAS123',
-      parkingDate: '2024-07-31T09:00:00Z',
-      carState: '주차 중',
-      entryTime: new Date(new Date().setDate(new Date().getDate() - 4)).toISOString(),
-      exitTime: undefined,
-      fee: 1100,
-      imageBase64: '',
-    },
-  ];
+  const response = await axios.get('http://mvp-project.shop:8081/stats/home-init');
+  const data = response.data.data;
+  const parkingLots = data.parkingLots.map((lot: any) => ({
+    licensePlate: lot.licensePlate,
+    parkingDate: lot.parkingDate,
+      carState: lot.carState === 1 ? '주차 중' : lot.carState === 0 ? '출차 완료' : '이동 중',
+    entryTime: new Date(lot.entranceTime).toISOString(),
+    exitTime: lot.exitTime ? new Date(lot.exitTime).toISOString() : undefined,
+    fee: lot.fee,
+    imageBase64: lot.image,
+  }));
   
-  // 임시 데이터를 사용하여 반환합니다.
   return {
-    todayIn: 5,
-    todayOut: 2,
-    todayIncome: 6000,
+    todayIn: data.todayIn,
+    todayOut: data.todayOut,
+    todayIncome: data.todayIncome,
     currentParkedCars: parkingLots,
   };
 });
