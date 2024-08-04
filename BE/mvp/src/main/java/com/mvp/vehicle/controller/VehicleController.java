@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/parked-vehicle")
+@RequestMapping("/api/parked-vehicle")
 @AllArgsConstructor
 public class VehicleController {
     private final VehicleService vehicleService;

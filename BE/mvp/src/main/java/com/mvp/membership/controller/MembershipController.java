@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/membership")
+@RequestMapping("/api/membership")
 @AllArgsConstructor
 public class MembershipController {
     private final MembershipService membershipService;

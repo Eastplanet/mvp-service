@@ -16,7 +16,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/parking-bot")
+@RequestMapping("/api/parking-bot")
 @AllArgsConstructor
 public class ParkingBotController {
     private ParkingBotService parkingBotService;
