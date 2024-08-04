@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/manager")
+@RequestMapping("/api/manager")
 @RequiredArgsConstructor
 public class ManagerController {
 
