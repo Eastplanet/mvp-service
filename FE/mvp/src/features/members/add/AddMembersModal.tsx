@@ -8,13 +8,13 @@ interface AddMemberModalProps {
 
 const AddMemberModal: React.FC<AddMemberModalProps> = ({ onClose }) => {
   const [name, setName] = useState('');
-  const [carNumber, setCarNumber] = useState('');
+  const [licensePlate, setlicensePlate] = useState('');
   const [phone, setPhone] = useState('');
   const [expiryDate, setExpiryDate] = useState('');
 
   const handleSubmit = async () => {
     try {
-      await axios.post('/api/members', { name, carNumber, phone, expiryDate });
+      await axios.post('/api/members', { name, licensePlate, phone, expiryDate });
       onClose(); // 성공 시 모달 닫기
     } catch (error) {
       console.error('회원 추가 중 오류 발생:', error);
@@ -40,8 +40,8 @@ const AddMemberModal: React.FC<AddMemberModalProps> = ({ onClose }) => {
           <label className={styles.label}>차량 번호</label>
           <input 
             type="text" 
-            value={carNumber} 
-            onChange={(e) => setCarNumber(e.target.value)} 
+            value={licensePlate} 
+            onChange={(e) => setlicensePlate(e.target.value)} 
             className={styles.input}
             placeholder="차량 번호" 
           />

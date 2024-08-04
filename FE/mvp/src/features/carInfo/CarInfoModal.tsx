@@ -1,16 +1,19 @@
 import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchParkingData } from '../main/mainSlice';
 import styles from './CarInfoModal.module.css';
 import axios from 'axios';
 import ExitModal from './exit/ExitModal';
 import MoveModal from './move/MoveModal';
 import DiscountModal from './discount/DiscountModal';
+import { RootState, AppDispatch } from '../../store/store';
 
 export interface CarLog {
-  carNumber: string;
+  licensePlate: string;
   parkingDate: string;
   carState: string;
-  entryTime: Date;
-  exitTime?: Date;
+  entryTime: string;
+  exitTime?: string;
   fee: number;
   imageBase64?: string;
 }
@@ -21,33 +24,34 @@ interface CarInfoModalProps {
 }
 
 const CarInfoModal: React.FC<CarInfoModalProps> = ({ carLog, onClose }) => {
+  const dispatch: AppDispatch = useDispatch();
   const [showExitModal, setShowExitModal] = useState(false);
-
-  const handleConfirmExit = () => {
-    // axios.post('/api/exit', {
-    //   carNumber: carLog.carNumber
-    // })
-    // .then(response => {
-    //   console.log('출차 완료:', response.data);
-    //   setShowExitModal(false);
-    // })
-    // .catch(error => {
-    //   console.error('출차 중 오류 발생:', error);
-    // });
-    setShowExitModal(false);
-  };
-
   const [showMoveModal, setShowMoveModal] = useState(false);
   const [showDiscountModal, setShowDiscountModal] = useState(false);
+  const currentParkedCars = useSelector((state: RootState) => state.main.currentParkedCars);
+
+  const handleConfirmExit = () => {
+    axios.delete(`http://mvp-project.shop:8081/parking-bot/exit/${carLog.licensePlate}`)
+      .then(response => {
+        console.log('출차 완료:', response);
+        setShowExitModal(false);
+        dispatch(fetchParkingData());
+        onClose();
+      })
+      .catch(error => {
+        console.error('출차 중 오류 발생:', error);
+        setShowExitModal(false);
+      });
+  };
 
   const handleApplyDiscount = (discount: number) => {
     axios.post('/api/apply-discount', {
-      carNumber: carLog.carNumber,
+      licensePlate: carLog.licensePlate,
       discount
     })
     .then(response => {
       console.log('할인 적용 완료:', response.data);
-      setShowDiscountModal(false); // 모달 닫기
+      setShowDiscountModal(false);
     })
     .catch(error => {
       console.error('할인 적용 중 오류 발생:', error);
@@ -56,9 +60,14 @@ const CarInfoModal: React.FC<CarInfoModalProps> = ({ carLog, onClose }) => {
 
   if (!carLog) return null;
 
-  const formatDateTime = (date: Date) => date.toLocaleString('ko-KR', { dateStyle: 'short', timeStyle: 'short' });
+  const formatDateTime = (dateString: string) => {
+    if (dateString === null) {
+        return '';
+    }
+    const date = new Date(dateString);
+    return date.toLocaleString('ko-KR', { dateStyle: 'short', timeStyle: 'short' });
+  };
 
-  // 상태에 따른 스타일 결정
   const getStatusColor = (state: string) => {
     switch (state) {
       case '주차 중':
@@ -89,7 +98,7 @@ const CarInfoModal: React.FC<CarInfoModalProps> = ({ carLog, onClose }) => {
               <div className={styles.carDetails}>
                 <div className={styles.detailRow}>
                   <div className={styles.dataName}>차량번호</div>
-                  <div className={styles.dataValue}>{carLog.carNumber}</div>
+                  <div className={styles.dataValue}>{carLog.licensePlate}</div>
                 </div>
                 <div className={styles.detailRow}>
                   <div className={styles.dataName}>입차시간</div>
@@ -112,8 +121,28 @@ const CarInfoModal: React.FC<CarInfoModalProps> = ({ carLog, onClose }) => {
               </div>
             </div>
             <div className={styles.buttonContainer}>
-              <button className={styles.modalButton} style={{ backgroundColor: '#4CAF50' }} onClick={() => setShowExitModal(true)}>출차</button>
-              <button className={styles.modalButton} style={{ backgroundColor: '#2196F3' }} onClick={() => setShowMoveModal(true)}>이동</button>
+              <button
+                className={styles.modalButton}
+                style={{
+                  backgroundColor: carLog.carState === '주차 중' ? '#4CAF50' : '#d3d3d3',
+                  cursor: carLog.carState === '주차 중' ? 'pointer' : 'not-allowed'
+                }}
+                onClick={() => setShowExitModal(true)}
+                disabled={carLog.carState !== '주차 중'}
+              >
+                출차
+              </button>
+              <button
+                className={styles.modalButton}
+                style={{
+                  backgroundColor: carLog.carState === '주차 중' ? '#2196F3' : '#d3d3d3',
+                  cursor: carLog.carState === '주차 중' ? 'pointer' : 'not-allowed'
+                }}
+                onClick={() => setShowMoveModal(true)}
+                disabled={carLog.carState !== '주차 중'}
+              >
+                이동
+              </button>
               <button
                 className={styles.modalButton}
                 style={{
@@ -130,12 +159,18 @@ const CarInfoModal: React.FC<CarInfoModalProps> = ({ carLog, onClose }) => {
         </div>
         {showExitModal && (
           <ExitModal
-            carNumber={carLog.carNumber}
+            licensePlate={carLog.licensePlate}
             onClose={() => setShowExitModal(false)}
             onConfirm={handleConfirmExit}
           />
         )}
-        {showMoveModal && <MoveModal carLog={carLog} onClose={() => setShowMoveModal(false)} />}
+        {showMoveModal && 
+          <MoveModal
+            carLog={carLog}
+            currentParkedCars={currentParkedCars}
+            onClose={() => setShowMoveModal(false)} 
+          />
+        }
         {showDiscountModal && (
           <DiscountModal
             carLog={carLog}
