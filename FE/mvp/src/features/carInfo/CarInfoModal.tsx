@@ -31,7 +31,7 @@ const CarInfoModal: React.FC<CarInfoModalProps> = ({ carLog, onClose }) => {
   const currentParkedCars = useSelector((state: RootState) => state.main.currentParkedCars);
 
   const handleConfirmExit = () => {
-    axios.delete(`http://mvp-project.shop:8081/parking-bot/exit/${carLog.licensePlate}`)
+    axios.delete(`https://mvp-project.shop/api/parking-bot/exit/${carLog.licensePlate}`)
       .then(response => {
         console.log('출차 완료:', response);
         setShowExitModal(false);
