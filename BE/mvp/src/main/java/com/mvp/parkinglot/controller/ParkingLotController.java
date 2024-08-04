@@ -8,14 +8,8 @@ import com.mvp.parkinglot.dto.ParkingLotMapDTO;
 import com.mvp.parkinglot.dto.ParkingLotSettingDTO;
 import com.mvp.parkinglot.service.ParkingLotService;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.function.EntityResponse;
-
-import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/parking-lots")
