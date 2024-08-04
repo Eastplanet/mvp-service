@@ -24,7 +24,7 @@ const initialState: AuthState = {
 export const login = createAsyncThunk(
   'auth/login',
   async (credentials: { email: string; password: string }) => {
-    const response = await axios.post('https://mvp-project.shop:8081/manager/login', credentials);
+    const response = await axios.post('https://mvp-project.shop/manager/login', credentials);
     return response.data;
   }
 );
