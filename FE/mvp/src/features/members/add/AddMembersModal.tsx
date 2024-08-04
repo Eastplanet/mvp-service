@@ -8,7 +8,7 @@ interface AddMemberModalProps {
 
 const AddMemberModal: React.FC<AddMemberModalProps> = ({ onClose }) => {
   const [name, setName] = useState('');
-  const [licensePlate, setlicensePlate] = useState('');
+  const [licensePlate, setLicensePlate] = useState('');
   const [phone, setPhone] = useState('');
   const [expiryDate, setExpiryDate] = useState('');
 
@@ -41,7 +41,7 @@ const AddMemberModal: React.FC<AddMemberModalProps> = ({ onClose }) => {
           <input 
             type="text" 
             value={licensePlate} 
-            onChange={(e) => setlicensePlate(e.target.value)} 
+            onChange={(e) => setLicensePlate(e.target.value)} 
             className={styles.input}
             placeholder="차량 번호" 
           />

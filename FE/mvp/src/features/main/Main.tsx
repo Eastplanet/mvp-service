@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '../../store/store';
-import { fetchParkingData, fetchSearchData, setlicensePlate, setStartDate, setEndDate } from './mainSlice';
+import { fetchParkingData, fetchSearchData, setLicensePlate, setStartDate, setEndDate } from './mainSlice';
 import Sidebar from '../sidebar/Sidebar';
 import styles from './Main.module.css';
 import searchIcon from '../../assets/images/icons/searchIcon.png'
@@ -23,6 +23,8 @@ const Main: React.FC = () => {
   const { todayIn, todayOut, todayIncome, licensePlate, startDate, endDate, searchData, currentParkedCars } = useSelector((state: RootState) => state.main);
   const [selectedCarLog, setSelectedCarLog] = useState<CarLog | null>(null);
   const [searchPerformed, setSearchPerformed] = useState(false);
+  const [activeTab, setActiveTab] = useState<'currentStatus' | 'parkingLog'>('currentStatus');
+  const [filteredCurrentParkedCars, setFilteredCurrentParkedCars] = useState<CarLog[]>([]);
 
   useEffect(() => {
     dispatch(fetchParkingData());
@@ -32,9 +34,16 @@ const Main: React.FC = () => {
   }, [searchData, currentParkedCars]);
 
   const handleSearch = () => {
-    dispatch(fetchSearchData({ licensePlate, startDate, endDate }));
-    setSearchPerformed(true);
-  };
+    if (activeTab === 'currentStatus') {
+      const filteredCars = currentParkedCars.filter(car =>
+        car.licensePlate && car.licensePlate.includes(licensePlate)
+      );
+      setFilteredCurrentParkedCars(filteredCars);
+    } else {
+      dispatch(fetchSearchData({ licensePlate, startDate, endDate }));
+      setSearchPerformed(true);
+    }
+  };  
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
@@ -72,7 +81,9 @@ const Main: React.FC = () => {
     setSelectedCarLog(carLog);
   };
 
-  const carLogsToDisplay = searchPerformed && searchData.length === 0 ? [] : (searchData.length > 0 ? searchData : currentParkedCars);
+  const carLogsToDisplay = activeTab === 'currentStatus' 
+  ? (filteredCurrentParkedCars.length > 0 ? filteredCurrentParkedCars : currentParkedCars)
+  : (searchPerformed && searchData.length === 0 ? [] : searchData);
 
   return (
     <div className={styles.main}>
@@ -99,14 +110,27 @@ const Main: React.FC = () => {
         </div>
         <div className={styles.searchSection}>
           <div className={styles.searchArea}>
-            <p>차량 검색</p>
+            <div className={styles.tabContainer}>
+              <p
+                className={`${styles.tab} ${activeTab === 'currentStatus' ? styles.activeTab : ''}`}
+                onClick={() => setActiveTab('currentStatus')}
+              >
+                현재 주차 현황
+              </p>
+              <p
+                className={`${styles.tab} ${activeTab === 'parkingLog' ? styles.activeTab : ''}`}
+                onClick={() => setActiveTab('parkingLog')}
+              >
+                주차 로그
+              </p>
+            </div>
             <div className={styles.searchBar}>
               <input 
                 className={styles.searchInput} 
                 type="text" 
                 placeholder="Search Car Number" 
                 value={licensePlate}
-                onChange={(e) => dispatch(setlicensePlate(e.target.value))}
+                onChange={(e) => dispatch(setLicensePlate(e.target.value))}
                 onKeyDown={handleKeyDown}
                 maxLength={10}
               />
@@ -114,20 +138,22 @@ const Main: React.FC = () => {
                 <img src={searchIcon} alt="Search" className={styles.icon} />
               </button>
             </div>
-            <div className={styles.searchDate}>
-              <input 
-                className={styles.dateInput} 
-                type="date" 
-                value={startDate}
-                onChange={(e) => dispatch(setStartDate(e.target.value))}
-              />
-              <input 
-                className={styles.dateInput} 
-                type="date" 
-                value={endDate}
-                onChange={(e) => dispatch(setEndDate(e.target.value))}
-              />
-            </div>
+            {activeTab === 'parkingLog' && (
+              <div className={styles.searchDate}>
+                <input 
+                  className={styles.dateInput} 
+                  type="date" 
+                  value={startDate}
+                  onChange={(e) => dispatch(setStartDate(e.target.value))}
+                />
+                <input 
+                  className={styles.dateInput} 
+                  type="date" 
+                  value={endDate}
+                  onChange={(e) => dispatch(setEndDate(e.target.value))}
+                />
+              </div>
+            )}
           </div>
           {searchPerformed && searchData.length === 0 && (
             <div className={styles.noResults}>
@@ -135,7 +161,7 @@ const Main: React.FC = () => {
             </div>
           )}
           {carLogsToDisplay.length > 0 && (
-            <div className={styles.searchData}>
+            <div className={`${styles.searchData} ${activeTab === 'currentStatus' ? styles.now : styles.log}`}>
               <ul>
                 {carLogsToDisplay
                   .filter(carLog => carLog.licensePlate)
