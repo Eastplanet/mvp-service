@@ -7,7 +7,7 @@
 
 .content {
   flex: 1;
-  padding: 20px 150px;
+  padding: 20px 100px;
   background-color: #f9fafc;
 }
 
@@ -50,11 +50,11 @@
 
 .summaryItem {
   display: flex;
-  flex: 0 1 150px;
+  flex: 1;
   background: white;
   border-radius: 10px;
-  padding: 0px 10px;  
-  margin: 0px 50px;
+  padding: 0px 20px;  
+  margin: 0px 30px;
   box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.25);
   align-items: center;
   justify-content: space-between;
@@ -108,21 +108,22 @@
   /* width: 100%; */
 }
 
-.name{
-  margin-left: 20px;
-  width: 100px;
+.name {
+  flex: 2; /* 비율을 설정하여 공간 분배 */
+  margin-left: 10px;
 }
 
-.car{
-  width: 150px;
-}
-.phone{
-  width: 250px;
-}
-.date{
-  width: 200px;
+.car {
+  flex: 2;
 }
 
+.phone {
+  flex: 3;
+}
+
+.date {
+  flex: 2;
+}
 
 .membersTable th, .membersTable td {
   padding: 10px;
@@ -205,10 +206,3 @@
 .pagination span {
   margin: 0 5px;
 }
-
-  
-
-
-
-
-  
