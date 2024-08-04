@@ -13,6 +13,7 @@
   padding: 5px;
 }
 
+/* 상단 요약 데이터 */
 .summaryContainer {
   display: flex;
   justify-content: space-between;
@@ -22,18 +23,39 @@
 .summary {
   flex: 1;
   background-color: white;
-  padding: 15px;
-  margin: 0 10px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  text-align: center;
+  padding: 0px 15px;
+  margin: 0 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+  /* text-align: center; */
 }
+
+.summaryTitle {
+  margin: 10px 0;
+  text-align: left;
+  font-size: 24px;
+  color: #a8a8a8;
+}
+
+.summaryData {
+  font-size: 25px;
+  margin: 0;
+  text-align: right;
+  font-weight: 600;
+}
+
+.summaryComparison {
+  margin: 5px 0 10px 0;
+  text-align: right;
+}
+
+/* 차트 */
 
 .chartContainer {
   background-color: white;
   padding: 20px;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -41,37 +63,47 @@
   margin: 0px 10px;
 }
 
+
+
+/* 우측 데이터 */
+
 .details {
   flex: 1;
   padding: 20px;
   background-color: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
   margin: 35px 35px;
-  text-align: center;
+  text-align: right;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  height: 662px;
+  height: 600px;
   overflow-y: auto;
 }
 
 .details p {
-  margin: 10px 0;
-  font-size: 1rem;
-}
-
-.details h3 {
-  margin: 10px 0;
+  margin: 0px 0;
   font-size: 1.5rem;
 }
 
+.details h3 {
+  margin: 0 0 25px 0;
+  font-size: 2.5rem;
+}
+
+.details .detailsTotal{
+  margin: 0;
+  font-size: 2.5rem;
+}
 .up {
   color: red;
+  font-weight: bold;
 }
 
 .down {
   color: blue;
+  font-weight: bold;
 }
 
 .totalUp {
