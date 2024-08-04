@@ -24,6 +24,7 @@ const Members: React.FC = () => {
   const [allSelected, setAllSelected] = useState<boolean>(false);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [searchTerm, setSearchTerm] = useState<string>('');
   // 페이지
   const [currentPage, setCurrentPage] = useState<number>(1);
   const itemsPerPage = 5;
@@ -159,7 +160,15 @@ const Members: React.FC = () => {
   const startPage = Math.max(1, currentPage - halfPagesToShow);
   const endPage = Math.min(totalPages, currentPage + halfPagesToShow);
 
-  const paginatedMembers = members.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+  const filteredMembers = members.filter(member =>
+    member.car.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const paginatedMembers = filteredMembers.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
+  };  
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -199,7 +208,7 @@ const Members: React.FC = () => {
       <div className={styles.content}>
         <div className={styles.header}>
           <h1>Members</h1>
-          <input className={styles.search} type="number" placeholder='Car Number'/> 
+          <input className={styles.search} type="text" placeholder='Car Number' value={searchTerm} onChange={handleSearchChange} />
         </div>
         <div className={styles.summary}>
           <div className={styles.summaryItem}>
