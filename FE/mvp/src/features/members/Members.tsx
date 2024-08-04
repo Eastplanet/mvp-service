@@ -24,6 +24,10 @@ const Members: React.FC = () => {
   const [allSelected, setAllSelected] = useState<boolean>(false);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  // 페이지
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const itemsPerPage = 5;
+
 
   useEffect(() => {
     dispatch(fetchMembers());
@@ -144,6 +148,49 @@ const Members: React.FC = () => {
     };
   };
 
+  // 페이지 컴포넌트
+  const totalPages = Math.ceil(members.length / itemsPerPage);
+
+  // 현재 페이지 주변으로 표시할 페이지 수
+  const pagesToShow = 5;
+  const halfPagesToShow = Math.floor(pagesToShow / 2);
+
+  // 페이지 버튼 범위를 계산
+  const startPage = Math.max(1, currentPage - halfPagesToShow);
+  const endPage = Math.min(totalPages, currentPage + halfPagesToShow);
+
+  const paginatedMembers = members.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
+  const Pagination = () => (
+    <div className={styles.pagination}>
+      <button 
+        onClick={() => handlePageChange(Math.max(1, startPage - pagesToShow))}
+        disabled={currentPage === 1}
+      >
+        &lt;
+      </button>
+      {Array.from({ length: endPage - startPage + 1 }, (_, index) => (
+        <button 
+          key={startPage + index}
+          onClick={() => handlePageChange(startPage + index)}
+          className={currentPage === startPage + index ? styles.activePage : ''}
+        >
+          {startPage + index}
+        </button>
+      ))}
+      <button 
+        onClick={() => handlePageChange(Math.min(totalPages, endPage + pagesToShow))}
+        disabled={currentPage === totalPages}
+      >
+        &gt;
+      </button>
+    </div>
+  );
+
   const stats = getStatistics();
 
   return (
@@ -152,105 +199,118 @@ const Members: React.FC = () => {
       <div className={styles.content}>
         <div className={styles.header}>
           <h1>Members</h1>
+          <input className={styles.search} type="number" placeholder='Car Number'/> 
         </div>
         <div className={styles.summary}>
           <div className={styles.summaryItem}>
             <div className={styles.icon}>🏁</div>
-            <div>전체 회원</div>
-            <div>{stats.total}</div>
+            <div>
+              <p className={styles.item}>전체 회원</p>
+              <p className={styles.stat}>{stats.total}</p>
+            </div>
           </div>
           <div className={styles.summaryItem}>
             <div className={styles.icon}>🆕</div>
-            <div>신규 회원</div>
-            <div>{stats.newMembers}</div>
+            <div>
+              <p className={styles.item}>신규 회원</p>
+              <p className={styles.stat}>{stats.newMembers}</p>
+            </div>
           </div>
           <div className={styles.summaryItem}>
             <div className={styles.icon}>🕒</div>
-            <div>최근 만료</div>
-            <div>{stats.recentExpired}</div>
+            <div>
+              <p className={styles.item}>최근 만료</p>
+              <p className={styles.stat}>{stats.recentExpired}</p>
+            </div>
           </div>
           <div className={styles.summaryItem}>
             <div className={styles.icon}>🔄</div>
-            <div>만료 예정</div>
-            <div>{stats.expiringSoon}</div>
+            <div>
+              <p className={styles.item}>만료 예정</p>
+              <p className={styles.stat}>{stats.expiringSoon}</p>
+            </div>
           </div>
         </div>
-        <div className={styles.membersTable}>
-          <table>
-            <thead>
-              <tr>
-                <th><input type="checkbox" checked={allSelected} onChange={handleSelectAll} /></th>
-                <th>Name</th>
-                <th>Car</th>
-                <th>Phone</th>
-                <th>Join Date</th>
-                <th>Secession Date</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {members.map((member) => (
-                <tr key={member.id}>
-                  <td>
-                    <input type="checkbox" checked={selectedIds.includes(member.id)} onChange={() => handleSelect(member.id)} />
-                  </td>
-                  <td>
-                    {editingMemberId === member.id ? (
-                      <input 
-                        type="text" 
-                        value={editingData?.name || ''} 
-                        onChange={(e) => handleInputChange(e, 'name')} 
-                      />
-                    ) : (
-                      member.name
-                    )}
-                  </td>
-                  <td>
-                    {editingMemberId === member.id ? (
-                      <input 
-                        type="text" 
-                        value={editingData?.car || ''} 
-                        onChange={(e) => handleInputChange(e, 'car')} 
-                      />
-                    ) : (
-                      member.car
-                    )}
-                  </td>
-                  <td>
-                    {editingMemberId === member.id ? (
-                      <input 
-                        type="text" 
-                        value={editingData?.phone || ''} 
-                        onChange={(e) => handleInputChange(e, 'phone')} 
-                      />
-                    ) : (
-                      member.phone
-                    )}
-                  </td>
-                  <td>{formatDate(member.join_date)}</td>
-                  <td>
-                    {editingMemberId === member.id ? (
-                      <input 
-                        type="date" 
-                        value={editingData?.secession_date ? editingData.secession_date.toISOString().split('T')[0] : ''} 
-                        onChange={(e) => handleInputChange(e, 'secession_date')} 
-                      />
-                    ) : (
-                      member.secession_date ? formatDate(member.secession_date) : 'N/A'
-                    )}
-                  </td>
-                  <td>
-                    {editingMemberId === member.id ? (
-                      <button onClick={handleSave}>Save</button>
-                    ) : (
-                      <button onClick={() => handleEdit(member)}>Edit</button>
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+
+        {/* 표 */}
+        <div className={styles.membersTable}>     
+
+          <div className={styles.tableHead}>
+            <td><input type="checkbox" checked={allSelected} onChange={handleSelectAll} /></td>
+            <td className={styles.name}>Name</td>
+            <td className={styles.car}>Car</td>
+            <td className={styles.phone}>Phone</td>
+            <td className={styles.date}>Join Date</td>
+            <td className={styles.date}>Secession Date</td>
+            <td>Actions</td>
+          </div>
+                  
+          {paginatedMembers.map((member) => (
+          <div className={styles.tableBody} key={member.id}>
+            <td>
+              <input type="checkbox" checked={selectedIds.includes(member.id)} onChange={() => handleSelect(member.id)} />
+            </td>
+            <td className={styles.name}>
+              {editingMemberId === member.id ? (
+                <input
+                  type="text"
+                  value={editingData?.name || ''} 
+                  onChange={(e) => handleInputChange(e, 'name')} 
+                />
+              ) : (
+                member.name
+              )}
+            </td>
+            <td className={styles.car}>
+              {editingMemberId === member.id ? (
+                <input 
+                  type="text" 
+                  value={editingData?.car || ''} 
+                  onChange={(e) => handleInputChange(e, 'car')} 
+                />
+              ) : (
+                member.car
+              )}
+            </td>
+            <td className={styles.phone}>
+              {editingMemberId === member.id ? (
+                <input 
+                  type="text" 
+                  value={editingData?.phone || ''} 
+                  onChange={(e) => handleInputChange(e, 'phone')} 
+                />
+              ) : (
+                member.phone
+              )}
+            </td>
+            <td className={styles.date}>{formatDate(member.join_date)}</td>
+            <td className={styles.date}>
+              {editingMemberId === member.id ? (
+                <input 
+                  type="date" 
+                  value={editingData?.secession_date ? editingData.secession_date.toISOString().split('T')[0] : ''} 
+                  onChange={(e) => handleInputChange(e, 'secession_date')} 
+                />
+              ) : (
+                member.secession_date ? formatDate(member.secession_date) : 'N/A'
+              )}
+            </td>
+            <td>
+              {editingMemberId === member.id ? (
+                <button className={styles.editButton} onClick={handleSave}>Save</button>
+              ) : (
+                <button className={styles.editButton} onClick={() => handleEdit(member)}>Edit</button>
+              )}
+            </td>
+          </div>
+        ))}
+          
+          
           {error && <div className={styles.error}>{error}</div>}
+        </div>
+        <div>
+        
+        <Pagination />
         </div>
         <div className={styles.actions}>
           <button className={styles.addButton} onClick={handleAddMember}>추가</button>
