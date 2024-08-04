@@ -50,7 +50,7 @@ const getDefaultDateRange = () => {
 };
 
 export const fetchParkingData = createAsyncThunk('main/fetchParkingData', async () => {
-  const response = await axios.get('http://mvp-project.shop:8081/stats/home-init');
+  const response = await axios.get('https://mvp-project.shop:8081/stats/home-init');
   const data = response.data.data;
   const parkingLots = data.parkingLots.map((lot: any) => ({
     licensePlate: lot.licensePlate,
@@ -82,7 +82,7 @@ export const fetchSearchData = createAsyncThunk(
       endDate = new Date(endDate).toISOString();
     }
 
-    const response = await axios.get('http://mvp-project.shop:8081/stats/parking-log', {
+    const response = await axios.get('https://mvp-project.shop:8081/stats/parking-log', {
       params: { licensePlate, startDate, endDate }
     });
 
