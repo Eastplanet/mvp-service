@@ -30,7 +30,7 @@ public class MembershipController {
     }
 
     @DeleteMapping("/{licensePlate}")
-    public ResponseEntity<ResponseDto> deleteMembership(@RequestParam String licensePlate) {
+    public ResponseEntity<ResponseDto> deleteMembership(@PathVariable String licensePlate) {
         boolean success = membershipService.deleteMembership(licensePlate);
 
         if (success) {
