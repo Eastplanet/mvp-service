@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '../../store/store';
-import { fetchMembers, updateMember, deleteMembersFromServer, deleteMember } from './membersSlice';
+import { fetchMembers, updateMember, deleteMembersFromServer } from './membersSlice';
 import styles from './Members.module.css';
 import Sidebar from '../sidebar/Sidebar';
 import AddMembersModal from './add/AddMembersModal';
