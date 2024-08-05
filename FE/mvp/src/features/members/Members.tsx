@@ -203,44 +203,45 @@ const Members: React.FC = () => {
   return (
     <div className={styles.membersPage}>
       <Sidebar />
-      <div className={styles.content}>
-        <div className={styles.header}>
-          <h1>Members</h1>
-          <input className={styles.search} type="text" placeholder='Car Number' value={searchTerm} onChange={handleSearchChange} />
-        </div>
-        <div className={styles.summary}>
-          <div className={styles.summaryItem}>
-            <div className={styles.icon}>🏁</div>
-            <div>
-              <p className={styles.item}>전체 회원</p>
-              <p className={styles.stat}>{stats.total}</p>
+      <div className={styles.page}>
+        <div className={styles.content}>
+          <div className={styles.header}>
+            <h1>Members</h1>
+            <input className={styles.search} type="number" placeholder='Car Number'/> 
+          </div>
+          <div className={styles.summary}>
+            <div className={styles.summaryItem}>
+              <div className={styles.icon}>🏁</div>
+              <div>
+                <p className={styles.item}>전체 회원</p>
+                <p className={styles.stat}>{stats.total}</p>
+              </div>
+            </div>
+            <div className={styles.summaryItem}>
+              <div className={styles.icon}>🆕</div>
+              <div>
+                <p className={styles.item}>신규 회원</p>
+                <p className={styles.stat}>{stats.newMembers}</p>
+              </div>
+            </div>
+            <div className={styles.summaryItem}>
+              <div className={styles.icon}>🕒</div>
+              <div>
+                <p className={styles.item}>최근 만료</p>
+                <p className={styles.stat}>{stats.recentExpired}</p>
+              </div>
+            </div>
+            <div className={styles.summaryItem}>
+              <div className={styles.icon}>🔄</div>
+              <div>
+                <p className={styles.item}>만료 예정</p>
+                <p className={styles.stat}>{stats.expiringSoon}</p>
+              </div>
             </div>
           </div>
-          <div className={styles.summaryItem}>
-            <div className={styles.icon}>🆕</div>
-            <div>
-              <p className={styles.item}>신규 회원</p>
-              <p className={styles.stat}>{stats.newMembers}</p>
-            </div>
-          </div>
-          <div className={styles.summaryItem}>
-            <div className={styles.icon}>🕒</div>
-            <div>
-              <p className={styles.item}>최근 만료</p>
-              <p className={styles.stat}>{stats.recentExpired}</p>
-            </div>
-          </div>
-          <div className={styles.summaryItem}>
-            <div className={styles.icon}>🔄</div>
-            <div>
-              <p className={styles.item}>만료 예정</p>
-              <p className={styles.stat}>{stats.expiringSoon}</p>
-            </div>
-          </div>
-        </div>
 
-        {/* 표 */}
-        <div className={styles.membersTable}>     
+          {/* 표 */}
+          <div className={styles.membersTable}>     
 
           <div className={styles.tableHead}>
             <div><input type="checkbox" checked={allSelected} onChange={handleSelectAll} /></div>
@@ -310,21 +311,17 @@ const Members: React.FC = () => {
               )}
             </div>
           </div>
-        ))}
+          <div>
           
-          
-          {error && <div className={styles.error}>{error}</div>}
+          <Pagination />
+          </div>
+          <div className={styles.actions}>
+            <button className={styles.addButton} onClick={handleAddMember}>추가</button>
+            <button className={styles.deleteButton} onClick={handleDelete}>삭제</button>
+          </div>
         </div>
-        <div>
-        
-        <Pagination />
-        </div>
-        <div className={styles.actions}>
-          <button className={styles.addButton} onClick={handleAddMember}>추가</button>
-          <button className={styles.deleteButton} onClick={handleDelete}>삭제</button>
-        </div>
+        {showModal && <AddMembersModal onClose={handleCloseModal} />}
       </div>
-      {showModal && <AddMembersModal onClose={handleCloseModal} />}
     </div>
   );
 };

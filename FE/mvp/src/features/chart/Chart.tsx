@@ -6,6 +6,7 @@ const Chart = () => {
   return (
     <div className={styles.chartPage}>
       <Sidebar />
+      <div className={styles.page}>
         <div className={styles.mainContent}>
           <div className={styles.summaryContainer}>
             <div className={styles.summary}>
@@ -45,6 +46,7 @@ const Chart = () => {
           <h3 className={styles.detailsTotal}>11,500,000 원</h3>
           <p className={styles.totalUp}>+15.0%</p>
         </div>
+      </div>
     </div>
   );
 }
