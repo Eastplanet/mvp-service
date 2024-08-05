@@ -33,7 +33,7 @@ class MQTTClient:
         if(serial_number != SERIAL_NUMBER):
             return
         # TODO : 작업 내용을 추가합니다.
-        self.bot_controller.start_driving(command)
+        self.bot_controller.startDriving(command)
         
     def publish(self, message):
         print("Publishing message" + str(message))

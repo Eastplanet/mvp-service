@@ -3,9 +3,11 @@
 import sys
 import time
 import Jetson.GPIO as GPIO
+from multiprocessing import Process, Queue
 from . import motorControl
 from . import utils
 from . import mapSetting
+from .getLidarData import start_lidar  # getLidarData의 start_lidar 함수 import
 
 # 상수 정의
 blackLine = 1
@@ -39,7 +41,7 @@ def setupGpio():
     return L_PIN, C_PIN, R_PIN
 
 
-def startLineTracing(startNode, endNode):
+def startLineTracing(startNode, endNode, queue):
     # 모터 초기화, GPIO 설정
     motorHat, kit = motorControl.initializeMotors()
     L_PIN, C_PIN, R_PIN = setupGpio()
@@ -67,8 +69,17 @@ def startLineTracing(startNode, endNode):
             currentTime = time.time()
             elapsedTime = currentTime - updateTime
             totalElapsedTime = currentTime - startTime
-            print(f"Total elapsed time: {totalElapsedTime:.2f} sec, [{elapsedTime:.2f}] sec")
-            print(f'Current Step{curStep} : {path[curStep]}')
+            print(f'\033[1mTotal elapsed time: {totalElapsedTime:.2f} sec, [{elapsedTime:.2f}] sec\033[0m')
+
+            print(f'  -  \033[1mStep {curStep} : {path[curStep]}\033[0m')
+
+            # 라이다 데이터 읽기
+            if not queue.empty():
+                lidar_data = queue.get()
+                if lidar_data <= 0.2:
+                    print("\033[1;31m[Warning!]Obstacle detected! Distance: {:.2f} m\033[0m".format(lidar_data), end='\n\n')
+                    time.sleep(0.2)
+                    continue
 
             if totalElapsedTime >= 50:
                 raise ExitProgramException
@@ -78,8 +89,8 @@ def startLineTracing(startNode, endNode):
             left = GPIO.input(R_PIN)  # 반대로 연결함
             
             # 상태 표시를 위한 심볼
-            statusSymbols = {blackLine: "☐", whiteLine: "◼"}
-            print(f'[ {statusSymbols[left]} {statusSymbols[center]} {statusSymbols[right]} ]')
+            statusSymbols = {blackLine: '☐', whiteLine: '◼'}
+            print(f'\033[1m[ {statusSymbols[left]} {statusSymbols[center]} {statusSymbols[right]} ] \033[0m', end=' -> ')
 
             if left == whiteLine and center == blackLine and right == whiteLine:        # ◼ ☐ ◼
                 motorControl.turnStraight(kit)
@@ -98,14 +109,14 @@ def startLineTracing(startNode, endNode):
             else:
                 # 교차로 처리 로직
                 if isOverElapsedTime(elapsedTime) and not isUpdated:
-                    print("\t\033[1;33m[Detect] InterSection!\033[0m")
+                    print("\t\033[1;33m[Detect!] InterSection!\033[0m")
                     curStep += 1
                     isUpdated = True
                     print('step++')
                     print(curStep, len(path), path[curStep])
                     if curStep < len(path):
                         if 'Rotate' in path[curStep]:
-                            motorControl.rotate(motorHat, kit, path[curStep])
+                            # motorControl.rotate(motorHat, kit, path[curStep])
                             updateTime = time.time()
                             curStep += 1
                             isUpdated = False
@@ -138,7 +149,7 @@ def startLineTracing(startNode, endNode):
                 elif left == blackLine and center == blackLine and right == blackLine:  # ☐ ☐ ☐
                     motorControl.turnStraight(kit)
                     prevDirection = 'straight'
-            motorControl.goStraight(motorHat)
+            # motorControl.goStraight(motorHat)
             time.sleep(0.05)
             print()
     except KeyboardInterrupt:
