@@ -32,13 +32,7 @@ public class VehicleLogConverter {
     public static List<VehicleLogDTO> entityListToDtoList(List<VehicleLog> vehicleLogList) {
         List<VehicleLogDTO> dtoList = new ArrayList<>();
         for (VehicleLog vehicleLog : vehicleLogList) {
-            VehicleLogDTO dto = VehicleLogDTO.builder()
-                    .licensePlate(vehicleLog.getLicensePlate())
-                    .entranceTime(vehicleLog.getEntranceTime())
-                    .exitTime(vehicleLog.getExitTime())
-                    .fee(vehicleLog.getFee())
-                    .build();
-            dtoList.add(dto);
+            dtoList.add(entityToDto(vehicleLog));
         }
         return dtoList;
     }
@@ -56,6 +50,7 @@ public class VehicleLogConverter {
                 .licensePlate(exitLogDTO.getLicensePlate())
                 .fee(exitLogDTO.getFee())
                 .image(exitLogDTO.getImage())
+                .entranceTime(exitLogDTO.getEntranceTime())
                 .build();
     }
 }

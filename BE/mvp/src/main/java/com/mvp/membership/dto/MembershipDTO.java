@@ -1,18 +1,14 @@
 package com.mvp.membership.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
-@Getter
+@Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class MembershipDTO {
-
     private String licensePlate;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
