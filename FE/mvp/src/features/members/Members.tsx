@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '../../store/store';
-import { fetchMembers, updateMember, deleteMembersFromServer } from './membersSlice';
+import { fetchMembers, updateMemberOnServer, deleteMembersFromServer } from './membersSlice';
 import styles from './Members.module.css';
 import Sidebar from '../sidebar/Sidebar';
 import AddMembersModal from './add/AddMembersModal';
@@ -18,7 +18,7 @@ interface Member {
 const Members: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const members = useSelector((state: RootState) => state.members.members);
-  const [selectedIds, setSelectedIds] = useState<number[]>([]);
+  const [selectedCars, setSelectedCars] = useState<string[]>([]);
   const [editingMemberId, setEditingMemberId] = useState<number | null>(null);
   const [editingData, setEditingData] = useState<Member | null>(null);
   const [allSelected, setAllSelected] = useState<boolean>(false);
@@ -35,12 +35,12 @@ const Members: React.FC = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    setAllSelected(members.length > 0 && selectedIds.length === members.length);
-  }, [selectedIds, members]);
+    setAllSelected(members.length > 0 && selectedCars.length === members.length);
+  }, [selectedCars, members]);
 
-  const handleSelect = (id: number) => {
-    setSelectedIds(prev => 
-      prev.includes(id) ? prev.filter(selectedId => selectedId !== id) : [...prev, id]
+  const handleSelect = (car: string) => {
+    setSelectedCars(prev => 
+      prev.includes(car) ? prev.filter(selectedCar => selectedCar !== car) : [...prev, car]
     );
   };
 
@@ -55,18 +55,17 @@ const Members: React.FC = () => {
 
   const handleSelectAll = () => {
     if (allSelected) {
-      setSelectedIds([]);
+      setSelectedCars([]);
     } else {
-      setSelectedIds(members.map(member => member.id));
+      setSelectedCars(members.map(member => member.car));
     }
     setAllSelected(!allSelected);
   };
 
   const handleDelete = () => {
-    if (selectedIds.length > 0) {
-      dispatch(deleteMembersFromServer(selectedIds));
-      // dispatch(deleteMember(selectedIds));
-      setSelectedIds([]);
+    if (selectedCars.length > 0) {
+      dispatch(deleteMembersFromServer(selectedCars));
+      setSelectedCars([]);
       setAllSelected(false);
     }
   };
@@ -78,9 +77,9 @@ const Members: React.FC = () => {
 
   const handleSave = async () => {
     if (editingData) {
-      const { name, car, secession_date, join_date } = editingData;
-      if (!name || !car || !secession_date) {
-        setError('이름, 차량 번호, 만료 기간은 필수 항목입니다.');
+      const { name, car, secession_date, phone, join_date } = editingData;
+      if (!name || !car || !secession_date || !phone) {
+        setError('이름, 차량 번호, 만료 기간, 전화번호는 필수 항목입니다.');
         return;
       }
   
@@ -91,7 +90,7 @@ const Members: React.FC = () => {
           join_date: join_date instanceof Date ? join_date : parseDate(join_date as string),
         };
   
-        await dispatch(updateMember(dataToSave));
+        await dispatch(updateMemberOnServer(dataToSave));
         setEditingMemberId(null);
         setEditingData(null);
         setError(null);
@@ -256,7 +255,7 @@ const Members: React.FC = () => {
           {paginatedMembers.map((member) => (
           <div className={styles.tableBody} key={member.id}>
             <div>
-              <input type="checkbox" checked={selectedIds.includes(member.id)} onChange={() => handleSelect(member.id)} />
+              <input type="checkbox" checked={selectedCars.includes(member.car)} onChange={() => handleSelect(member.car)} />
             </div>
             <div className={styles.name}>
               {editingMemberId === member.id ? (
