@@ -1,6 +1,6 @@
-  .container {
+.container {
   display: flex;
-  /* height: 100vh; */
+  height: 100vh;
   background-color: #f9fafc;
 }
 
@@ -19,7 +19,7 @@
   padding-left: 30px;
   padding-right: 30px;
   width: 100%;
-  max-width: 1200px; /* 최대 너비 설정 */
+  max-width: 1200px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column; 
@@ -152,15 +152,15 @@ font-weight: bold; /* 글자를 볼드체로 설정 */
   color: white;
   font-size: large;
   font-weight: bold;
-  background-color: #f44336; /* 빨간색 배경 */
+  background-color: #f44336;
   border-radius: 20px;
   border: rgb(99, 0, 0) 3px solid;
   box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.25);
   cursor: pointer;
 }
 
-.button_deactivate:active {
-  background-color: #c62828; /* 클릭 시 어두운 빨간색 */
+.button_deactivate.active {
+  background-color: #c62828;
 }
 
 .button_activate {
@@ -169,15 +169,15 @@ font-weight: bold; /* 글자를 볼드체로 설정 */
   color: #fff;
   font-size: large;
   font-weight: bold;
-  background-color: #4caf50; /* 초록색 배경 */
+  background-color: #4caf50;
   border-radius: 20px;
   border: rgb(99, 0, 0) 3px solid;
   box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.25);
   cursor: pointer;
 }
 
-.button_activate:active {
-  background-color: #388e3c; /* 클릭 시 어두운 초록색 */
+.button_activate.active {
+  background-color: #388e3c;
 }
 
 /* 기본 회색 상태 */
