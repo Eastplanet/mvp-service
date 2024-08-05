@@ -15,6 +15,7 @@ const AddMemberModal: React.FC<AddMemberModalProps> = ({ onClose }) => {
   const [licensePlate, setLicensePlate] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [endDate, setEndDate] = useState('');
+  const [error, setError] = useState('');
 
   const getISODateString = (date: string) => {
     const dateObject = new Date(date);
@@ -22,8 +23,14 @@ const AddMemberModal: React.FC<AddMemberModalProps> = ({ onClose }) => {
   };
 
   const handleSubmit = async () => {
+    if (!name || !licensePlate || !phoneNumber || !endDate) {
+      setError('모든 필수 정보를 입력하세요.');
+      return;
+    }
+  
     const startDate = getISODateString(new Date().toISOString());
     const formattedEndDate = getISODateString(endDate);
+  
     try {
       await axios.post('https://mvp-project.shop/api/memberships', { name, licensePlate, phoneNumber, endDate: formattedEndDate, startDate });
       dispatch(fetchMembers());
@@ -38,6 +45,7 @@ const AddMemberModal: React.FC<AddMemberModalProps> = ({ onClose }) => {
       <div className={styles.modalContent}>
         <button className={styles.backButton} onClick={onClose} aria-label="Close">←</button>
         <h2 className={styles.title}>회원 추가</h2>
+        {error && <div className={styles.error}>{error}</div>}
         <div className={styles.formGroup}>
           <label className={styles.label}>이름</label>
           <input 

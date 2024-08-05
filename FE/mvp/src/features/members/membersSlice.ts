@@ -42,9 +42,28 @@ export const fetchMembers = createAsyncThunk<Member[]>('members/fetchMembers', a
   }
 });
 
-export const deleteMembersFromServer = createAsyncThunk<void, number[]>('members/deleteMembers', async (licensePlate) => {
-  await axios.delete(`https://mvp-project.shop/api/memberships/${licensePlate}`);
+export const deleteMembersFromServer = createAsyncThunk<void, string[]>('members/deleteMembers', async (licensePlates) => {
+  await Promise.all(
+    licensePlates.map((licensePlate) => axios.delete(`https://mvp-project.shop/api/memberships/${licensePlate}`))
+  );
 });
+
+export const updateMemberOnServer = createAsyncThunk<Member, Member>(
+  'members/updateMemberOnServer',
+  async (member) => {
+    const response = await axios.patch(`https://mvp-project.shop/api/memberships/${member.car}`, {
+      endDate: member.secession_date.toISOString(),
+      phoneNumber: member.phone,
+      name: member.name,
+    });
+    return {
+      ...member,
+      secession_date: new Date(response.data.endDate),
+      phone: response.data.phoneNumber,
+      name: response.data.name,
+    };
+  }
+);
 
 const membersSlice = createSlice({
   name: 'members',
@@ -80,7 +99,13 @@ const membersSlice = createSlice({
         state.error = action.error.message || 'Failed to fetch members';
       })
       .addCase(deleteMembersFromServer.fulfilled, (state, action) => {
-        state.members = state.members.filter(member => !action.meta.arg.includes(member.id));
+        state.members = state.members.filter(member => !action.meta.arg.includes(member.car));
+      })
+      .addCase(updateMemberOnServer.fulfilled, (state, action) => {
+        const index = state.members.findIndex(member => member.car === action.payload.car);
+        if (index !== -1) {
+          state.members[index] = action.payload;
+        }
       });
   }
 });
