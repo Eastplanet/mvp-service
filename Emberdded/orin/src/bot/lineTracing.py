@@ -39,7 +39,7 @@ def setupGpio():
     return L_PIN, C_PIN, R_PIN
 
 
-def startDriving(startNode, endNode):
+def startLineTracing(startNode, endNode):
     # 모터 초기화, GPIO 설정
     motorHat, kit = motorControl.initializeMotors()
     L_PIN, C_PIN, R_PIN = setupGpio()

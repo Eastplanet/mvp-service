@@ -11,7 +11,7 @@ class MQTTClient:
         self.pub_topic = pub_topic
         self.sub_topic = sub_topic
         self.bot_controller = bot_controller
-        self.client = mqtt.Client()
+        self.client = mqtt.Client(protocol=mqtt.MQTTv5)
         self.client.on_connect = self.on_connect
         self.client.on_message = self.on_message
 
@@ -19,7 +19,7 @@ class MQTTClient:
         self.client.connect(self.broker, self.port, 60)
         self.client.loop_start()
 
-    def on_connect(self, client, userdata, flags, rc):
+    def on_connect(self, client, userdata, flags, rc, properties=None):
         if rc == 0:
             print("브로커 연결 성공!")
             self.client.subscribe(self.sub_topic)
