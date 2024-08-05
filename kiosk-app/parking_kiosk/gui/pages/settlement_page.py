@@ -143,10 +143,8 @@ class SettlementPage(QWidget):
         success = handle_exit(self.vehicle_info['license_plate'])
         # 정산 완료 시 메인페이지로 전환
         if success:
-            self.return_to_main()
+            self.main_window.return_to_main()
 
     def go_back(self):
         self.parent().stacked_widget.setCurrentWidget(self.parent().exit_page)
         
-    def return_to_main(self):
-        self.main_window.stacked_widget.setCurrentWidget(self.main_window.main_button)
