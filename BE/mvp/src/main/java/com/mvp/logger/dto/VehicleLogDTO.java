@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class VehicleLogDTO {
     private String licensePlate;
     private LocalDateTime entranceTime;
