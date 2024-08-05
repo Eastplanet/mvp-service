@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '../../store/store';
-import { fetchMembers, updateMember, deleteMembersFromServer, deleteMember } from './membersSlice';
+import { fetchMembers, updateMember, deleteMembersFromServer } from './membersSlice';
 import styles from './Members.module.css';
 import Sidebar from '../sidebar/Sidebar';
 import AddMembersModal from './add/AddMembersModal';
@@ -24,6 +24,7 @@ const Members: React.FC = () => {
   const [allSelected, setAllSelected] = useState<boolean>(false);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [searchTerm, setSearchTerm] = useState<string>('');
   // 페이지
   const [currentPage, setCurrentPage] = useState<number>(1);
   const itemsPerPage = 5;
@@ -63,8 +64,8 @@ const Members: React.FC = () => {
 
   const handleDelete = () => {
     if (selectedIds.length > 0) {
-      // dispatch(deleteMembersFromServer(selectedIds));
-      dispatch(deleteMember(selectedIds));
+      dispatch(deleteMembersFromServer(selectedIds));
+      // dispatch(deleteMember(selectedIds));
       setSelectedIds([]);
       setAllSelected(false);
     }
@@ -84,7 +85,6 @@ const Members: React.FC = () => {
       }
   
       try {
-        // Date 타입으로 처리
         const dataToSave = {
           ...editingData,
           secession_date: secession_date instanceof Date ? secession_date : parseDate(secession_date as string),
@@ -159,7 +159,15 @@ const Members: React.FC = () => {
   const startPage = Math.max(1, currentPage - halfPagesToShow);
   const endPage = Math.min(totalPages, currentPage + halfPagesToShow);
 
-  const paginatedMembers = members.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+  const filteredMembers = members.filter(member =>
+    member.car.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+  
+  const paginatedMembers = filteredMembers.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
+  };    
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -199,7 +207,7 @@ const Members: React.FC = () => {
       <div className={styles.content}>
         <div className={styles.header}>
           <h1>Members</h1>
-          <input className={styles.search} type="number" placeholder='Car Number'/> 
+          <input className={styles.search} type="text" placeholder='Car Number' value={searchTerm} onChange={handleSearchChange} />
         </div>
         <div className={styles.summary}>
           <div className={styles.summaryItem}>
@@ -236,21 +244,21 @@ const Members: React.FC = () => {
         <div className={styles.membersTable}>     
 
           <div className={styles.tableHead}>
-            <td><input type="checkbox" checked={allSelected} onChange={handleSelectAll} /></td>
-            <td className={styles.name}>Name</td>
-            <td className={styles.car}>Car</td>
-            <td className={styles.phone}>Phone</td>
-            <td className={styles.date}>Join Date</td>
-            <td className={styles.date}>Secession Date</td>
-            <td>Actions</td>
+            <div><input type="checkbox" checked={allSelected} onChange={handleSelectAll} /></div>
+            <div className={styles.name}>Name</div>
+            <div className={styles.car}>Car</div>
+            <div className={styles.phone}>Phone</div>
+            <div className={styles.date}>Join Date</div>
+            <div className={styles.date}>Secession Date</div>
+            <div>Actions</div>
           </div>
                   
           {paginatedMembers.map((member) => (
           <div className={styles.tableBody} key={member.id}>
-            <td>
+            <div>
               <input type="checkbox" checked={selectedIds.includes(member.id)} onChange={() => handleSelect(member.id)} />
-            </td>
-            <td className={styles.name}>
+            </div>
+            <div className={styles.name}>
               {editingMemberId === member.id ? (
                 <input
                   type="text"
@@ -260,8 +268,8 @@ const Members: React.FC = () => {
               ) : (
                 member.name
               )}
-            </td>
-            <td className={styles.car}>
+            </div>
+            <div className={styles.car}>
               {editingMemberId === member.id ? (
                 <input 
                   type="text" 
@@ -271,8 +279,8 @@ const Members: React.FC = () => {
               ) : (
                 member.car
               )}
-            </td>
-            <td className={styles.phone}>
+            </div>
+            <div className={styles.phone}>
               {editingMemberId === member.id ? (
                 <input 
                   type="text" 
@@ -282,9 +290,9 @@ const Members: React.FC = () => {
               ) : (
                 member.phone
               )}
-            </td>
-            <td className={styles.date}>{formatDate(member.join_date)}</td>
-            <td className={styles.date}>
+            </div>
+            <div className={styles.date}>{formatDate(member.join_date)}</div>
+            <div className={styles.date}>
               {editingMemberId === member.id ? (
                 <input 
                   type="date" 
@@ -294,14 +302,14 @@ const Members: React.FC = () => {
               ) : (
                 member.secession_date ? formatDate(member.secession_date) : 'N/A'
               )}
-            </td>
-            <td>
+            </div>
+            <div>
               {editingMemberId === member.id ? (
                 <button className={styles.editButton} onClick={handleSave}>Save</button>
               ) : (
                 <button className={styles.editButton} onClick={() => handleEdit(member)}>Edit</button>
               )}
-            </td>
+            </div>
           </div>
         ))}
           

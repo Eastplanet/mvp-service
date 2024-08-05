@@ -1,4 +1,3 @@
-// membersSlice.ts
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
@@ -43,8 +42,8 @@ export const fetchMembers = createAsyncThunk<Member[]>('members/fetchMembers', a
   }
 });
 
-export const deleteMembersFromServer = createAsyncThunk<void, number[]>('members/deleteMembers', async (ids) => {
-  await axios.post('/api/deleteMembers', { ids });
+export const deleteMembersFromServer = createAsyncThunk<void, number[]>('members/deleteMembers', async (licensePlate) => {
+  await axios.delete(`https://mvp-project.shop/api/memberships/${licensePlate}`);
 });
 
 const membersSlice = createSlice({
