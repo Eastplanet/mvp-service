@@ -16,6 +16,8 @@ public class VehicleLogConverter {
                 .entranceTime(vehicleLog.getEntranceTime())
                 .exitTime(vehicleLog.getExitTime())
                 .fee(vehicleLog.getFee())
+                .type(vehicleLog.getType())
+                .image(vehicleLog.getImage())
                 .build();
     }
 
