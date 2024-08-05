@@ -5,9 +5,9 @@ import com.mvp.common.exception.RestApiException;
 import com.mvp.common.exception.StatusCode;
 import com.mvp.membership.dto.MembershipDTO;
 import com.mvp.membership.service.MembershipService;
-import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,6 +18,7 @@ import java.util.List;
 public class MembershipController {
     private final MembershipService membershipService;
 
+    @Transactional
     @PostMapping
     public ResponseEntity<ResponseDto> createMembership(@RequestBody MembershipDTO membershipDTO) {
         MembershipDTO createdMembership = membershipService.createMembership(membershipDTO);
@@ -29,6 +30,7 @@ public class MembershipController {
         }
     }
 
+    @Transactional
     @DeleteMapping("/{licensePlate}")
     public ResponseEntity<ResponseDto> deleteMembership(@PathVariable String licensePlate) {
         boolean success = membershipService.deleteMembership(licensePlate);
@@ -40,6 +42,7 @@ public class MembershipController {
         }
     }
 
+    @Transactional
     @PatchMapping("/{membershipId}")
     public ResponseEntity<ResponseDto> updateMembership(@RequestBody MembershipDTO membershipDTO) {
         MembershipDTO updatedMembership = membershipService.updateMembership(membershipDTO);
