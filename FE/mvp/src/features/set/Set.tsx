@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Sidebar from '../sidebar/Sidebar';
 import styles from './Set.module.css';
+import axios from 'axios'
 
 // 초기 상태의 타입 정의
 interface InitialState {
@@ -41,28 +42,28 @@ const Set: React.FC = () => {
   // 데이터 로드 함수
   const fetchData = async () => {
     try {
-      const response = await fetch('/api/get-settings');
-      const data = await response.json();
+      const response = await axios.get('https://mvp-project.shop/api/parking-lots/setting');
+      const data = response.data.data;
       // 받아온 데이터로 상태 업데이트
-      setBasicTime(data.basicTime);
-      setBasicCost(data.basicCost);
-      setAdditionalTime(data.additionalTime);
-      setAdditionalCost(data.additionalCost);
-      setOneDayTicket(data.oneDayTicket);
-      setOneWeekTicket(data.oneWeekTicket);
-      setOneMonthTicket(data.oneMonthTicket);
-      setIsSystemActive(data.isSystemActive);
+      setBasicTime(data.baseParkingTime ?? 0);
+      setBasicCost(data.baseFee ?? 0);
+      setAdditionalTime(data.additionalUnitTime ?? 0);
+      setAdditionalCost(data.additionalUnitFee ?? 0);
+      setOneDayTicket(data.dailyFee ?? 0);
+      setOneWeekTicket(data.weeklyFee ?? 0);
+      setOneMonthTicket(data.monthlyFee ?? 0);
+      setIsSystemActive(data.isSystemActive ?? true);
       
       // 초기 상태 저장
       initialStateRef.current = {
-        basicTime: data.basicTime,
-        basicCost: data.basicCost,
-        additionalTime: data.additionalTime,
-        additionalCost: data.additionalCost,
-        oneDayTicket: data.oneDayTicket,
-        oneWeekTicket: data.oneWeekTicket,
-        oneMonthTicket: data.oneMonthTicket,
-        isSystemActive: data.isSystemActive
+        basicTime: data.basicTime ?? 0,
+        basicCost: data.basicCost ?? 0,
+        additionalTime: data.additionalTime ?? 0,
+        additionalCost: data.additionalCost ?? 0,
+        oneDayTicket: data.dailyFee ?? 0,
+        oneWeekTicket: data.oneWeekTicket ?? 0,
+        oneMonthTicket: data.oneMonthTicket ?? 0,
+        isSystemActive: data.isSystemActive ?? true
       };
     } catch (error) {
       console.error('데이터 로드 실패:', error);
@@ -102,32 +103,33 @@ const Set: React.FC = () => {
   };
 
   // 저장 버튼 클릭 핸들러
-  const handleSave = () => {
+  const handleSave = async () => {
     const data = {
-      basicTime,
-      basicCost,
-      additionalTime,
-      additionalCost,
-      oneDayTicket,
-      oneWeekTicket,
-      oneMonthTicket,
-      isSystemActive
+      weekdayStartTime: null, 
+      weekdayEndTime: null,
+      weekendStartTime: null,
+      weekendEndTime: null,
+      baseParkingTime: basicTime,
+      baseFee: basicCost,
+      additionalUnitTime: additionalTime,
+      additionalUnitFee: additionalCost,
+      dailyFee: oneDayTicket,
+      weeklyFee: oneWeekTicket,
+      monthlyFee: oneMonthTicket
     };
-    
-    console.log("저장된 데이터:", data);
-
-    // 실제 서버로 데이터 전송 코드 (주석 처리된 예시)
-    // fetch('/api/save-settings', {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    //   body: JSON.stringify(data),
-    // })
-    // .then(response => response.json())
-    // .then(result => console.log('성공:', result))
-    // .catch(error => console.error('실패:', error));
+  
+    try {
+      const response = await axios.put('https://mvp-project.shop/api/parking-lots/setting', data, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      console.log('성공:', response.data);
+    } catch (error) {
+      console.error('실패:', error);
+    }
   };
+  
 
   return (
     <div className={styles.container}>
