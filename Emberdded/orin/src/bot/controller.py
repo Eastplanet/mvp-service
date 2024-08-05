@@ -1,4 +1,8 @@
+import threading
 import time
+import Jetson.GPIO as GPIO
+from motorControl import initializeMotors
+from lineTracing import startDriving
 
 class BotController:
     def __init__(self, mqtt_client):
@@ -6,14 +10,15 @@ class BotController:
 
     # TODO : 주행 로직 추가
     def start_driving(self, message):
-        start = message.get("start")
-        end = message.get("end")
+        startNode = message.get("start")
+        endNode = message.get("end")
         
-        print("Driving from {} to {}".format(start, end))
+        print("Driving from {} to {}".format(startNode, endNode))
         time.sleep(2)
+        startDriving(startNode, endNode)
         self.complete_driving()
         
-    def complete_driving(self):
+    def completeDriving(self):
         message = {
             "parkingBotSerialNumber": "1001",
             "status": "complete"
