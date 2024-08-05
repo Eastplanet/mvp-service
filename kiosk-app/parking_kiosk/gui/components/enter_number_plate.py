@@ -79,3 +79,10 @@ class EnterNumberPlate(QWidget):
         for i, char in enumerate(data):
             self.car_number_labels[i].setText(char)
     
+    def reset_labels(self):
+        for label in self.car_number_labels:
+            label.setText(" ")
+        self.current_label_index = 0
+        if self.keypad:
+            self.keypad.show_number_keyboard()
+    
