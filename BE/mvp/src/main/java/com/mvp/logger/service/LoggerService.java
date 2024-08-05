@@ -65,4 +65,5 @@ public class LoggerService {
         vehicleLogRepository.save(vehicleLog);
     }
 
+
 }

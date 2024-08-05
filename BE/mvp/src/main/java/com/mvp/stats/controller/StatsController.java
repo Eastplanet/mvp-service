@@ -5,6 +5,7 @@ import com.mvp.common.exception.StatusCode;
 import com.mvp.stats.dto.HomePageInitDto;
 import com.mvp.stats.dto.ParkingLogReq;
 import com.mvp.stats.dto.ParkingLogRes;
+import com.mvp.stats.dto.RevenueResDTO;
 import com.mvp.stats.service.StatsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -27,8 +28,12 @@ public class StatsController {
 
     @GetMapping("/parking-log")
     public ResponseEntity<ResponseDto> parkingLog(@ModelAttribute ParkingLogReq parkingLogReq){
-        System.out.println("parkingLogReq = " + parkingLogReq);
         List<ParkingLogRes> parkingLot = statsService.getParkingLot(parkingLogReq);
         return ResponseDto.response(StatusCode.SUCCESS, parkingLot);
+    }
+
+    @GetMapping("/revenue")
+    public ResponseEntity<ResponseDto> revenueStats(){
+        return ResponseDto.response(StatusCode.SUCCESS, statsService.getRevenueStats());
     }
 }

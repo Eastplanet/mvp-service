@@ -2,6 +2,9 @@ package com.mvp.membership.service;
 
 import com.mvp.common.exception.RestApiException;
 import com.mvp.common.exception.StatusCode;
+import com.mvp.logger.converter.VehicleLogConverter;
+import com.mvp.logger.dto.VehicleLogDTO;
+import com.mvp.logger.entity.VehicleLog;
 import com.mvp.membership.converter.MembershipConverter;
 import com.mvp.membership.dto.MembershipDTO;
 import com.mvp.membership.entity.Membership;
@@ -10,6 +13,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -57,5 +61,10 @@ public class MembershipService {
         List<Membership> membershipList = membershipRepository.findAll();
 
         return MembershipConverter.entityToDtoList(membershipList);
+    }
+
+    public List<MembershipDTO> findMembershipDate(LocalDateTime start, LocalDateTime end) {
+        List<Membership> allByExitTimeBetween = membershipRepository.findByLicensePlateEntranceTimeBetween(start, end);
+        return MembershipConverter.entityToDtoList(allByExitTimeBetween);
     }
 }
