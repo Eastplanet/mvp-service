@@ -114,6 +114,16 @@
   font-weight: bold;
 }
 
+.arrowUp{
+  width: 0px;
+  height: 0px;
+  border-bottom: 10px solid red;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  margin-top: 0px;
+  margin-bottom: auto;
+}
+
 .totalUp {
   color: green;
   font-weight: bold;

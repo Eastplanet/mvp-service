@@ -12,7 +12,10 @@ const Chart = () => {
             <div className={styles.summary}>
               <p className={styles.summaryTitle}>이번 달 매출</p>
               <h3 className={styles.summaryData}>5,500,000 원</h3>
-              <p className={styles.summaryComparison}>지난 달 대비 <span className={styles.up}>+10.0%</span></p>
+              <p className={styles.summaryComparison}>지난 달 대비
+              <span className={styles.up}>+10.0%</span>
+              <span className={styles.arrowUp}></span>
+              </p>
             </div>
             <div className={styles.summary}>
               <p className={styles.summaryTitle}>이번 달 주차량</p>
