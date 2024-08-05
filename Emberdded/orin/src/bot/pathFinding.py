@@ -49,33 +49,32 @@ def dijkstra(mapGrid, start, goal, initialDirection):
     return reconstructPath(cameFrom, start, goal)
 
 def reconstructPath(cameFrom, start, goal):
-    """Reconstructs the path from the goal to the start, including the action instructions only."""
+    """Reconstructs the path from the goal to the start, including the direction of movement."""
     current = goal
     path = []
-    previous_action = None
-
+    straightNum = 0
     while current != start:
         if current not in cameFrom:
             return []  # No valid path found
         prevNode, moveType = cameFrom[current]
-
-        # Determine the action based on the move type
-        if moveType == 'straight':
-            action = 'Straight'
-        elif moveType == 'left':
-            action = 'Rotate left'
-        elif moveType == 'right':
-            action = 'Rotate right'
-        else:
-            action = 'Unknown action'
-
-        # Avoid adding duplicate "Straight" actions
-        if action != previous_action or action != 'Straight':
+        
+        # Determine the current direction based on the movement direction to this node
+        if prevNode is not None:
+            if moveType == 'straight':
+                straightNum += 1
+                action = 'Straight'
+            else:
+                straightNum = 0
+                if moveType == 'left':
+                    action = 'Rotate left'
+                elif moveType == 'right':
+                    action = 'Rotate right'
+                else:
+                    action = 'Unknown action'
             path.append(action)
-            previous_action = action
 
+            # if action != 'Straight' or straightNum % 2 == 1:
+            #     path.append(action)
         current = prevNode
-
     path.reverse()
     return path
-

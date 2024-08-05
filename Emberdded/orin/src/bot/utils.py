@@ -1,5 +1,4 @@
 import time
-from motorControl import initServoAngle, steerServoAngle
 
 def findCoordinates(mapGrid, number):
     """Find the coordinates of a specific number in the map grid."""

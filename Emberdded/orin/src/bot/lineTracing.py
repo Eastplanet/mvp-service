@@ -3,9 +3,9 @@
 import sys
 import time
 import Jetson.GPIO as GPIO
-import motorControl
-import utils
-import mapSetting
+from . import motorControl
+from . import utils
+from . import mapSetting
 
 # 상수 정의
 blackLine = 1
@@ -45,6 +45,7 @@ def startDriving(startNode, endNode):
     L_PIN, C_PIN, R_PIN = setupGpio()
 
     path = mapSetting.findShortestPathToGoal(mapSetting.mapGrid, startNode, endNode, 'up')
+    print(path)
     curStep = 0
     prevDirection = 'straight'
     startTime = updateTime = time.time()
@@ -126,7 +127,7 @@ def startDriving(startNode, endNode):
                             curStep += 1
                             isUpdated = False
                             print('step++')
-                            print(curStep, len(path), path[curStep])
+                            # print(curStep, len(path), path[curStep])
                     
                 elif left == whiteLine and center == blackLine and right == blackLine:  # ◼ ☐ ☐
                     motorControl.turnRight(kit)

@@ -45,6 +45,12 @@ def initializeMotors():
 
     return motorHat, kit
 
+def rotate(motorHat, kit, action):
+    if action == 'Rotate left':
+        rotateLeft(motorHat, kit)
+    else:
+        rotateRight(motorHat, kit)
+
 def rotateLeft(motorHat, kit):
     # 서보를 왼쪽으로 회전시키고 모터를 설정하여 2초간 유지
     kit.servo[0].angle = initServoAngle - steerServoAngle
