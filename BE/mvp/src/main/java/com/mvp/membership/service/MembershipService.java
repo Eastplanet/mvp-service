@@ -1,12 +1,19 @@
 package com.mvp.membership.service;
 
+import com.mvp.common.exception.RestApiException;
+import com.mvp.common.exception.StatusCode;
+import com.mvp.logger.converter.VehicleLogConverter;
+import com.mvp.logger.dto.VehicleLogDTO;
+import com.mvp.logger.entity.VehicleLog;
 import com.mvp.membership.converter.MembershipConverter;
 import com.mvp.membership.dto.MembershipDTO;
 import com.mvp.membership.entity.Membership;
 import com.mvp.membership.repository.MembershipRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -29,13 +36,15 @@ public class MembershipService {
         }
     }
 
+    @Transactional
     public MembershipDTO updateMembership(MembershipDTO membershipDTO) {
-        if(membershipRepository.existsByLicensePlate(membershipDTO.getLicensePlate())) {
-            Membership updatedMembership = membershipRepository.save(MembershipConverter.dtoToEntity(membershipDTO));
-            return MembershipConverter.entityToDto(updatedMembership);
-        } else {
-            return null;
+
+        Membership findByPlate = membershipRepository.findByLicensePlate(membershipDTO.getLicensePlate());
+        if(findByPlate == null || findByPlate.getId() == null) {
+            throw new RestApiException(StatusCode.BAD_REQUEST);
         }
+        findByPlate.update(membershipDTO);
+        return MembershipConverter.entityToDto(findByPlate);
     }
 
     public MembershipDTO getMembership(String licensePlate) {
@@ -52,5 +61,10 @@ public class MembershipService {
         List<Membership> membershipList = membershipRepository.findAll();
 
         return MembershipConverter.entityToDtoList(membershipList);
+    }
+
+    public List<MembershipDTO> findMembershipDate(LocalDateTime start, LocalDateTime end) {
+        List<Membership> allByExitTimeBetween = membershipRepository.findByLicensePlateEntranceTimeBetween(start, end);
+        return MembershipConverter.entityToDtoList(allByExitTimeBetween);
     }
 }

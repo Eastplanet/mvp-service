@@ -39,4 +39,5 @@ public class VehicleLog {
     @Column(name = "type")
     private Integer type;
 
+
 }

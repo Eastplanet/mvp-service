@@ -43,7 +43,7 @@ public class MembershipController {
     }
 
     @Transactional
-    @PatchMapping("/{membershipId}")
+    @PatchMapping()
     public ResponseEntity<ResponseDto> updateMembership(@RequestBody MembershipDTO membershipDTO) {
         MembershipDTO updatedMembership = membershipService.updateMembership(membershipDTO);
 
