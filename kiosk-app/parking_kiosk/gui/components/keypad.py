@@ -1,4 +1,5 @@
 from PyQt6.QtWidgets import QWidget, QGridLayout, QPushButton, QStackedWidget, QVBoxLayout
+from PyQt6.QtCore import Qt
 
 class Keypad(QWidget):
     def __init__(self, number_plate_labels, parent=None, main_window=None, use_number_keypad=False, mode='entry'):
@@ -23,7 +24,7 @@ class Keypad(QWidget):
             self.stacked_widget.addWidget(self.number_keypad)
 
             layout.addWidget(self.stacked_widget)
-            self.stacked_widget.setCurrentWidget(self.cheonjiin_keypad)
+            self.stacked_widget.setCurrentWidget(self.number_keypad)
 
     def keypad_clicked(self):
         button = self.sender()
@@ -36,11 +37,11 @@ class Keypad(QWidget):
             self.number_plate_labels.set_label_text(key)
 
     def handle_confirm(self):
+        license_plate = self.number_plate_labels.get_all_label_text()
+        self.number_plate_labels.reset_labels()
         if self.mode == 'entry':
-            license_plate = self.number_plate_labels.get_all_label_text()
             self.main_window.confirm_enter(license_plate)  # 입차 모드일 때만 GIF를 표시합니다.
         elif self.mode == 'exit':
-            license_plate = self.number_plate_labels.get_all_label_text()
             self.main_window.show_vehicle_selection_page(license_plate)  # 출차 모드일 때 차량 리스트 페이지를 표시합니다.
 
     def create_cheonjiin_keyboard(self):
@@ -54,10 +55,15 @@ class Keypad(QWidget):
             button = QPushButton(key, self)
             button.setFixedSize(80, 60)
             button.setStyleSheet("""
-                background-color: white; 
-                font-size: 20px; 
-                border-radius: 5px;
-                color: black;
+                QPushButton {
+                    background-color: white; 
+                    font-size: 20px; 
+                    border-radius: 5px;
+                    color: black;
+                }
+                QPushButton:hover {
+                    background-color: lightgray;
+                }
             """)
             button.clicked.connect(self.keypad_clicked)
             layout.addWidget(button, *position)
@@ -75,10 +81,15 @@ class Keypad(QWidget):
             button = QPushButton(key, self)
             button.setFixedSize(80, 60)
             button.setStyleSheet("""
-                background-color: white; 
-                font-size: 20px; 
-                border-radius: 5px;
-                color: black;
+                QPushButton {
+                    background-color: white; 
+                    font-size: 20px; 
+                    border-radius: 5px;
+                    color: black;
+                }
+                QPushButton:hover {
+                    background-color: lightgray;
+                }
             """)
             button.clicked.connect(self.keypad_clicked)
             layout.addWidget(button, *position)

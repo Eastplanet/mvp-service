@@ -10,10 +10,15 @@ class ParkButton(QWidget):
         self.button = QPushButton("자동 주차하기", self)
         self.button.setFixedSize(200, 60)
         self.button.setStyleSheet("""
-            background-color: #FFB300; 
-            color: white; 
-            font-size: 20px; 
-            border-radius: 5px;
+            QPushButton {
+                background-color: #FFB300; 
+                color: white; 
+                font-size: 20px; 
+                border-radius: 5px;
+            }
+            QPushButton:hover {
+                background-color: #FFA000;
+            }
         """)
         self.layout.addWidget(self.button, alignment=Qt.AlignmentFlag.AlignCenter)
 
