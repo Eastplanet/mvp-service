@@ -4,12 +4,14 @@ import storage from 'redux-persist/lib/storage';
 import authReducer from '../features/auth/authSlice';
 import mainReducer from '../features/main/mainSlice';
 import membersReducer from '../features/members/membersSlice';
+import chartReducer from '../features/chart/chartSlice';
 
 // 각 리듀서 결합
 const rootReducer = combineReducers({
   auth: authReducer,
   main: mainReducer,
   members: membersReducer,
+  chart: chartReducer,
 });
 
 // persist 설정

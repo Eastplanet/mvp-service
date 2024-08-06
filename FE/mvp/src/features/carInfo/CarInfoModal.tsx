@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchParkingData } from '../main/mainSlice';
 import styles from './CarInfoModal.module.css';
@@ -15,6 +15,7 @@ export interface CarLog {
   entryTime: string;
   exitTime?: string;
   fee: number;
+  lotState?: number;
   imageBase64?: string;
 }
 
@@ -33,7 +34,6 @@ const CarInfoModal: React.FC<CarInfoModalProps> = ({ carLog, onClose }) => {
   const handleConfirmExit = () => {
     axios.delete(`https://mvp-project.shop/api/parking-bot/exit/${carLog.licensePlate}`)
       .then(response => {
-        console.log('출차 완료:', response);
         setShowExitModal(false);
         dispatch(fetchParkingData());
         onClose();
@@ -45,13 +45,16 @@ const CarInfoModal: React.FC<CarInfoModalProps> = ({ carLog, onClose }) => {
   };
 
   const handleApplyDiscount = (discount: number) => {
+    console.log([carLog.licensePlate, discount])
     axios.post('https://mvp-project.shop/api/parked-vehicle/discount', {
       licensePlate: carLog.licensePlate,
-      discount
+      discountAmount: discount
     })
     .then(response => {
       console.log('할인 적용 완료:', response.data);
-      setShowDiscountModal(false);
+      dispatch(fetchParkingData())
+      // setShowDiscountModal(false);
+      onClose();
     })
     .catch(error => {
       console.error('할인 적용 중 오류 발생:', error);
@@ -71,7 +74,7 @@ const CarInfoModal: React.FC<CarInfoModalProps> = ({ carLog, onClose }) => {
   const getStatusColor = (state: string) => {
     if (state === '주차 중' || state === '입차') {
       return 'blue';
-    } else if (state === '출차 완료' || state === '출차') {
+    } else if (state === '대기 중' || state === '출차') {
       return 'black';
     } else if (state === '이동 중') {
       return 'red';

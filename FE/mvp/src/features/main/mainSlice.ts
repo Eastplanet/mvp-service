@@ -9,6 +9,7 @@ interface CarLog {
   entryTime: string;
   exitTime?: string;
   fee: number;
+  lotState?: number;
   imageBase64?: string;
 }
 
@@ -55,12 +56,14 @@ export const fetchParkingData = createAsyncThunk('main/fetchParkingData', async 
   const parkingLots = data.parkingLots.map((lot: any) => ({
     licensePlate: lot.licensePlate,
     parkingDate: lot.parkingDate,
-    carState: lot.carState === 1 ? '주차 중' : lot.carState === 0 ? '출차 완료' : '이동 중',
+    carState: lot.carState === 0 ? '주차 중' : lot.carState === 1 ? '대기 중' : lot.carState === 2 ? '이동 중' : '',
     entryTime: new Date(lot.entranceTime).toISOString(),
     exitTime: lot.exitTime ? new Date(lot.exitTime).toISOString() : undefined,
     fee: lot.fee,
+    lotState: lot.lotState,
     imageBase64: lot.image,
   }));
+  console.log(parkingLots)
   console.log(data)
   
   return {
