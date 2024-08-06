@@ -128,6 +128,9 @@ public class ParkingBotService {
             throw new RestApiException(StatusCode.NO_SUCH_ELEMENT);
         }
 
+        // 차량 상태변화
+        parkedVehicle.updateStatus(VEHICLE_WAIT);
+
         // 주차공간 상태변화
         ParkingLotSpot spot = parkingLotSpotRepository.findByParkedVehicleId(parkedVehicle.getId());
         if(spot == null){

@@ -12,6 +12,7 @@ import com.mvp.vehicle.repository.ParkingLotSpotRepository;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -74,18 +75,12 @@ public class VehicleService {
         return result;
     }
 
+    @Transactional
     public ParkedVehicleDTO giveDiscount(DiscountDTO discountDTO) {
         ParkedVehicle parkedVehicle = parkedVehicleRepository.findByLicensePlate(discountDTO.getLicensePlate());
 
         if (parkedVehicle != null) {
-            ParkedVehicle updatedParkedVehicle = ParkedVehicle.builder()
-                    .id(parkedVehicle.getId())
-                    .image(parkedVehicle.getImage())
-                    .licensePlate(parkedVehicle.getLicensePlate())
-                    .entranceTime(parkedVehicle.getEntranceTime())
-                    .discount(parkedVehicle.getDiscount() + discountDTO.getDiscountAmount())
-                    .build();
-            parkedVehicleRepository.save(updatedParkedVehicle);
+            parkedVehicle.updateDiscount(discountDTO.getDiscountAmount());
             return ParkedVehicleConverter.entityToDto(parkedVehicle);
         } else {
             return null;

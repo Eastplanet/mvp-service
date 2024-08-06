@@ -38,4 +38,12 @@ public class ParkedVehicle {
     @Column(name = "status")
     @ColumnDefault("0")
     private Integer status;
+
+    public void updateDiscount(Integer discount) {
+        this.discount = discount;
+    }
+
+    public void updateStatus(Integer status) {
+        this.status = status;
+    }
 }
