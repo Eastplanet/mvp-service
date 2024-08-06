@@ -3,7 +3,9 @@ package com.mvp.membership.controller;
 import com.mvp.common.ResponseDto;
 import com.mvp.common.exception.RestApiException;
 import com.mvp.common.exception.StatusCode;
+import com.mvp.membership.converter.MembershipConverter;
 import com.mvp.membership.dto.MembershipDTO;
+import com.mvp.membership.dto.MembershipResDTO;
 import com.mvp.membership.service.MembershipService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +24,7 @@ public class MembershipController {
     @PostMapping
     public ResponseEntity<ResponseDto> createMembership(@RequestBody MembershipDTO membershipDTO) {
         MembershipDTO createdMembership = membershipService.createMembership(membershipDTO);
+        MembershipResDTO resp = new MembershipResDTO();
 
         if (createdMembership != null) {
             return ResponseDto.response(StatusCode.SUCCESS, createdMembership);
@@ -47,19 +50,20 @@ public class MembershipController {
     public ResponseEntity<ResponseDto> updateMembership(@RequestBody MembershipDTO membershipDTO) {
         MembershipDTO updatedMembership = membershipService.updateMembership(membershipDTO);
 
-        if (updatedMembership != null) {
-            return ResponseDto.response(StatusCode.SUCCESS, updatedMembership);
-        } else {
+        if(updatedMembership == null) {
             throw new RestApiException(StatusCode.INTERNAL_SERVER_ERROR);
         }
+        MembershipResDTO result = MembershipConverter.dtoToResDTO(updatedMembership);
+        return ResponseDto.response(StatusCode.SUCCESS, result);
     }
 
     @GetMapping("/{licensePlate}")
-    public ResponseEntity<ResponseDto> getMembership(@RequestParam String licensePlate) {
+    public ResponseEntity<ResponseDto> getMembership(@PathVariable String licensePlate) {
         MembershipDTO membership = membershipService.getMembership(licensePlate);
+        MembershipResDTO result = MembershipConverter.dtoToResDTO(membership);
 
-        if (membership != null) {
-            return ResponseDto.response(StatusCode.SUCCESS, membership);
+        if (result != null) {
+            return ResponseDto.response(StatusCode.SUCCESS, result);
         } else {
             throw new RestApiException(StatusCode.INTERNAL_SERVER_ERROR);
         }
@@ -68,11 +72,7 @@ public class MembershipController {
     @GetMapping("/list")
     public ResponseEntity<ResponseDto> getMembershipList() {
         List<MembershipDTO> membershipDTOList = membershipService.getMembershipList();
-
-        if (membershipDTOList != null) {
-            return ResponseDto.response(StatusCode.SUCCESS, membershipDTOList);
-        } else {
-            throw new RestApiException(StatusCode.INTERNAL_SERVER_ERROR);
-        }
+        List<MembershipResDTO> result = MembershipConverter.dtoListToResDTOList(membershipDTOList);
+        return ResponseDto.response(StatusCode.SUCCESS, result);
     }
 }
