@@ -12,7 +12,7 @@ class SettlementPage(QWidget):
         self.vehicle_info = vehicle_info
 
         layout = QVBoxLayout()
-        layout.setContentsMargins(20, 20, 20, 20)
+        layout.setContentsMargins(40, 30, 40, 0)
         self.setLayout(layout)
 
         # 차량 정보 카드
@@ -20,7 +20,7 @@ class SettlementPage(QWidget):
         card.setStyleSheet("""
             QFrame {
                 background-color: white;
-                border-radius: 15px;
+                border-radius: 5px;
                 padding: 15px;
             }
         """)
@@ -56,6 +56,13 @@ class SettlementPage(QWidget):
         header_layout.addLayout(info_layout)
 
         card_layout.addLayout(header_layout)
+        
+        # 구분선 추가
+        line = QFrame(self)
+        line.setFrameShape(QFrame.Shape.HLine)
+        line.setFrameShadow(QFrame.Shadow.Sunken)
+        line.setStyleSheet("color: gray;")
+        card_layout.addWidget(line)
 
         # 정산 세부 정보
         details_layout = QVBoxLayout()
@@ -75,17 +82,17 @@ class SettlementPage(QWidget):
             detail_frame = QFrame(self)
             detail_frame.setStyleSheet("background-color: white; border-radius: 5px; padding: 2px;")
             detail_layout = QHBoxLayout(detail_frame)
-            detail_layout.setSpacing(10)
-            detail_layout.setContentsMargins(10, 2, 10, 2)
+            detail_layout.setContentsMargins(30, 0, 30, 0)
 
             detail_label = QLabel(label, self)
-            detail_label.setStyleSheet("font-size: 16px; color: black;")
+            detail_label.setStyleSheet("font-size: 14px; color: black; font-weight: bold;")
             detail_label.setAlignment(Qt.AlignmentFlag.AlignLeft)
             detail_value = QLabel(value, self)
             if label == "정산요금":
-                detail_value.setStyleSheet("font-size: 24px; color: red; font-weight: bold;")
+                detail_label.setStyleSheet("font-size: 18px; color: black; font-weight: bold;")
+                detail_value.setStyleSheet("font-size: 18px; color: red; font-weight: bold;")
             else:
-                detail_value.setStyleSheet("font-size: 16px; color: black;")
+                detail_value.setStyleSheet("font-size: 14px; color: black; font-weight: bold;")
             detail_value.setAlignment(Qt.AlignmentFlag.AlignRight)
             detail_layout.addWidget(detail_label)
             detail_layout.addStretch()

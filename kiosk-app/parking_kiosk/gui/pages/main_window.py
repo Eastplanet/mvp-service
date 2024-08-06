@@ -77,7 +77,7 @@ class MainWindow(QMainWindow):
     # 입차 처리
     def confirm_enter(self, license_plate):
         success = handle_enter("./result/temp_image.jpeg", license_plate, datetime.datetime.now())
-        self.gif_widget = GifWidget("parking_kiosk/gui/res/test.gif", main_msg="입차가 진행됩니다", sub_msg="잠시만 기다려주세요..", duration=3000, parent=self)
+        self.gif_widget = GifWidget("parking_kiosk/gui/res/car-anime.gif", main_msg="입차가 진행됩니다", sub_msg="잠시만 기다려주세요..", duration=3000, parent=self)
         self.gif_widget.move(self.rect().center() - self.gif_widget.rect().center())
         if success:
             self.gif_widget.start()
