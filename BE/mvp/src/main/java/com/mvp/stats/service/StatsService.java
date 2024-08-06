@@ -86,7 +86,7 @@ public class StatsService {
         for (ParkingLotSpotDTO dto : allParkingLotSpot) {
             ParkingLotSpotStats stats = new ParkingLotSpotStats();
             stats.setParkingLotSpotNumber(dto.getSpotNumber());
-            stats.setCarState(dto.getStatus());
+            stats.setLotState(dto.getStatus());
             stats.setExitTime(null);
             if(dto.getParkedVehicle() != null){
                 stats.setLicensePlate(dto.getParkedVehicle().getLicensePlate());
