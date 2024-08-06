@@ -67,6 +67,7 @@
   box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.25);
   align-items: center;
   justify-content: space-between;
+  min-width: 100px;
 }
 
 .icon {
@@ -87,24 +88,30 @@
 
 .membersTable {
   background: none;
-  border-radius: 10px;
+  /* border-radius: 10px; */
   overflow: hidden;
 }
 
 .tableHead{
   display: flex;
+  border-radius: 10px;
   background: none;
-  padding: 5px
+  padding: 5px;
+  margin: 2px;
+  font-size: 18px;
+  text-align: left;
 }
 
 .tableBody{
   display: flex;
   border-radius: 10px;
-  background: white;
+  background: rgb(255, 255, 255);
   box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.25);
+  margin: 2px;
   margin-bottom: 10px;
   padding: 5px;
   font-size: 18px;
+  text-align: left;
 }
 
 .tableBody input {
@@ -112,26 +119,31 @@
   background: none;
   font-size: 18px;
   color: #c0c0c0;
-  padding: 0;
-  margin: 0;
-  /* width: 100%; */
+  /* padding: 0;
+  margin: 0; */
+  width: 100%;
 }
 
 .name {
-  flex: 2; /* 비율을 설정하여 공간 분배 */
+  flex: 0 0 15%;
   margin-left: 10px;
 }
 
 .car {
-  flex: 2;
+  flex: 0 0 15%;
 }
 
 .phone {
-  flex: 3;
+  flex: 0 0 20%;
 }
 
 .date {
-  flex: 2;
+  flex: 0 0 15%;
+  margin-right: 5%;
+}
+
+.action{
+  flex: 0 0 10%;
 }
 
 .membersTable th, .membersTable td {
@@ -143,7 +155,13 @@
   background: #f0f0f0;
 }
 
+.actionButtons {
+  display: flex;
+  justify-content: flex-end;
+  /* margin-top: 20px; */
+}
 .editButton {
+  flex: 1;
   background: none;
   border: none;
   color: #c0c0c0;
@@ -151,11 +169,6 @@
   /* text-decoration: underline; */
 }
 
-.actions {
-  display: flex;
-  justify-content: flex-end;
-  /* margin-top: 20px; */
-}
 
 .addButton {
   background-color: #007bff;
