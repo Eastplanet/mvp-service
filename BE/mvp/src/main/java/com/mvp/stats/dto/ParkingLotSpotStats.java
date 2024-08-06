@@ -16,6 +16,7 @@ public class ParkingLotSpotStats {
     private String licensePlate;
     private LocalDateTime parkingDate;
     private Integer carState;
+    private Integer lotState;
     private LocalDateTime entranceTime;
     private LocalDateTime exitTime;
     private Long fee;
