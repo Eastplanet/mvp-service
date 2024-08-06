@@ -1,5 +1,6 @@
 package com.mvp.vehicle.converter;
 
+import com.mvp.vehicle.dto.ParkedVehicleDTO;
 import com.mvp.vehicle.dto.ParkingLotSpotDTO;
 import com.mvp.vehicle.entity.ParkingLotSpot;
 
@@ -27,7 +28,9 @@ public class ParkingLotSpotConverter {
     public static List<ParkingLotSpotDTO> entityListToDtoList(List<ParkingLotSpot> parkingLotSpotList) {
         List<ParkingLotSpotDTO> list = new ArrayList<>();
         for (ParkingLotSpot parkingLotSpot : parkingLotSpotList) {
-            list.add(entityToDto(parkingLotSpot));
+            ParkingLotSpotDTO parkingLotSpotDTO = entityToDto(parkingLotSpot);
+            parkingLotSpotDTO.setParkedVehicle(ParkedVehicleConverter.entityToDto(parkingLotSpot.getParkedVehicle()));
+            list.add(parkingLotSpotDTO);
         }
         return list;
     }
