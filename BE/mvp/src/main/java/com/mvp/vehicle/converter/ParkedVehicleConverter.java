@@ -14,16 +14,19 @@ public class ParkedVehicleConverter {
         }
         else{
             return ParkedVehicleDTO.builder()
+                    .id(parkedVehicle.getId())
                     .entranceTime(parkedVehicle.getEntranceTime())
                     .image(parkedVehicle.getImage())
                     .licensePlate(parkedVehicle.getLicensePlate())
                     .discount(parkedVehicle.getDiscount())
+                    .status(parkedVehicle.getStatus())
                     .build();
         }
     }
 
     public static ParkedVehicle dtoToEntity(ParkedVehicleDTO parkedVehicleDTO) {
         return ParkedVehicle.builder()
+                .status(parkedVehicleDTO.getStatus())
                 .entranceTime(parkedVehicleDTO.getEntranceTime())
                 .image(parkedVehicleDTO.getImage())
                 .licensePlate(parkedVehicleDTO.getLicensePlate())
