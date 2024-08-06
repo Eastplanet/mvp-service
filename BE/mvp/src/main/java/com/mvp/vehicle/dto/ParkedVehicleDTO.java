@@ -18,4 +18,5 @@ public class ParkedVehicleDTO {
     private byte[] image;
     private String licensePlate;
     private Integer discount;
+    private Integer status;
 }
