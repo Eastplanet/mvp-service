@@ -36,10 +36,10 @@ public class StatsService {
     private final ParkingLotService parkingLotService;
     private final MembershipService membershipService;
 
-    public Integer calculatePrice(ParkedVehicleDTO parkedVehicleDTO) {
+    public Long calculatePrice(ParkedVehicleDTO parkedVehicleDTO) {
         ParkingLotSettingDTO setting = parkingLotService.getSetting();
 
-        int price = setting.getBaseFee();
+        long price = setting.getBaseFee();
 
         LocalDateTime entranceTime = parkedVehicleDTO.getEntranceTime();
         LocalDateTime now = LocalDateTime.now();
@@ -48,7 +48,7 @@ public class StatsService {
 
         if(minutes <= 0)return price;
 
-        price += (int)(minutes/setting.getAdditionalUnitTime())*setting.getAdditionalUnitFee();
+        price += (minutes/setting.getAdditionalUnitTime())*setting.getAdditionalUnitFee();
         return price;
     }
 

@@ -148,7 +148,7 @@ public class ParkingBotService {
             taskQueue.addTask(task);
         }
 
-        int price;
+        long price;
         if(membershipService.isOwnMemberships(parkedVehicle.getLicensePlate())){
             price = 0;
         }

@@ -18,6 +18,6 @@ public class ParkingLotSpotStats {
     private Integer carState;
     private LocalDateTime entranceTime;
     private LocalDateTime exitTime;
-    private Integer fee;
+    private Long fee;
     private byte[] image;
 }
