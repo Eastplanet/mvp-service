@@ -3,6 +3,7 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QPushButton
 from gui.components.keypad import Keypad
 from gui.components.exit_number_plate import ExitNumberPlate
+from gui.components.home_button import HomeButton
 
 class ExitPage(QWidget):
     def __init__(self, main_window, parent=None):
@@ -11,7 +12,7 @@ class ExitPage(QWidget):
 
         layout = QVBoxLayout()
         self.setLayout(layout)
-
+        
         # 상단 Spacer
         top_spacer = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
         layout.addSpacerItem(top_spacer)

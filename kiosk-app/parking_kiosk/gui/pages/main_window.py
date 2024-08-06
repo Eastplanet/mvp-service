@@ -18,6 +18,8 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtCore import QSize
 
 from gui.components.error_dialog import ErrorDialog
+from PyQt6.QtWidgets import QPushButton
+from PyQt6.QtGui import QIcon
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -66,10 +68,19 @@ class MainWindow(QMainWindow):
         # 입차 페이지
         self.entry_page = EntryPage(self)
         self.stacked_widget.addWidget(self.entry_page)
-        
+
         # 출차 페이지
         self.exit_page = ExitPage(self)
         self.stacked_widget.addWidget(self.exit_page)
+
+        # 홈 버튼
+        self.home_button = QPushButton(self)
+        self.home_button.setIcon(QIcon("parking_kiosk/gui/res/home-icon.png"))  # 홈 아이콘 경로 설정
+        self.home_button.setIconSize(QSize(30, 30))
+        self.home_button.setFixedSize(40, 40)
+        self.home_button.setStyleSheet("border: none;")
+        self.home_button.clicked.connect(self.return_to_main)
+        self.home_button.move(10, 10)  # 절대 위치 설정
         
     # 출차 페이지
     def show_exit_page(self):
@@ -144,7 +155,7 @@ class MainWindow(QMainWindow):
             self.show_error_dialog("차량 정보를 찾을 수 없습니다.")
             return
         
-        vehicle_selection_page = VehicleSelectionPage(vehicles, self)
+        vehicle_selection_page = VehicleSelectionPage(vehicles, self, self)
         self.stacked_widget.addWidget(vehicle_selection_page)
         self.stacked_widget.setCurrentWidget(vehicle_selection_page)
     
