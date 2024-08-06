@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
+import { setLicensePlate } from '../main/mainSlice';
 
 interface Member {
   id: number;
@@ -51,14 +52,16 @@ export const deleteMembersFromServer = createAsyncThunk<void, string[]>('members
 export const updateMemberOnServer = createAsyncThunk<Member, Member>(
   'members/updateMemberOnServer',
   async (member) => {
-    const response = await axios.patch(`https://mvp-project.shop/api/memberships/${member.car}`, {
+    console.log([member.car,member.secession_date.toISOString(),member.phone,member.name])
+    const response = await axios.patch(`https://mvp-project.shop/api/memberships`, {
+      licensePlate: member.car,
       endDate: member.secession_date.toISOString(),
       phoneNumber: member.phone,
       name: member.name,
     });
     return {
       ...member,
-      secession_date: new Date(response.data.endDate),
+      secession_date: response.data.endDate.toISOString(),
       phone: response.data.phoneNumber,
       name: response.data.name,
     };

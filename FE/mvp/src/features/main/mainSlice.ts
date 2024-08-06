@@ -61,6 +61,7 @@ export const fetchParkingData = createAsyncThunk('main/fetchParkingData', async 
     fee: lot.fee,
     imageBase64: lot.image,
   }));
+  console.log(data)
   
   return {
     todayIn: data.todayIn,
@@ -87,10 +88,11 @@ export const fetchSearchData = createAsyncThunk(
     });
 
     const data = response.data.data;
+    console.log(data);
     const parkingLots = data.map((lot: any) => ({
       licensePlate: lot.licensePlate,
       parkingDate: lot.parkingDate,
-      carState: lot.parkingState === 1 ? '주차 중' : lot.carState === 0 ? '출차 완료' : '이동 중',
+      carState: lot.parkingState === 1 ? '출차' : '입차',
       entryTime: new Date(lot.entranceTime).toISOString(),
       exitTime: lot.exitTime ? new Date(lot.exitTime).toISOString() : undefined,
       fee: lot.fee,
