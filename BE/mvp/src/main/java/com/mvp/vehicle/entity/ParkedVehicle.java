@@ -34,4 +34,8 @@ public class ParkedVehicle {
     @Column(name = "discount")
     @ColumnDefault("0")
     private Integer discount;
+
+    @Column(name = "status")
+    @ColumnDefault("0")
+    private Integer status;
 }

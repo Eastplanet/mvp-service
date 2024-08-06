@@ -5,8 +5,6 @@ import com.mvp.common.exception.RestApiException;
 import com.mvp.common.exception.StatusCode;
 import com.mvp.parkingbot.dto.*;
 import com.mvp.parkingbot.service.ParkingBotService;
-import com.mvp.vehicle.dto.ParkedVehicleDTO;
-import com.mvp.vehicle.repository.ParkedVehicleRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -60,10 +58,9 @@ public class ParkingBotController {
      */
     @GetMapping("/poll")
     public ResponseEntity<ResponseDto> pollTask() {
-        Task task = parkingBotService.getTaskfromQueue();
-        if (task != null) {
-            parkingBotService.updateStatus(task.getParkingBotSerialNumber(), 1);
-            return ResponseDto.response(StatusCode.SUCCESS, task);
+        Task nextTask = parkingBotService.handleTask();
+        if (nextTask != null) {
+            return ResponseDto.response(StatusCode.SUCCESS, nextTask);
         } else {
             throw new RestApiException(StatusCode.BAD_REQUEST);
         }
@@ -114,6 +111,15 @@ public class ParkingBotController {
 
         if (parkingBotDTO != null) {
             return ResponseDto.response(StatusCode.SUCCESS, parkingBotDTO);
+        } else {
+            throw new RestApiException(StatusCode.BAD_REQUEST);
+        }
+    }
+
+    @PatchMapping("/status/complete")
+    public ResponseEntity<ResponseDto> completeTask(@RequestBody Task task) {
+        if(parkingBotService.completeTask(task)) {
+            return ResponseDto.response(StatusCode.SUCCESS, null);
         } else {
             throw new RestApiException(StatusCode.BAD_REQUEST);
         }
