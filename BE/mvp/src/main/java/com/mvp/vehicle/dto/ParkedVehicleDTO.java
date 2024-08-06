@@ -17,4 +17,6 @@ public class ParkedVehicleDTO {
     private LocalDateTime entranceTime;
     private byte[] image;
     private String licensePlate;
+    private Integer discount;
+    private Integer status;
 }

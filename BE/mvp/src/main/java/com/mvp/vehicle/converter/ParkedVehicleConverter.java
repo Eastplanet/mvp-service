@@ -17,6 +17,7 @@ public class ParkedVehicleConverter {
                     .entranceTime(parkedVehicle.getEntranceTime())
                     .image(parkedVehicle.getImage())
                     .licensePlate(parkedVehicle.getLicensePlate())
+                    .discount(parkedVehicle.getDiscount())
                     .build();
         }
     }
@@ -26,6 +27,7 @@ public class ParkedVehicleConverter {
                 .entranceTime(parkedVehicleDTO.getEntranceTime())
                 .image(parkedVehicleDTO.getImage())
                 .licensePlate(parkedVehicleDTO.getLicensePlate())
+                .discount(parkedVehicleDTO.getDiscount())
                 .build();
     }
 

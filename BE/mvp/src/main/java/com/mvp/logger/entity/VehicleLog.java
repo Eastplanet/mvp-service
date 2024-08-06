@@ -1,4 +1,4 @@
-package com.mvp.logs.entity;
+package com.mvp.logger.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -20,7 +20,7 @@ public class VehicleLog {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "license_plate", length = 16)
+    @Column(name = "license_plate", length = 16, nullable = false)
     private String licensePlate;
 
     @Column(name = "entrance_time")
@@ -30,6 +30,14 @@ public class VehicleLog {
     private LocalDateTime exitTime;
 
     @Column(name = "fee")
-    private Integer fee;
+    private Long fee;
+
+    @Lob
+    @Column(name = "image", columnDefinition = "LONGBLOB")
+    private byte[] image;
+
+    @Column(name = "type")
+    private Integer type;
+
 
 }

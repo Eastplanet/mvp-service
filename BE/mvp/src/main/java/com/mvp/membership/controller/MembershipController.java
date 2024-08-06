@@ -1,72 +1,78 @@
 package com.mvp.membership.controller;
 
+import com.mvp.common.ResponseDto;
+import com.mvp.common.exception.RestApiException;
+import com.mvp.common.exception.StatusCode;
 import com.mvp.membership.dto.MembershipDTO;
 import com.mvp.membership.service.MembershipService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/membership")
+@RequestMapping("/api/memberships")
 @AllArgsConstructor
 public class MembershipController {
     private final MembershipService membershipService;
 
+    @Transactional
     @PostMapping
-    public ResponseEntity<MembershipDTO> createMembership(@RequestBody MembershipDTO membershipDTO) {
+    public ResponseEntity<ResponseDto> createMembership(@RequestBody MembershipDTO membershipDTO) {
         MembershipDTO createdMembership = membershipService.createMembership(membershipDTO);
 
         if (createdMembership != null) {
-            return ResponseEntity.ok(createdMembership);
+            return ResponseDto.response(StatusCode.SUCCESS, createdMembership);
         } else {
-            return ResponseEntity.badRequest().build();
+            throw new RestApiException(StatusCode.INTERNAL_SERVER_ERROR);
         }
     }
 
+    @Transactional
     @DeleteMapping("/{licensePlate}")
-    public ResponseEntity<Void> deleteMembership(@RequestParam String licensePlate) {
+    public ResponseEntity<ResponseDto> deleteMembership(@PathVariable String licensePlate) {
         boolean success = membershipService.deleteMembership(licensePlate);
 
         if (success) {
-            return ResponseEntity.ok().build();
+            return ResponseDto.response(StatusCode.SUCCESS, null);
         } else {
-            return ResponseEntity.badRequest().build();
+            throw new RestApiException(StatusCode.INTERNAL_SERVER_ERROR);
         }
     }
 
-    @PatchMapping("/{membershipId}")
-    public ResponseEntity<MembershipDTO> updateMembership(@RequestBody MembershipDTO membershipDTO) {
+    @Transactional
+    @PatchMapping()
+    public ResponseEntity<ResponseDto> updateMembership(@RequestBody MembershipDTO membershipDTO) {
         MembershipDTO updatedMembership = membershipService.updateMembership(membershipDTO);
 
         if (updatedMembership != null) {
-            return ResponseEntity.ok(updatedMembership);
+            return ResponseDto.response(StatusCode.SUCCESS, updatedMembership);
         } else {
-            return ResponseEntity.badRequest().build();
+            throw new RestApiException(StatusCode.INTERNAL_SERVER_ERROR);
         }
     }
 
     @GetMapping("/{licensePlate}")
-    public ResponseEntity<MembershipDTO> getMembership(@RequestParam String licensePlate) {
+    public ResponseEntity<ResponseDto> getMembership(@RequestParam String licensePlate) {
         MembershipDTO membership = membershipService.getMembership(licensePlate);
 
         if (membership != null) {
-            return ResponseEntity.ok(membership);
+            return ResponseDto.response(StatusCode.SUCCESS, membership);
         } else {
-            return ResponseEntity.badRequest().build();
+            throw new RestApiException(StatusCode.INTERNAL_SERVER_ERROR);
         }
     }
 
     @GetMapping("/list")
-    public ResponseEntity<List<MembershipDTO>> getMembershipList(){
+    public ResponseEntity<ResponseDto> getMembershipList() {
         List<MembershipDTO> membershipDTOList = membershipService.getMembershipList();
 
-        if(membershipDTOList != null){
-            return ResponseEntity.ok(membershipDTOList);
+        if (membershipDTOList != null) {
+            return ResponseDto.response(StatusCode.SUCCESS, membershipDTOList);
         } else {
-            return ResponseEntity.badRequest().build();
+            throw new RestApiException(StatusCode.INTERNAL_SERVER_ERROR);
         }
-
     }
 }
