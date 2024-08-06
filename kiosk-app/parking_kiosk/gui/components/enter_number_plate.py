@@ -83,13 +83,26 @@ class EnterNumberPlate(QWidget):
     def clear_label(self):
         if self.current_label_index != 3:  # 4번째 레이블은 수정 불가
             self.car_number_labels[self.current_label_index].setText("")
-            self.update_current_label_color()
+            if self.current_label_index == 4:
+                self.current_label_index -= 2
+            elif self.current_label_index > 0:
+                self.current_label_index -= 1
+            else:
+                self.current_label_index = 0
+        self.update_current_label_color()
         
     def set_label_text(self, text):
         if self.current_label_index != 3:  # 4번째 레이블은 수정 불가
             self.car_number_labels[self.current_label_index].setText(text)
             self.update_current_label_color()
-
+            if self.current_label_index == 2:
+                self.current_label_index += 2
+            elif self.current_label_index < 7:
+                self.current_label_index += 1
+            else:
+                self.current_label_index = 7
+        self.update_current_label_color()
+        
     def get_current_label_text(self):
         return self.car_number_labels[self.current_label_index].text()
         

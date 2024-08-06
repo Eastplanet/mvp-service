@@ -28,7 +28,7 @@ class Camera:
         return image_base64
 
     def ocr_reader(self):
-        # self.capture_image()
+        self.capture_image()
         
         url = 'https://apis.openapi.sk.com/sigmeta/lpr/v1'
         headers = {
@@ -37,8 +37,8 @@ class Camera:
         }
 
         # 이미지 리사이즈
-        # image = cv2.imread('./result/captured_img.jpeg')
-        image = cv2.imread(image_path)
+        image = cv2.imread('./result/captured_img.jpeg')
+        # image = cv2.imread(image_path)
         resized_img = self.resize_image(image)
 
         temp_file_path = './result/temp_image.jpeg'
