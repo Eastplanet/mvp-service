@@ -61,6 +61,7 @@ public class ManagerController {
         }
 
         ManagerDTO result = managerService.updateManager(managerDTO);
+
         if (result == null) {
             throw new RestApiException(StatusCode.INTERNAL_SERVER_ERROR);
         }

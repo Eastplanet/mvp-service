@@ -30,4 +30,9 @@ public class ParkingLotSpot {
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "parked_vehicle_id", referencedColumnName = "id")
     private ParkedVehicle parkedVehicle;
+
+    public void updateVehicleAndStatus(ParkedVehicle vehicle, Integer status){
+        this.parkedVehicle = vehicle;
+        this.status = status;
+    }
 }
