@@ -14,6 +14,6 @@ import java.time.LocalDateTime;
 public class ExitLogDTO {
     private String licensePlate;
     private byte[] image;
-    private Integer fee;
+    private Long fee;
     private LocalDateTime entranceTime;
 }

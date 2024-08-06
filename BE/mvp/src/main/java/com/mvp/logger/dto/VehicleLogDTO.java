@@ -12,7 +12,7 @@ public class VehicleLogDTO {
     private String licensePlate;
     private LocalDateTime entranceTime;
     private LocalDateTime exitTime;
-    private Integer fee;
+    private Long fee;
     private byte[] image;
     private Integer type;
 }

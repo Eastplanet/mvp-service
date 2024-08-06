@@ -5,6 +5,7 @@ import com.mvp.common.exception.StatusCode;
 import com.mvp.logger.dto.EntranceLogDTO;
 import com.mvp.logger.dto.ExitLogDTO;
 import com.mvp.logger.service.LoggerService;
+import com.mvp.membership.service.MembershipService;
 import com.mvp.parkingbot.converter.ParkingBotConverter;
 import com.mvp.parkingbot.dto.*;
 import com.mvp.parkingbot.entity.ParkingBot;
@@ -37,6 +38,7 @@ public class ParkingBotService {
     private final ParkedVehicleRepository parkedVehicleRepository;
     private final LoggerService LoggerService;
     private final StatsService statsService;
+    private final MembershipService membershipService;
     private TaskQueue taskQueue;
 
     /**
@@ -146,7 +148,14 @@ public class ParkingBotService {
             taskQueue.addTask(task);
         }
 
-        int price = statsService.calculatePrice(ParkedVehicleConverter.entityToDto(parkedVehicle));
+        long price;
+        if(membershipService.isOwnMemberships(parkedVehicle.getLicensePlate())){
+            price = 0;
+        }
+        else{
+            price = statsService.calculatePrice(ParkedVehicleConverter.entityToDto(parkedVehicle));
+        }
+
         ExitLogDTO logDto = ExitLogDTO.builder()
                 .licensePlate(parkedVehicle.getLicensePlate())
                 .image(parkedVehicle.getImage())
