@@ -52,7 +52,9 @@ public class StatsService {
         minutes -= setting.getBaseParkingTime();
         if(minutes > 0){
             price += (minutes/setting.getAdditionalUnitTime())*setting.getAdditionalUnitFee();
-            price -= parkedVehicleDTO.getDiscount();
+            if(parkedVehicleDTO.getDiscount() != null){
+                price -= parkedVehicleDTO.getDiscount();
+            }
             if(price < 0)price = 0;
         }
         return price;
