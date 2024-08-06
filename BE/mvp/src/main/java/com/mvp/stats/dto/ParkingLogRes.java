@@ -17,6 +17,6 @@ public class ParkingLogRes {
     private Integer parkingState;
     private LocalDateTime entranceTime;
     private LocalDateTime exitTime;
-    private Integer fee;
+    private Long fee;
     private byte[] image;
 }

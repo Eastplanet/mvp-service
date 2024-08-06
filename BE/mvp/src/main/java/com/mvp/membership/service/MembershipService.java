@@ -67,4 +67,13 @@ public class MembershipService {
         List<Membership> allByExitTimeBetween = membershipRepository.findByLicensePlateEntranceTimeBetween(start, end);
         return MembershipConverter.entityToDtoList(allByExitTimeBetween);
     }
+
+    public boolean isOwnMemberships(String licensePlate) {
+        Membership byLicensePlate = membershipRepository.findByLicensePlate(licensePlate);
+        if(byLicensePlate == null) {
+            return false;
+        }
+        LocalDateTime now = LocalDateTime.now();
+        return now.isAfter(byLicensePlate.getStartDate()) && now.isBefore(byLicensePlate.getEndDate());
+    }
 }
