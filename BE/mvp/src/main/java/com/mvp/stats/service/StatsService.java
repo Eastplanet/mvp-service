@@ -75,10 +75,12 @@ public class StatsService {
         List<ParkingLotSpotDTO> allParkingLotSpot = vehicleService.getAllParkingLotSpot();
         List<ParkingLotSpotStats> list = new ArrayList<>();
 
+        ParkingLotSettingDTO parkingLotSetting = parkingLotService.getSetting();
 
         for (ParkingLotSpotDTO dto : allParkingLotSpot) {
             ParkingLotSpotStats stats = new ParkingLotSpotStats();
             stats.setParkingLotSpotNumber(dto.getSpotNumber());
+            stats.setCarState(dto.getStatus());
             stats.setExitTime(null);
             if(dto.getParkedVehicle() != null){
                 stats.setLicensePlate(dto.getParkedVehicle().getLicensePlate());
