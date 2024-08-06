@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class DiscountDTO {
-    private Long parkedVehicleId;
+    private String licensePlate;
     private Integer discountAmount;
 }

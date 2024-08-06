@@ -159,13 +159,7 @@ public class ParkingBotService {
             taskQueue.addTask(task);
         }
 
-        long price;
-        if(membershipService.isOwnMemberships(parkedVehicle.getLicensePlate())){
-            price = 0;
-        }
-        else{
-            price = statsService.calculatePrice(ParkedVehicleConverter.entityToDto(parkedVehicle));
-        }
+        long price = statsService.calculatePrice(ParkedVehicleConverter.entityToDto(parkedVehicle));
 
         ExitLogDTO logDto = ExitLogDTO.builder()
                 .licensePlate(parkedVehicle.getLicensePlate())

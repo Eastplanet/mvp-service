@@ -75,7 +75,7 @@ public class VehicleService {
     }
 
     public ParkedVehicleDTO giveDiscount(DiscountDTO discountDTO) {
-        ParkedVehicle parkedVehicle = parkedVehicleRepository.findById(discountDTO.getParkedVehicleId()).orElse(null);
+        ParkedVehicle parkedVehicle = parkedVehicleRepository.findByLicensePlate(discountDTO.getLicensePlate());
 
         if (parkedVehicle != null) {
             ParkedVehicle updatedParkedVehicle = ParkedVehicle.builder()
