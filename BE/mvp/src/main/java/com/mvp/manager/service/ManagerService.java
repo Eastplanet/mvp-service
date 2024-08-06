@@ -7,16 +7,22 @@ import com.mvp.manager.converter.ManagerConverter;
 import com.mvp.manager.dto.ManagerDTO;
 import com.mvp.manager.entity.Manager;
 import com.mvp.manager.repository.ManagerRepository;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
+@Getter
 @Service
 @RequiredArgsConstructor
 public class ManagerService {
 
     private final ManagerRepository managerRepository;
+    private final Map<String, String> apiKeyStore = new ConcurrentHashMap<>();
 
     public ManagerDTO createManager(ManagerDTO managerDTO) {
         if(checkDuplicateEmail(managerDTO)) {
@@ -35,7 +41,9 @@ public class ManagerService {
         }
         Manager manager = find.get();
 
-        if(manager.getPassword().equals(HashUtil.sha256(managerDTO.getPassword()))) {
+        if(manager.getPassword().equals(HashUtil.sha256(managerDTO.getPassword()))) {   // 로그인 성공 시 API Key 생성
+            String apiKey = UUID.randomUUID().toString();
+            apiKeyStore.put(apiKey, manager.getEmail());
             return ManagerConverter.entityToDto(manager);
         }
         else{
@@ -79,6 +87,10 @@ public class ManagerService {
             managerRepository.delete(find.get());
             return true;
         }
+    }
+
+    public boolean validateApiKey(String apiKey) {
+        return apiKeyStore.containsKey(apiKey);
     }
 }
 
