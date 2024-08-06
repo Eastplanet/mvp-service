@@ -45,7 +45,7 @@ const CarInfoModal: React.FC<CarInfoModalProps> = ({ carLog, onClose }) => {
   };
 
   const handleApplyDiscount = (discount: number) => {
-    axios.post('/api/apply-discount', {
+    axios.post('https://mvp-project.shop/api/parked-vehicle/discount', {
       licensePlate: carLog.licensePlate,
       discount
     })
@@ -69,15 +69,14 @@ const CarInfoModal: React.FC<CarInfoModalProps> = ({ carLog, onClose }) => {
   };
 
   const getStatusColor = (state: string) => {
-    switch (state) {
-      case '주차 중':
-        return 'blue';
-      case '출차 완료':
-        return 'black';
-      case '이동 중':
-        return 'red';
-      default:
-        return 'black';
+    if (state === '주차 중' || state === '입차') {
+      return 'blue';
+    } else if (state === '출차 완료' || state === '출차') {
+      return 'black';
+    } else if (state === '이동 중') {
+      return 'red';
+    } else {
+      return 'black';
     }
   };
 
@@ -116,7 +115,7 @@ const CarInfoModal: React.FC<CarInfoModalProps> = ({ carLog, onClose }) => {
                 </div>
                 <div className={styles.detailRow}>
                   <div className={styles.dataName}>요금</div>
-                  <div className={styles.dataValue}>{carLog.fee.toLocaleString()}원</div>
+                  <div className={styles.dataValue}>{carLog.fee ? carLog.fee.toLocaleString() : '-'}원</div>
                 </div>
               </div>
             </div>
@@ -146,11 +145,11 @@ const CarInfoModal: React.FC<CarInfoModalProps> = ({ carLog, onClose }) => {
               <button
                 className={styles.modalButton}
                 style={{
-                  backgroundColor: carLog.carState === '출차 완료' ? '#d3d3d3' : '#FF9800',
-                  cursor: carLog.carState === '출차 완료' ? 'not-allowed' : 'pointer'
+                  backgroundColor: carLog.carState === '주차 중' || carLog.carState === '이동 중' ? '#FF9800' : '#d3d3d3',
+                  cursor: carLog.carState === '주차 중' || carLog.carState === '이동 중' ? 'pointer' : 'not-allowed'
                 }}
                 onClick={() => setShowDiscountModal(true)}
-                disabled={carLog.carState === '출차 완료'}
+                disabled={!(carLog.carState === '주차 중' || carLog.carState === '이동 중')}
               >
                 할인
               </button>

@@ -91,6 +91,7 @@ const Members: React.FC = () => {
         };
   
         await dispatch(updateMemberOnServer(dataToSave));
+        await dispatch(fetchMembers());
         setEditingMemberId(null);
         setEditingData(null);
         setError(null);
