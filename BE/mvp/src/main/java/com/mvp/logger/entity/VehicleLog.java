@@ -30,7 +30,7 @@ public class VehicleLog {
     private LocalDateTime exitTime;
 
     @Column(name = "fee")
-    private Integer fee;
+    private Long fee;
 
     @Lob
     @Column(name = "image", columnDefinition = "LONGBLOB")
