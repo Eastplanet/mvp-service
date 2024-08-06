@@ -4,6 +4,8 @@ import axios from 'axios';
 import styles from './AddMembersModal.module.css';
 import { fetchMembers } from '../membersSlice';
 import { AppDispatch } from '../../../store/store';
+import backIcon from '../../../assets/images/icons/back.png';
+
 
 interface AddMemberModalProps {
   onClose: () => void;
@@ -43,7 +45,9 @@ const AddMemberModal: React.FC<AddMemberModalProps> = ({ onClose }) => {
   return (
     <div className={styles.modalOverlay}>
       <div className={styles.modalContent}>
-        <button className={styles.backButton} onClick={onClose} aria-label="Close">←</button>
+        <button className={styles.backButton} onClick={onClose} aria-label="Close">
+          <img src={backIcon} alt="back" />
+        </button>
         <h2 className={styles.title}>회원 추가</h2>
         {error && <div className={styles.error}>{error}</div>}
         <div className={styles.formGroup}>
@@ -86,9 +90,7 @@ const AddMemberModal: React.FC<AddMemberModalProps> = ({ onClose }) => {
           />
         </div>
         <div className={styles.buttonContainer}>
-          <button className={styles.submitButton} onClick={handleSubmit}>
-            →
-          </button>
+          <button className={styles.submitButton} onClick={handleSubmit}>완료</button>
         </div>
       </div>
     </div>

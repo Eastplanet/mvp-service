@@ -10,27 +10,36 @@ const Chart = () => {
         <div className={styles.mainContent}>
           <div className={styles.summaryContainer}>
             <div className={styles.summary}>
-              <p className={styles.summaryTitle}>이번 달 매출</p>
+              <p className={styles.summaryTitle}>당월 매출</p>
               <h3 className={styles.summaryData}>5,500,000 원</h3>
-              <p className={styles.summaryComparison}>지난 달 대비
-              <span className={styles.up}>+10.0%</span>
-              <span className={styles.arrowUp}></span>
+              <p className={styles.summaryComparison}>전월 대비
+                <span className={styles.up}>+10.0%</span>
+                <span className={styles.arrowUp}></span>
               </p>
             </div>
             <div className={styles.summary}>
-              <p className={styles.summaryTitle}>이번 달 주차량</p>
+              <p className={styles.summaryTitle}>당월 주차량</p>
               <h3 className={styles.summaryData}>2,000 대</h3>
-              <p className={styles.summaryComparison}>지난 달 대비 <span className={styles.down}>-2.5%</span></p>
+              <p className={styles.summaryComparison}>전월 대비
+                <span className={styles.down}>-2.5%</span>
+                <span className={styles.arrowDown}></span>
+              </p>
             </div>
             <div className={styles.summary}>
               <p className={styles.summaryTitle}>오늘 매출</p>
               <h3 className={styles.summaryData}>200,000 원</h3>
-              <p className={styles.summaryComparison}>어제 대비 <span className={styles.up}>+8.8%</span></p>
+              <p className={styles.summaryComparison}>어제 대비
+                <span className={styles.up}>+8.8%</span>
+                <span className={styles.arrowUp}></span>  
+              </p>
             </div>
             <div className={styles.summary}>
               <p className={styles.summaryTitle}>오늘 주차량</p>
               <h3 className={styles.summaryData}>80 대</h3>
-              <p className={styles.summaryComparison}>어제 대비 <span className={styles.up}>+7.0%</span></p>
+              <p className={styles.summaryComparison}>어제 대비
+                <span className={styles.up}>+7.0%</span>
+                <span className={styles.arrowUp}></span>
+              </p>
             </div>
           </div>
           <div className={styles.chartContainer}>
@@ -47,7 +56,9 @@ const Chart = () => {
           <h3>10,000,000 원</h3>
           <p>총 매출</p>
           <h3 className={styles.detailsTotal}>11,500,000 원</h3>
-          <p className={styles.totalUp}>+15.0%</p>
+          <span className={styles.totalUp}>+15.0%
+            <span className={styles.arrowUp}></span>
+          </span>
         </div>
       </div>
     </div>

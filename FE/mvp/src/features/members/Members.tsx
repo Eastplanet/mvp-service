@@ -255,7 +255,7 @@ const Members: React.FC = () => {
               <div className={styles.phone}>Phone</div>
               <div className={styles.date}>Join Date</div>
               <div className={styles.date}>Secession Date</div>
-              <div>Actions</div>
+              <div className={styles.action}>Actions</div>
             </div>
                     
             {paginatedMembers.map((member) => (
@@ -327,7 +327,7 @@ const Members: React.FC = () => {
             <div>
               <Pagination />
             </div>
-            <div className={styles.actions}>
+            <div className={styles.actionButtons}>
               <button className={styles.addButton} onClick={handleAddMember}>추가</button>
               <button className={styles.deleteButton} onClick={handleDelete}>삭제</button>
             </div>

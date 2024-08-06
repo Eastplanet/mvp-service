@@ -37,6 +37,7 @@
   margin: 0 10px; /* 주변에 여백 추가 */
   border-radius: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+  min-width: 150px;
 }
 
 .summaryTitle {
@@ -55,7 +56,9 @@
 
 .summaryComparison {
   margin: 5px 0 10px 0;
-  text-align: right;
+  justify-content: flex-end;
+  display: flex;
+  align-items: center;
 }
 
 /* 차트 */
@@ -120,13 +123,54 @@
   border-bottom: 10px solid red;
   border-left: 6px solid transparent;
   border-right: 6px solid transparent;
-  margin-top: 0px;
-  margin-bottom: auto;
+  margin-left: 5px;
+  position: relative;
+  top: 2px; 
+}
+
+.arrowDown{
+  width: 0px;
+  height: 0px;
+  border-top: 10px solid blue;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  margin-left: 5px;
+  position: relative;
+  top: 2px; 
 }
 
 .totalUp {
-  color: green;
+  display: flex;
+  justify-content: flex-end;
+  color: red;
   font-weight: bold;
-  font-size: 1.2rem;
+  font-size: 28px;
 }
-
+.totalDown {
+  display: flex;
+  justify-content: flex-end;
+  color: blue;
+  font-weight: bold;
+  font-size: 28px;
+}
+.totalUp .arrowUp{
+  width: 0px;
+  height: 0px;
+  border-bottom: 20px solid red;
+  border-left: 12px solid transparent;
+  border-right: 12px solid transparent;
+  margin-left: 5px;
+  position: relative;
+  top: 10px; 
+}
+.totalDown .arrowDown{
+  width: 0px;
+  height: 0px;
+  border-top: 20px solid blue;
+  border-left: 12px solid transparent;
+  border-right: 12px solid transparent;
+  margin-left: 5px;
+  position: relative;
+  top: 10px; 
+}
+ 
