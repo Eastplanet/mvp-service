@@ -163,6 +163,7 @@ public class ParkingBotService {
                 .licensePlate(parkedVehicle.getLicensePlate())
                 .image(parkedVehicle.getImage())
                 .fee(price)
+                .entranceTime(parkedVehicle.getEntranceTime())
                 .build();
         LoggerService.createExitLog(logDto);
 
