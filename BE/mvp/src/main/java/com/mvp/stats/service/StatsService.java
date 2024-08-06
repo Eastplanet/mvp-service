@@ -75,7 +75,6 @@ public class StatsService {
         List<ParkingLotSpotDTO> allParkingLotSpot = vehicleService.getAllParkingLotSpot();
         List<ParkingLotSpotStats> list = new ArrayList<>();
 
-        ParkingLotSettingDTO parkingLotSetting = parkingLotService.getSetting();
 
         for (ParkingLotSpotDTO dto : allParkingLotSpot) {
             ParkingLotSpotStats stats = new ParkingLotSpotStats();
