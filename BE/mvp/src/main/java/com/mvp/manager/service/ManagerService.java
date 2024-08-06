@@ -44,7 +44,9 @@ public class ManagerService {
         if(manager.getPassword().equals(HashUtil.sha256(managerDTO.getPassword()))) {   // 로그인 성공 시 API Key 생성
             String apiKey = UUID.randomUUID().toString();
             apiKeyStore.put(apiKey, manager.getEmail());
-            return ManagerConverter.entityToDto(manager);
+            ManagerDTO loginManagerDTO = ManagerConverter.entityToDto(manager);
+            loginManagerDTO.setApiKey(apiKey);
+            return loginManagerDTO;
         }
         else{
             throw new RestApiException(StatusCode.INVALID_EMAIL_OR_PASSWORD);
