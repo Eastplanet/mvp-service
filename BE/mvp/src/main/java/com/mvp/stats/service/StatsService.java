@@ -37,18 +37,24 @@ public class StatsService {
     private final MembershipService membershipService;
 
     public Long calculatePrice(ParkedVehicleDTO parkedVehicleDTO) {
+
+        boolean ownMemberships = membershipService.isOwnMemberships(parkedVehicleDTO.getLicensePlate());
+        if(ownMemberships == true){
+            return 0L;
+        }
+
         ParkingLotSettingDTO setting = parkingLotService.getSetting();
 
         long price = setting.getBaseFee();
-
         LocalDateTime entranceTime = parkedVehicleDTO.getEntranceTime();
         LocalDateTime now = LocalDateTime.now();
         long minutes = Duration.between(entranceTime, now).toMinutes();
         minutes -= setting.getBaseParkingTime();
-
-        if(minutes <= 0)return price;
-
-        price += (minutes/setting.getAdditionalUnitTime())*setting.getAdditionalUnitFee();
+        if(minutes > 0){
+            price += (minutes/setting.getAdditionalUnitTime())*setting.getAdditionalUnitFee();
+            price -= parkedVehicleDTO.getDiscount();
+            if(price < 0)price = 0;
+        }
         return price;
     }
 
@@ -74,8 +80,6 @@ public class StatsService {
 
         List<ParkingLotSpotDTO> allParkingLotSpot = vehicleService.getAllParkingLotSpot();
         List<ParkingLotSpotStats> list = new ArrayList<>();
-
-        ParkingLotSettingDTO parkingLotSetting = parkingLotService.getSetting();
 
         for (ParkingLotSpotDTO dto : allParkingLotSpot) {
             ParkingLotSpotStats stats = new ParkingLotSpotStats();
