@@ -1,5 +1,6 @@
 package com.mvp.stats.service;
 
+import com.mvp.calculator.service.CalculatorService;
 import com.mvp.common.exception.RestApiException;
 import com.mvp.common.exception.StatusCode;
 import com.mvp.logger.dto.VehicleLogDTO;
@@ -35,30 +36,7 @@ public class StatsService {
     private final LoggerService loggerService;
     private final ParkingLotService parkingLotService;
     private final MembershipService membershipService;
-
-    public Long calculatePrice(ParkedVehicleDTO parkedVehicleDTO) {
-
-        boolean ownMemberships = membershipService.isOwnMemberships(parkedVehicleDTO.getLicensePlate());
-        if(ownMemberships == true){
-            return 0L;
-        }
-
-        ParkingLotSettingDTO setting = parkingLotService.getSetting();
-
-        long price = setting.getBaseFee();
-        LocalDateTime entranceTime = parkedVehicleDTO.getEntranceTime();
-        LocalDateTime now = LocalDateTime.now();
-        long minutes = Duration.between(entranceTime, now).toMinutes();
-        minutes -= setting.getBaseParkingTime();
-        if(minutes > 0){
-            price += (minutes/setting.getAdditionalUnitTime())*setting.getAdditionalUnitFee();
-            if(parkedVehicleDTO.getDiscount() != null){
-                price -= parkedVehicleDTO.getDiscount();
-            }
-            if(price < 0)price = 0;
-        }
-        return price;
-    }
+    private final CalculatorService calculateService;
 
     public HomePageInitDto getInitHomePage() {
         LocalDateTime todayStart = LocalDateTime.now().with(LocalTime.MIN);
@@ -92,7 +70,7 @@ public class StatsService {
                 stats.setLicensePlate(dto.getParkedVehicle().getLicensePlate());
                 stats.setParkingDate(dto.getParkedVehicle().getEntranceTime());
                 stats.setEntranceTime(dto.getParkedVehicle().getEntranceTime());
-                stats.setFee(calculatePrice(dto.getParkedVehicle()));
+                stats.setFee(calculateService.calculatePrice(dto.getParkedVehicle()));
                 stats.setImage(dto.getParkedVehicle().getImage());
                 stats.setCarState(dto.getParkedVehicle().getStatus());
             }
@@ -162,7 +140,7 @@ public class StatsService {
         // 이번 달을 포함한 지난 12개월 동안의 데이터를 가져오기 위한 리스트
         List<MonthlyRevenue> monthlyRevenues = new ArrayList<>();
         // 현재 날짜를 기준으로 지난 12개월 동안의 데이터를 가져옴
-        for (int i = 11; i >= 0; i--) {
+        for (int i = 0; i < 12; i++) {
             // 현재 달에서 i 달 전의 첫째 날
             LocalDate firstDayOfMonth = LocalDate.now().minusMonths(i).withDayOfMonth(1);
             LocalDateTime startOfMonth = firstDayOfMonth.atStartOfDay();

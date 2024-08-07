@@ -5,6 +5,7 @@ import com.mvp.common.exception.RestApiException;
 import com.mvp.common.exception.StatusCode;
 import com.mvp.vehicle.dto.DiscountDTO;
 import com.mvp.vehicle.dto.ParkedVehicleDTO;
+import com.mvp.vehicle.dto.ParkedVehicleSettleDTO;
 import com.mvp.vehicle.service.VehicleService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -55,7 +56,7 @@ public class VehicleController {
      */
     @GetMapping
     public ResponseEntity<ResponseDto> getParkedVehicleByBackNum(@RequestParam String backNum){
-        List<ParkedVehicleDTO> parkedVehicleList = vehicleService.getParkedVehicleListByBackNum(backNum);
+        List<ParkedVehicleSettleDTO> parkedVehicleList = vehicleService.getParkedVehicleListByBackNum(backNum);
 
         if(!parkedVehicleList.isEmpty()){
             return ResponseDto.response(StatusCode.SUCCESS, parkedVehicleList);

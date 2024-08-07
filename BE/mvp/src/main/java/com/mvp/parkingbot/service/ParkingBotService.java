@@ -1,5 +1,6 @@
 package com.mvp.parkingbot.service;
 
+import com.mvp.calculator.service.CalculatorService;
 import com.mvp.common.exception.RestApiException;
 import com.mvp.common.exception.StatusCode;
 import com.mvp.logger.dto.EntranceLogDTO;
@@ -49,6 +50,7 @@ public class ParkingBotService {
     private final LoggerService LoggerService;
     private final StatsService statsService;
     private final MembershipService membershipService;
+    private final CalculatorService calculatorService;
     private TaskQueue taskQueue;
 
     /**
@@ -161,7 +163,7 @@ public class ParkingBotService {
             taskQueue.addTask(task);
         }
 
-        long price = statsService.calculatePrice(ParkedVehicleConverter.entityToDto(parkedVehicle));
+        long price = calculatorService.calculatePrice(ParkedVehicleConverter.entityToDto(parkedVehicle));
 
         ExitLogDTO logDto = ExitLogDTO.builder()
                 .licensePlate(parkedVehicle.getLicensePlate())
