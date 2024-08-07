@@ -47,16 +47,17 @@ const ParkingLot: React.FC<ParkingLotProps> = ({ parkingData, onCarLogClick, sel
               key={index + 1}
               className={`${styles.parkingSpace} 
                 ${mode === 'move' && selectedCarLog && carLog.licensePlate === selectedCarLog.licensePlate ? styles.selectedParkingSpace : ''} 
-                ${carLog.lotState === 2 ? styles.unavailableParkingSpace : ''}`}
+                ${carLog.lotState === 2 ? styles.unavailableParkingSpace : styles.clickableParkingSpace}`}
               onClick={() => {
                 if (carLog.lotState !== 2) handleCarLogClick(carLog, index + 1);
               }}
             >
               {carLog.licensePlate && <img src={parkingCar} alt={carLog.licensePlate} className={styles.rotatedCar} />}
+              {carLog.licensePlate && carLog.lotState === 2 && <span className={styles.moving}>이동 중</span>}
             </div>
           ))}
           <div
-            className={`${styles.parkingSpace} ${styles.emptySpace}`}
+            className={`${styles.parkingSpace} ${styles.emptySpace} ${mode === 'move' ? styles.clickableParkingSpace : ''}`}
             onClick={() => {
               if (mode === 'move') handleSlotClick(4);
             }}
@@ -69,12 +70,13 @@ const ParkingLot: React.FC<ParkingLotProps> = ({ parkingData, onCarLogClick, sel
               key={index + 4}
               className={`${styles.parkingSpace} 
                 ${mode === 'move' && selectedCarLog && carLog.licensePlate === selectedCarLog.licensePlate ? styles.selectedParkingSpace : ''} 
-                ${carLog.lotState === 2 ? styles.unavailableParkingSpace : ''}`}
+                ${carLog.lotState === 2 ? styles.unavailableParkingSpace : styles.clickableParkingSpace}`}
               onClick={() => {
                 if (carLog.lotState !== 2) handleCarLogClick(carLog, index + 4);
               }}
             >
               {carLog.licensePlate && <img src={parkingCar} alt={carLog.licensePlate} />}
+              {carLog.licensePlate && carLog.lotState === 2 && <span className={styles.moving}>이동 중</span>}
             </div>
           ))}
         </div>
