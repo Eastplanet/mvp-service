@@ -1,5 +1,6 @@
 package com.mvp.stats.service;
 
+import com.mvp.calculator.service.CalculatorService;
 import com.mvp.common.exception.RestApiException;
 import com.mvp.common.exception.StatusCode;
 import com.mvp.logger.dto.VehicleLogDTO;
@@ -35,30 +36,7 @@ public class StatsService {
     private final LoggerService loggerService;
     private final ParkingLotService parkingLotService;
     private final MembershipService membershipService;
-
-    public Long calculatePrice(ParkedVehicleDTO parkedVehicleDTO) {
-
-        boolean ownMemberships = membershipService.isOwnMemberships(parkedVehicleDTO.getLicensePlate());
-        if(ownMemberships == true){
-            return 0L;
-        }
-
-        ParkingLotSettingDTO setting = parkingLotService.getSetting();
-
-        long price = setting.getBaseFee();
-        LocalDateTime entranceTime = parkedVehicleDTO.getEntranceTime();
-        LocalDateTime now = LocalDateTime.now();
-        long minutes = Duration.between(entranceTime, now).toMinutes();
-        minutes -= setting.getBaseParkingTime();
-        if(minutes > 0){
-            price += (minutes/setting.getAdditionalUnitTime())*setting.getAdditionalUnitFee();
-            if(parkedVehicleDTO.getDiscount() != null){
-                price -= parkedVehicleDTO.getDiscount();
-            }
-            if(price < 0)price = 0;
-        }
-        return price;
-    }
+    private final CalculatorService calculateService;
 
     public HomePageInitDto getInitHomePage() {
         LocalDateTime todayStart = LocalDateTime.now().with(LocalTime.MIN);
@@ -92,7 +70,7 @@ public class StatsService {
                 stats.setLicensePlate(dto.getParkedVehicle().getLicensePlate());
                 stats.setParkingDate(dto.getParkedVehicle().getEntranceTime());
                 stats.setEntranceTime(dto.getParkedVehicle().getEntranceTime());
-                stats.setFee(calculatePrice(dto.getParkedVehicle()));
+                stats.setFee(calculateService.calculatePrice(dto.getParkedVehicle()));
                 stats.setImage(dto.getParkedVehicle().getImage());
                 stats.setCarState(dto.getParkedVehicle().getStatus());
             }
