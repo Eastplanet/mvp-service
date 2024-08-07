@@ -1,16 +1,18 @@
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLabel, QSpacerItem, QSizePolicy, QPushButton, QScrollArea, QFrame
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLabel, QSpacerItem, QSizePolicy, QPushButton, QScrollArea, QFrame, QHBoxLayout
 from PyQt6.QtCore import Qt
 from gui.components.vehicle_list_item import VehicleListItem
+from gui.components.home_button import HomeButton
 
 class VehicleSelectionPage(QWidget):
     def __init__(self, vehicles, main_window, parent=None):
         super(VehicleSelectionPage, self).__init__(parent)
+        self.main_window = main_window
 
         layout = QVBoxLayout()
         layout.setContentsMargins(20, 20, 20, 20)
         layout.setSpacing(20)
         self.setLayout(layout)
-
+        
         # 상단 라벨
         top_label = QLabel("차량을 선택하세요", self)
         top_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
@@ -68,24 +70,3 @@ class VehicleSelectionPage(QWidget):
         # Spacer
         bottom_spacer = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
         layout.addSpacerItem(bottom_spacer)
-
-        # 뒤로가기 버튼
-        back_button = QPushButton(self)
-        back_button.setFixedSize(60, 60)
-        back_button.setStyleSheet("""
-            QPushButton {
-                background-color: #FFB300; 
-                color: white; 
-                font-size: 30px; 
-                border-radius: 30px;
-            }
-            QPushButton:hover {
-                background-color: #FFA000;
-            }
-        """)
-        back_button.setText("↩")
-        back_button.clicked.connect(self.go_back)
-        layout.addWidget(back_button, alignment=Qt.AlignmentFlag.AlignRight)
-
-    def go_back(self):
-        self.parent().stacked_widget.setCurrentWidget(self.parent().exit_page)

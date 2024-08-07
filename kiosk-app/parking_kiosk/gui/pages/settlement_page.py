@@ -4,6 +4,7 @@ from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton, QSpacerIt
 from PyQt6.QtGui import QPixmap
 from PyQt6.QtCore import Qt
 from core.handlers import handle_exit
+from gui.components.home_button import HomeButton
 
 class SettlementPage(QWidget):
     def __init__(self, vehicle_info, main_window, parent=None):
@@ -103,9 +104,6 @@ class SettlementPage(QWidget):
         card_layout.addLayout(details_layout)
         layout.addWidget(card)
 
-        # Spacer
-        layout.addSpacerItem(QSpacerItem(20, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding))
-
         # 정산하기 버튼
         settle_button = QPushButton("정산하기", self)
         settle_button.setFixedSize(200, 60)
@@ -123,24 +121,6 @@ class SettlementPage(QWidget):
         settle_button.clicked.connect(self.confirm_settle)
         layout.addWidget(settle_button, alignment=Qt.AlignmentFlag.AlignCenter)
 
-        # 뒤로가기 버튼
-        back_button = QPushButton(self)
-        back_button.setFixedSize(60, 60)
-        back_button.setStyleSheet("""
-            QPushButton {
-                background-color: #FFB300; 
-                color: white; 
-                font-size: 30px; 
-                border-radius: 30px;
-            }
-            QPushButton:hover {
-                background-color: #FFA000;
-            }
-        """)
-        back_button.setText("↩")
-        back_button.clicked.connect(self.go_back)
-        layout.addWidget(back_button, alignment=Qt.AlignmentFlag.AlignRight)
-
     def format_datetime(self, datetime_str):
         dt = datetime.fromisoformat(datetime_str)
         return dt.strftime("%m-%d %H:%M")
@@ -151,7 +131,3 @@ class SettlementPage(QWidget):
         # 정산 완료 시 메인페이지로 전환
         if success:
             self.main_window.return_to_main()
-
-    def go_back(self):
-        self.parent().stacked_widget.setCurrentWidget(self.parent().exit_page)
-        

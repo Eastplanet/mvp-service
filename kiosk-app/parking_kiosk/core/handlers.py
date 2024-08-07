@@ -8,7 +8,7 @@ from config.config import SERVER_URL
 
 def handle_enter(image_path, license_plate, entrance_time):
     print('입차 명령 전송 시작')
-    url = SERVER_URL + "/parking-bot/enter"  # 서버 엔드포인트 URL을 입력하세요
+    url = SERVER_URL + "/api/parking-bot/enter"  # 서버 엔드포인트 URL을 입력하세요
 
     # 이미지 파일을 읽어서 Base64로 인코딩
     with open(image_path, 'rb') as image_file:
@@ -30,15 +30,12 @@ def handle_enter(image_path, license_plate, entrance_time):
         
     print(f"Status Code: {response.status_code}")
     print(f"Response: {response.text}")
-    os.remove('./result/temp_image.jpeg')
+    # os.remove('./result/temp_image.jpeg')
     
-    if(response.status_code == 200):
-        return True
-    else:
-        return False
+    return response.json()
     
 def handle_exit(licensePlate):
-    url = SERVER_URL + "/parking-bot/exit/" + licensePlate
+    url = SERVER_URL + "/api/parking-bot/exit/" + licensePlate
     response = requests.delete(url)
     
     if response.status_code == 200:
@@ -48,15 +45,12 @@ def handle_exit(licensePlate):
 
 # 차량 정보 가져오기
 def handle_get_vehicles(license_plate):
-    url = SERVER_URL + "/parked-vehicle?backNum=" + license_plate
+    url = SERVER_URL + "/api/parked-vehicle?backNum=" + license_plate
     
     response = requests.get(url)
     
+    vehicles = []
     if response.status_code == 200:
-        vehicles = response.json()
-        
-    for vehicle in vehicles:
-        print(vehicle.get('licensePlate'))
-        print(vehicle.get('entranceTime'))
+        vehicles = response.json().get('data')
     
     return vehicles

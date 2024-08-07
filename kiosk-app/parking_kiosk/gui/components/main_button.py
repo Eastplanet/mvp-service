@@ -72,6 +72,8 @@ class MainButton(QWidget):
         # 입차 버튼
         self.entry_button = AnimatedButton("입차", "#FFB300", "#FFA000", self)
         layout.addWidget(self.entry_button, alignment=Qt.AlignmentFlag.AlignCenter)
+        
+        layout.addSpacing(30)
 
         # 출차 버튼
         self.exit_button = AnimatedButton("출차", "#FF0000", "#CC0000", self)

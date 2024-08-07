@@ -3,6 +3,7 @@ from aiohttp import ClientSession
 import requests
 import base64
 import cv2
+from static.ko_en_mapper import ko_en_mapper
 
 image_path = "parking_kiosk/gui/res/test.jpg"
 
@@ -28,7 +29,7 @@ class Camera:
         return image_base64
 
     def ocr_reader(self):
-        # self.capture_image()
+        self.capture_image()
         
         url = 'https://apis.openapi.sk.com/sigmeta/lpr/v1'
         headers = {
@@ -37,8 +38,8 @@ class Camera:
         }
 
         # 이미지 리사이즈
-        # image = cv2.imread('./result/captured_img.jpeg')
-        image = cv2.imread(image_path)
+        image = cv2.imread('./result/captured_img.jpeg')
+        # image = cv2.imread(image_path)
         resized_img = self.resize_image(image)
 
         temp_file_path = './result/temp_image.jpeg'
@@ -61,7 +62,9 @@ class Camera:
         # os.remove(temp_file_path)
         print(lp_string)
         print(base64_encoded_img)
-        return lp_string
+        
+        
+        return self.kor_converter(lp_string)
 
     def resize_image(self, image, max_width=1024, max_height=1024):
         height, width = image.shape[:2]
@@ -71,3 +74,8 @@ class Camera:
             resized_image = cv2.resized(image, new_size, interpolation=cv2.INTER_AREA)
             return resized_image
         return image
+
+    def kor_converter(self, lp_string):
+        for eng, kor in ko_en_mapper.items():
+            lp_string = lp_string.replace(eng, kor)
+        return lp_string
