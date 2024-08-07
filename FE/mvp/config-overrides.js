@@ -6,9 +6,6 @@ module.exports = function override(config, env) {
       host: 'localhost',
       port: 8081,
     };
-    console.log('-------------------------------------------------');
-    console.log('devServer configuration:', config.devServer);
-    console.log('-------------------------------------------------');
     return config;
   };
   

@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './MoveModal.module.css';
 import { CarLog } from '../CarInfoModal';
 import ParkingLot from '../../parkingLot/ParkingLot';
-import axios from 'axios';
+import api from '../../../api/axios';
 import { useDispatch } from 'react-redux';
 import { fetchParkingData } from '../../main/mainSlice';
 import { AppDispatch } from '../../../store/store';
@@ -19,7 +19,7 @@ const MoveModal: React.FC<MoveModalProps> = ({ carLog, currentParkedCars, onClos
 
   const handleEmptySlotClick = async (slotId: number) => {
     try {
-      const response = await axios.post('http://mvp-project.shop:8081/parking-bot/move-vehicle', {
+      const response = await api.post('https://mvp-project.shop/api/parking-bot/move-vehicle', {
         licensePlate: carLog.licensePlate,
         endSpot: slotId,
       });

@@ -1,21 +1,42 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import api from '../../../api/axios';
 import styles from './AddMembersModal.module.css';
+import { fetchMembers } from '../membersSlice';
+import { AppDispatch } from '../../../store/store';
+import backIcon from '../../../assets/images/icons/back.png';
+
 
 interface AddMemberModalProps {
   onClose: () => void;
 }
 
 const AddMemberModal: React.FC<AddMemberModalProps> = ({ onClose }) => {
+  const dispatch = useDispatch<AppDispatch>();
   const [name, setName] = useState('');
-  const [licensePlate, setlicensePlate] = useState('');
-  const [phone, setPhone] = useState('');
-  const [expiryDate, setExpiryDate] = useState('');
+  const [licensePlate, setLicensePlate] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [endDate, setEndDate] = useState('');
+  const [error, setError] = useState('');
+
+  const getISODateString = (date: string) => {
+    const dateObject = new Date(date);
+    return dateObject.toISOString();
+  };
 
   const handleSubmit = async () => {
+    if (!name || !licensePlate || !phoneNumber || !endDate) {
+      setError('모든 필수 정보를 입력하세요.');
+      return;
+    }
+  
+    const startDate = getISODateString(new Date().toISOString());
+    const formattedEndDate = getISODateString(endDate);
+  
     try {
-      await axios.post('/api/members', { name, licensePlate, phone, expiryDate });
-      onClose(); // 성공 시 모달 닫기
+      await api.post('https://mvp-project.shop/api/memberships', { name, licensePlate, phoneNumber, endDate: formattedEndDate, startDate });
+      dispatch(fetchMembers());
+      onClose();
     } catch (error) {
       console.error('회원 추가 중 오류 발생:', error);
     }
@@ -24,8 +45,11 @@ const AddMemberModal: React.FC<AddMemberModalProps> = ({ onClose }) => {
   return (
     <div className={styles.modalOverlay}>
       <div className={styles.modalContent}>
-        <button className={styles.backButton} onClick={onClose} aria-label="Close">←</button>
+        <button className={styles.backButton} onClick={onClose} aria-label="Close">
+          <img src={backIcon} alt="back" />
+        </button>
         <h2 className={styles.title}>회원 추가</h2>
+        {error && <div className={styles.error}>{error}</div>}
         <div className={styles.formGroup}>
           <label className={styles.label}>이름</label>
           <input 
@@ -41,7 +65,7 @@ const AddMemberModal: React.FC<AddMemberModalProps> = ({ onClose }) => {
           <input 
             type="text" 
             value={licensePlate} 
-            onChange={(e) => setlicensePlate(e.target.value)} 
+            onChange={(e) => setLicensePlate(e.target.value)} 
             className={styles.input}
             placeholder="차량 번호" 
           />
@@ -50,8 +74,8 @@ const AddMemberModal: React.FC<AddMemberModalProps> = ({ onClose }) => {
           <label className={styles.label}>연락처</label>
           <input 
             type="text" 
-            value={phone} 
-            onChange={(e) => setPhone(e.target.value)} 
+            value={phoneNumber} 
+            onChange={(e) => setPhoneNumber(e.target.value)} 
             className={styles.input}
             placeholder="연락처" 
           />
@@ -60,15 +84,13 @@ const AddMemberModal: React.FC<AddMemberModalProps> = ({ onClose }) => {
           <label className={styles.label}>만료일</label>
           <input 
             type="date" 
-            value={expiryDate} 
-            onChange={(e) => setExpiryDate(e.target.value)} 
+            value={endDate} 
+            onChange={(e) => setEndDate(e.target.value)} 
             className={styles.input}
           />
         </div>
         <div className={styles.buttonContainer}>
-          <button className={styles.submitButton} onClick={handleSubmit}>
-            →
-          </button>
+          <button className={styles.submitButton} onClick={handleSubmit}>완료</button>
         </div>
       </div>
     </div>

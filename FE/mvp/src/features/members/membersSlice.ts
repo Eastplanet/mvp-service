@@ -1,6 +1,6 @@
-// membersSlice.ts
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
+import api from '../../api/axios';
+import { setLicensePlate } from '../main/mainSlice';
 
 interface Member {
   id: number;
@@ -24,28 +24,46 @@ const initialState: MembersState = {
 };
 
 export const fetchMembers = createAsyncThunk<Member[]>('members/fetchMembers', async () => {
-  // try {
-  //   const response = await axios.get<Member[]>('/api/members');
-  //   return response.data;
-  // } catch (error) {
-  //   if (axios.isAxiosError(error) && error.response) {
-  //     throw new Error(error.response.data);
-  //   }
-  //   throw new Error('Failed to fetch members');
-  // }
-  return [
-    { id: 1, name: '김동현', car: '123가 4568', phone: '010-0000-0000', join_date: new Date('2024-01-31'), secession_date: new Date('2024-12-31') },
-    { id: 2, name: '김세진', car: '11나 2233', phone: '010-0000-0000', join_date: new Date('2024-07-20'), secession_date: new Date('2024-12-31') },
-    { id: 3, name: '손우혁', car: '12다 3457', phone: '010-0000-0000', join_date: new Date('2024-05-31'), secession_date: new Date('2024-12-31') },
-    { id: 4, name: '손원륜', car: '98라 9653', phone: '010-0000-0000', join_date: new Date('2024-03-31'), secession_date: new Date('2024-12-31') },
-    { id: 5, name: '오동규', car: '77마 7777', phone: '010-0000-0000', join_date: new Date('2024-07-04'), secession_date: new Date('2024-07-31') },
-    { id: 6, name: '오동규', car: '77마 7777', phone: '010-0000-0000', join_date: new Date('2024-01-01'), secession_date: new Date('2024-12-31') },
-  ];
+  try {
+    const response = await api.get('https://mvp-project.shop/api/memberships/list');
+    const data = response.data.data;
+    return data.map((item: any, index: number) => ({
+      id: index + 1,
+      name: item.name,
+      car: item.licensePlate,
+      phone: item.phoneNumber,
+      join_date: new Date(item.startDate),
+      secession_date: new Date(item.endDate),
+    }));
+  } catch (error) {
+    console.error(error);
+  }
 });
 
-export const deleteMembersFromServer = createAsyncThunk<void, number[]>('members/deleteMembers', async (ids) => {
-  await axios.post('/api/deleteMembers', { ids });
+export const deleteMembersFromServer = createAsyncThunk<void, string[]>('members/deleteMembers', async (licensePlates) => {
+  await Promise.all(
+    licensePlates.map((licensePlate) => api.delete(`https://mvp-project.shop/api/memberships/${licensePlate}`))
+  );
 });
+
+export const updateMemberOnServer = createAsyncThunk<Member, Member>(
+  'members/updateMemberOnServer',
+  async (member) => {
+    console.log([member.car,member.secession_date.toISOString(),member.phone,member.name])
+    const response = await api.patch(`https://mvp-project.shop/api/memberships`, {
+      licensePlate: member.car,
+      endDate: member.secession_date.toISOString(),
+      phoneNumber: member.phone,
+      name: member.name,
+    });
+    return {
+      ...member,
+      secession_date: response.data.endDate.toISOString(),
+      phone: response.data.phoneNumber,
+      name: response.data.name,
+    };
+  }
+);
 
 const membersSlice = createSlice({
   name: 'members',
@@ -81,7 +99,13 @@ const membersSlice = createSlice({
         state.error = action.error.message || 'Failed to fetch members';
       })
       .addCase(deleteMembersFromServer.fulfilled, (state, action) => {
-        state.members = state.members.filter(member => !action.meta.arg.includes(member.id));
+        state.members = state.members.filter(member => !action.meta.arg.includes(member.car));
+      })
+      .addCase(updateMemberOnServer.fulfilled, (state, action) => {
+        const index = state.members.findIndex(member => member.car === action.payload.car);
+        if (index !== -1) {
+          state.members[index] = action.payload;
+        }
       });
   }
 });
