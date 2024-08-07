@@ -74,13 +74,8 @@ public class ParkingBotService {
 
         // 주차공간 상태변화
         ParkingLotSpot spot = availableSpot.get();
-        spot = ParkingLotSpot.builder()
-                .id(spot.getId())
-                .spotNumber(spot.getSpotNumber())
-                .parkedVehicle(vehicle)
-                .status(LOT_IMPOSSIBLE)
-                .build();
-        parkingLotSpotRepository.save(spot);
+        spot.updateVehicleAndStatus(vehicle,LOT_IMPOSSIBLE);
+
 
         // 주차봇 할당
         Optional<ParkingBot> availableBot = parkingBotRepository.findFirstByStatus(BOT_IDLE);
@@ -136,6 +131,7 @@ public class ParkingBotService {
         if(spot == null){
             throw new RestApiException(StatusCode.NO_SUCH_ELEMENT);
         }
+        spot.updateVehicleAndStatus(spot.getParkedVehicle(),LOT_IMPOSSIBLE);
 
         // 주차봇 할당
         Optional<ParkingBot> availableBot = parkingBotRepository.findFirstByStatus(BOT_IDLE);
@@ -205,31 +201,9 @@ public class ParkingBotService {
 
         // 주차공간 상태변화
         ParkedVehicle parkedVehicle = startSpot.getParkedVehicle();
-        parkedVehicle = ParkedVehicle.builder()
-                .id(parkedVehicle.getId())
-                .licensePlate(parkedVehicle.getLicensePlate())
-                .entranceTime(parkedVehicle.getEntranceTime())
-                .image(parkedVehicle.getImage())
-                .status(VEHICLE_WAIT)
-                .build();
-        parkedVehicleRepository.save(parkedVehicle);
-
-        startSpot = ParkingLotSpot.builder()
-                .id(startSpot.getId())
-                .spotNumber(startSpot.getSpotNumber())
-                .parkedVehicle(null)
-                .status(LOT_IMPOSSIBLE)
-                .build();
-
-        endSpot = ParkingLotSpot.builder()
-                .id(endSpot.getId())
-                .spotNumber(endSpot.getSpotNumber())
-                .parkedVehicle(parkedVehicle)
-                .status(LOT_IMPOSSIBLE)
-                .build();
-
-        parkingLotSpotRepository.save(startSpot);
-        parkingLotSpotRepository.save(endSpot);
+        parkedVehicle.updateStatus(VEHICLE_WAIT);
+        startSpot.updateVehicleAndStatus(null,LOT_IMPOSSIBLE);
+        endSpot.updateVehicleAndStatus(parkedVehicle,LOT_IMPOSSIBLE);
 
         // 주차봇 할당
         ParkingBot availableBot = parkingBotRepository.findFirstByStatus(BOT_IDLE).orElse(null);
@@ -286,17 +260,10 @@ public class ParkingBotService {
      */
     public ParkingBotDTO updateStatus(Integer serialNumber, Integer status) {
         ParkingBot parkingBot = parkingBotRepository.findBySerialNumber(serialNumber);
-
         if(parkingBot == null){
             throw new RestApiException(StatusCode.NOT_FOUND);
         }
-
-        parkingBot = ParkingBot.builder()
-                .serialNumber(serialNumber)
-                .status(status)
-                .build();
-        parkingBotRepository.save(parkingBot);
-
+        parkingBot.updateSerialNumberAndStatus(serialNumber,status);
         return ParkingBotConverter.entityToDto(parkingBot);
     }
 
@@ -306,16 +273,10 @@ public class ParkingBotService {
      * @return
      */
     public List<ParkingBotDTO> updateAllStatus(Integer status) {
+
         List<ParkingBot> parkingBotList = parkingBotRepository.findAll();
-
-        for (ParkingBot parkingBot : parkingBotList) {
-            parkingBot = ParkingBot.builder()
-                    .serialNumber(parkingBot.getSerialNumber())
-                    .status(status)
-                    .build();
-            parkingBotRepository.save(parkingBot);
-        }
-
+        parkingBotList
+                .forEach(parkingBot -> parkingBot.updateStatus(status));
         return ParkingBotConverter.entityToDtoList(parkingBotList);
     }
 
@@ -330,7 +291,6 @@ public class ParkingBotService {
                 .status(BOT_IDLE)
                 .build();
         parkingBotRepository.save(parkingBot);
-
         return ParkingBotConverter.entityToDto(parkingBot);
     }
 
@@ -344,7 +304,6 @@ public class ParkingBotService {
         if(parkingBot == null){
             return false;
         }
-
         parkingBotRepository.delete(parkingBot);
         return true;
     }
@@ -380,20 +339,8 @@ public class ParkingBotService {
             throw new RestApiException(StatusCode.NOT_FOUND);
         }
 
-        parkingBot = ParkingBot.builder()
-                .serialNumber(parkingBot.getSerialNumber())
-                .status(BOT_BUSY)
-                .build();
-        parkingBotRepository.save(parkingBot);
-
-        parkedVehicle = ParkedVehicle.builder()
-                .id(parkedVehicle.getId())
-                .licensePlate(parkedVehicle.getLicensePlate())
-                .entranceTime(parkedVehicle.getEntranceTime())
-                .image(parkedVehicle.getImage())
-                .status(VEHICLE_MOVE)
-                .build();
-        parkedVehicleRepository.save(parkedVehicle);
+        parkingBot.updateStatus(BOT_BUSY);
+        parkedVehicle.updateStatus(VEHICLE_MOVE);
 
         return task;
     }
@@ -417,62 +364,19 @@ public class ParkingBotService {
             throw new RestApiException(StatusCode.NOT_FOUND);
         }
 
-        parkingBot = ParkingBot.builder()
-                .serialNumber(parkingBot.getSerialNumber())
-                .status(BOT_IDLE)
-                .build();
-        parkingBotRepository.save(parkingBot);
+        parkingBot.updateStatus(BOT_IDLE);
 
         if(task.getType() == ENTRANCE){
-            parkingLotSpotEnd = ParkingLotSpot.builder()
-                    .id(parkingLotSpotEnd.getId())
-                    .spotNumber(parkingLotSpotEnd.getSpotNumber())
-                    .parkedVehicle(parkedVehicle)
-                    .status(LOT_OCCUPIED)
-                    .build();
-
-            parkedVehicle = ParkedVehicle.builder()
-                    .id(parkedVehicle.getId())
-                    .licensePlate(parkedVehicle.getLicensePlate())
-                    .entranceTime(parkedVehicle.getEntranceTime())
-                    .image(parkedVehicle.getImage())
-                    .status(VEHICLE_PARKED)
-                    .build();
+            parkingLotSpotEnd.updateVehicleAndStatus(parkedVehicle,LOT_OCCUPIED);
+            parkedVehicle.updateStatus(VEHICLE_PARKED);
         } else if(task.getType() == EXIT){
-            parkingLotSpotStart = ParkingLotSpot.builder()
-                    .id(parkingLotSpotStart.getId())
-                    .spotNumber(parkingLotSpotStart.getSpotNumber())
-                    .parkedVehicle(null)
-                    .status(LOT_EMPTY)
-                    .build();
-
+            parkingLotSpotStart.updateVehicleAndStatus(null,LOT_EMPTY);
             parkingBotRepository.delete(parkingBot);
         } else{
-            parkingLotSpotStart = ParkingLotSpot.builder()
-                    .id(parkingLotSpotStart.getId())
-                    .spotNumber(parkingLotSpotStart.getSpotNumber())
-                    .parkedVehicle(null)
-                    .status(LOT_EMPTY)
-                    .build();
-            parkingLotSpotEnd = ParkingLotSpot.builder()
-                    .id(parkingLotSpotEnd.getId())
-                    .spotNumber(parkingLotSpotEnd.getSpotNumber())
-                    .parkedVehicle(parkedVehicle)
-                    .status(LOT_OCCUPIED)
-                    .build();
-
-            parkedVehicle = ParkedVehicle.builder()
-                    .id(parkedVehicle.getId())
-                    .licensePlate(parkedVehicle.getLicensePlate())
-                    .entranceTime(parkedVehicle.getEntranceTime())
-                    .image(parkedVehicle.getImage())
-                    .status(VEHICLE_PARKED)
-                    .build();
+            parkingLotSpotStart.updateVehicleAndStatus(null,LOT_EMPTY);
+            parkingLotSpotEnd.updateVehicleAndStatus(parkedVehicle,LOT_OCCUPIED);
+            parkedVehicle.updateStatus(VEHICLE_PARKED);
         }
-
-        parkedVehicleRepository.save(parkedVehicle);
-        parkingLotSpotRepository.save(parkingLotSpotStart);
-        parkingLotSpotRepository.save(parkingLotSpotEnd);
 
         if(taskQueue.hasWaitingTasks()){
             Task waitingTask = taskQueue.getNextWaitingTask();

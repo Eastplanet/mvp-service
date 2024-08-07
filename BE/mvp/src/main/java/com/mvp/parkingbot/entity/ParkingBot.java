@@ -24,4 +24,13 @@ public class ParkingBot {
     @Column(name = "status")
     @ColumnDefault("0")
     private Integer status;
+
+    public void updateSerialNumberAndStatus(Integer serialNumber, Integer status) {
+        this.serialNumber = serialNumber;
+        this.status = status;
+    }
+
+    public void updateStatus(Integer status) {
+        this.status = status;
+    }
 }

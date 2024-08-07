@@ -47,7 +47,6 @@ public class LoggerService {
 
         VehicleLogDTO vehicleLogDTO = VehicleLogConverter.entranceDtoToVehicleLogDTO(entranceLogDTO);
         vehicleLogDTO.setType(ENTER_TYPE);
-
         VehicleLog vehicleLog = VehicleLogConverter.dtoToEntity(vehicleLogDTO);
         vehicleLogRepository.save(vehicleLog);
     }
