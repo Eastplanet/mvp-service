@@ -83,7 +83,14 @@ const CarInfoModal: React.FC<CarInfoModalProps> = ({ carLog, onClose }) => {
     }
   };
 
-  console.log(carLog.imageBase64)
+  const decodeBase64 = (encodedString: string) => {
+    try {
+      return atob(encodedString);
+    } catch (error) {
+      console.error("디코딩 중 오류 발생:", error);
+      return null;
+    }
+  };
 
   return (
     <div className={styles.modalOverlay}>
@@ -92,7 +99,11 @@ const CarInfoModal: React.FC<CarInfoModalProps> = ({ carLog, onClose }) => {
         <div className={styles.modalBody}>
           <div className={styles.imageContainer}>
             {carLog.imageBase64 ? (
-              <img src={carLog.imageBase64} alt="Car" className={styles.carImage} />
+              <img 
+                src={decodeBase64(carLog.imageBase64) || ''} 
+                alt="Car" 
+                className={styles.carImage} 
+              />
             ) : (
               <div className={styles.noImage}>이미지 없음</div>
             )}
