@@ -22,7 +22,7 @@ def main():
     
     # MQTT 클라이언트 초기화
     mqtt_client = MQTTClient(broker=MQTT_BROKER_IP, port=MQTT_PORT, sub_topic=MQTT_TOPIC_SUB, pub_topic=MQTT_TOPIC_PUB)
-    server_url = SERVER_URL + "/api/parking-bot/poll"
+    server_url = SERVER_URL + "/parking-bot/poll"
     
     # 데몬 프로세스 시작
     polling_daemon = PollingDaemon(mqtt_client, server_url=server_url, poll_interval=5)

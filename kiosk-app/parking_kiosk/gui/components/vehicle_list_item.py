@@ -13,9 +13,9 @@ class VehicleListItem(QWidget):
         self.discount = vehicle['discount']
         self.fee = vehicle['fee']
         try:
-            self.entranceTime = datetime.strptime(vehicle['entrance_time'], '%Y-%m-%dT%H:%M:%S.%f')
+            self.entranceTime = datetime.strptime(vehicle['entranceTime'], '%Y-%m-%dT%H:%M:%S.%f')
         except ValueError:
-            self.entranceTime = datetime.strptime(vehicle['entrance_time'], '%Y-%m-%dT%H:%M:%S')
+            self.entranceTime = datetime.strptime(vehicle['entranceTime'], '%Y-%m-%dT%H:%M:%S')
         
         # 입차 시간과 현재 시간의 차이 계산
         self.duration = datetime.now() - self.entranceTime
@@ -85,9 +85,9 @@ class VehicleListItem(QWidget):
             'entry_time': self.entranceTime.isoformat(),
             'exit_time': datetime.now().isoformat(),
             'fee_type': '일반',
-            'parking_fee': self.fee,
-            'discount_fee': self.discount,
-            'total_fee': self.fee - self.discount
+            'parking_fee': self.fee.__str__(),
+            'discount_fee': self.discount.__str__(),
+            'total_fee': (self.fee - self.discount).__str__()
         }
         
         # 클릭 이벤트 연결

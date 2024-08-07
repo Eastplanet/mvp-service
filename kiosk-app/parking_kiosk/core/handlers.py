@@ -4,23 +4,11 @@ import base64
 import json
 import os
 import requests
-from config.config import SERVER_URL, get_api_key
-from config.config import set_api_key
-
-def kiosk_login():
-    url = SERVER_URL + "/api/manager/login"
-    
-    payload = {
-        "email": "kiosk",
-        "password": "1234"
-    }
-    
-    response = requests.post(url, data=json.dumps(payload), headers={'Content-Type': 'application/json'})
-    set_api_key(response.json().get('data').get('apiKey'))
+from config.config import SERVER_URL, get_api_key, set_api_key
 
 def handle_enter(image_path, license_plate, entrance_time):
     print('입차 명령 전송 시작')
-    url = SERVER_URL + "/api/parking-bot/enter"  # 서버 엔드포인트 URL을 입력하세요
+    url = SERVER_URL + "/parking-bot/enter"  # 서버 엔드포인트 URL을 입력하세요
 
     # 이미지 파일을 읽어서 Base64로 인코딩
     with open(image_path, 'rb') as image_file:
@@ -34,8 +22,8 @@ def handle_enter(image_path, license_plate, entrance_time):
     }
     
     headers = {
-        'API-KEY': get_api_key(),
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'API-KEY': get_api_key()
     }
 
     # POST 요청 전송
@@ -48,12 +36,10 @@ def handle_enter(image_path, license_plate, entrance_time):
     return response.json()
     
 def handle_exit(licensePlate):
-    url = SERVER_URL + "/api/parking-bot/exit/" + licensePlate
-    
+    url = SERVER_URL + "/parking-bot/exit/" + licensePlate
     headers = {
         'API-KEY': get_api_key()
     }
-    
     response = requests.delete(url, headers=headers)
     
     if response.status_code == 200:
@@ -63,16 +49,32 @@ def handle_exit(licensePlate):
 
 # 차량 정보 가져오기
 def handle_get_vehicles(license_plate):
-    url = SERVER_URL + "/api/parked-vehicle?backNum=" + license_plate
-    
+    url = SERVER_URL + "/parked-vehicle?backNum=" + license_plate
     headers = {
         'API-KEY': get_api_key()
     }
-    
     response = requests.get(url, headers=headers)
     
     vehicles = []
     if response.status_code == 200:
         vehicles = response.json().get('data')
     
+    print(vehicles)
+    
     return vehicles
+
+def kiosk_login():
+    url = SERVER_URL + "/manager/login"
+    
+    headers = {
+        'Content-Type': 'application/json'
+    }
+    
+    payload = {
+        'email': 'kiosk',
+        'password': '1234'
+    }
+    
+    response = requests.post(url, data=json.dumps(payload), headers=headers)
+    set_api_key(response.json().get('data').get('apiKey'))
+    
