@@ -75,9 +75,6 @@ const Members: React.FC = () => {
       setAllSelected(false);
     }
   };
-  
-  
-
 
   const handleEdit = (member: Member) => {
     setEditingMemberId(member.id);
@@ -120,10 +117,13 @@ const Members: React.FC = () => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>, field: keyof Member) => {
     if (editingData) {
-      const value = (field === 'join_date' || field === 'secession_date')
-        ? new Date(e.target.value)
-        : e.target.value;
-        
+      let value: string | Date = e.target.value;
+      if (field === 'phone') {
+        value = value.replace(/\D/g, '');
+      } else if (field === 'join_date' || field === 'secession_date') {
+        value = new Date(value);
+      }
+  
       setEditingData({ ...editingData, [field]: value });
     }
   };
@@ -305,6 +305,7 @@ const Members: React.FC = () => {
                       type="text"
                       value={editingData?.phone || ''}
                       onChange={(e) => handleInputChange(e, 'phone')}
+                      maxLength={13} // 최대 길이를 13으로 설정
                     />
                   ) : (
                     member.phone
