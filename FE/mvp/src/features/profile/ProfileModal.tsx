@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../store/store';
 import styles from './ProfileModal.module.css';
 import logo from '../../assets/images/logos/logo.png'
-import { logout } from '../auth/authSlice';
+import { logoutSuccess } from '../auth/authSlice';
 
 interface ProfileModalProps {
   onClose: () => void;
@@ -15,8 +15,7 @@ const ProfileModal: React.FC<ProfileModalProps> = ({ onClose }) => {
   const dispatch = useDispatch();
 
   const handleLogout = () => {
-    // dispatch(logoutSuccess());
-    logout()
+    dispatch(logoutSuccess());
     onClose();
   };
 
@@ -34,12 +33,10 @@ const ProfileModal: React.FC<ProfileModalProps> = ({ onClose }) => {
         <div className={styles.modalBody}>
           <div className={styles.infoRow}>
             <div className={styles.label}>관리자 정보</div>
-            {/* <div className={styles.line}></div> */}
             <div className={styles.value}>{user.name}</div>
           </div>
           <div className={styles.infoRow}>
             <div className={styles.label}>이메일</div>
-            {/* <div className={styles.line}></div> */}
             <div className={styles.value}>{user.email}</div>
           </div>
         </div>
