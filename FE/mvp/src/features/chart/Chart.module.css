@@ -112,6 +112,11 @@
   font-weight: bold;
 }
 
+.same {
+  color: black;
+  font-weight: bold;
+}
+
 .down {
   color: blue;
   font-weight: bold;

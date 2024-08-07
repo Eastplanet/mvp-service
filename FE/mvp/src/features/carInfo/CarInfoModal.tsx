@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchParkingData } from '../main/mainSlice';
 import styles from './CarInfoModal.module.css';
-import axios from 'axios';
+import api from '../../api/axios';
 import ExitModal from './exit/ExitModal';
 import MoveModal from './move/MoveModal';
 import DiscountModal from './discount/DiscountModal';
@@ -15,6 +15,7 @@ export interface CarLog {
   entryTime: string;
   exitTime?: string;
   fee: number;
+  lotState?: number;
   imageBase64?: string;
 }
 
@@ -31,9 +32,8 @@ const CarInfoModal: React.FC<CarInfoModalProps> = ({ carLog, onClose }) => {
   const currentParkedCars = useSelector((state: RootState) => state.main.currentParkedCars);
 
   const handleConfirmExit = () => {
-    axios.delete(`https://mvp-project.shop/api/parking-bot/exit/${carLog.licensePlate}`)
+    api.delete(`https://mvp-project.shop/api/parking-bot/exit/${carLog.licensePlate}`)
       .then(response => {
-        console.log('출차 완료:', response);
         setShowExitModal(false);
         dispatch(fetchParkingData());
         onClose();
@@ -45,13 +45,16 @@ const CarInfoModal: React.FC<CarInfoModalProps> = ({ carLog, onClose }) => {
   };
 
   const handleApplyDiscount = (discount: number) => {
-    axios.post('/api/apply-discount', {
+    console.log([carLog.licensePlate, discount])
+    api.post('https://mvp-project.shop/api/parked-vehicle/discount', {
       licensePlate: carLog.licensePlate,
-      discount
+      discountAmount: discount
     })
     .then(response => {
       console.log('할인 적용 완료:', response.data);
-      setShowDiscountModal(false);
+      dispatch(fetchParkingData())
+      // setShowDiscountModal(false);
+      onClose();
     })
     .catch(error => {
       console.error('할인 적용 중 오류 발생:', error);
@@ -69,15 +72,23 @@ const CarInfoModal: React.FC<CarInfoModalProps> = ({ carLog, onClose }) => {
   };
 
   const getStatusColor = (state: string) => {
-    switch (state) {
-      case '주차 중':
-        return 'blue';
-      case '출차 완료':
-        return 'black';
-      case '이동 중':
-        return 'red';
-      default:
-        return 'black';
+    if (state === '주차 중' || state === '입차') {
+      return 'blue';
+    } else if (state === '대기 중' || state === '출차') {
+      return 'black';
+    } else if (state === '이동 중') {
+      return 'red';
+    } else {
+      return 'black';
+    }
+  };
+
+  const decodeBase64 = (encodedString: string) => {
+    try {
+      return atob(encodedString);
+    } catch (error) {
+      console.error("디코딩 중 오류 발생:", error);
+      return null;
     }
   };
 
@@ -88,7 +99,11 @@ const CarInfoModal: React.FC<CarInfoModalProps> = ({ carLog, onClose }) => {
         <div className={styles.modalBody}>
           <div className={styles.imageContainer}>
             {carLog.imageBase64 ? (
-              <img src={`data:image/png;base64,${carLog.imageBase64}`} alt="Car" className={styles.carImage} />
+              <img 
+                src={decodeBase64(carLog.imageBase64) || ''} 
+                alt="Car" 
+                className={styles.carImage} 
+              />
             ) : (
               <div className={styles.noImage}>이미지 없음</div>
             )}
@@ -116,7 +131,7 @@ const CarInfoModal: React.FC<CarInfoModalProps> = ({ carLog, onClose }) => {
                 </div>
                 <div className={styles.detailRow}>
                   <div className={styles.dataName}>요금</div>
-                  <div className={styles.dataValue}>{carLog.fee.toLocaleString()}원</div>
+                  <div className={styles.dataValue}>{carLog.fee ? carLog.fee.toLocaleString() : '-'}원</div>
                 </div>
               </div>
             </div>
@@ -146,11 +161,11 @@ const CarInfoModal: React.FC<CarInfoModalProps> = ({ carLog, onClose }) => {
               <button
                 className={styles.modalButton}
                 style={{
-                  backgroundColor: carLog.carState === '출차 완료' ? '#d3d3d3' : '#FF9800',
-                  cursor: carLog.carState === '출차 완료' ? 'not-allowed' : 'pointer'
+                  backgroundColor: carLog.carState === '주차 중' || carLog.carState === '이동 중' ? '#FF9800' : '#d3d3d3',
+                  cursor: carLog.carState === '주차 중' || carLog.carState === '이동 중' ? 'pointer' : 'not-allowed'
                 }}
                 onClick={() => setShowDiscountModal(true)}
-                disabled={carLog.carState === '출차 완료'}
+                disabled={!(carLog.carState === '주차 중' || carLog.carState === '이동 중')}
               >
                 할인
               </button>

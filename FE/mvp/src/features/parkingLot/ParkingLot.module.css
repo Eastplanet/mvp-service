@@ -71,3 +71,9 @@
 .selectedParkingSpace {
   background-color: yellow;
 }
+
+.unavailableParkingSpace {
+  background-color: grey;
+  pointer-events: none;
+  opacity: 0.5;
+}

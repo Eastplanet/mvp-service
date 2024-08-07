@@ -15,6 +15,7 @@ type CarLog = {
   entryTime: string;
   exitTime?: string;
   fee: number;
+  lotState?: number;
   imageBase64?: string;
 };
 
@@ -65,15 +66,14 @@ const Main: React.FC = () => {
   };
 
   const getCarStateClass = (state: string) => {
-    switch(state) {
-      case '주차 중':
-        return styles.carStateParked;
-      case '출차 완료':
-        return styles.carStateExited;
-      case '이동 중':
-        return styles.carStateMoving;
-      default:
-        return '';
+    if (state === '주차 중' || state === '입차') {
+      return styles.carStateParked;
+    } else if (state === '대기 중' || state === '출차') {
+      return styles.carStateExited;
+    } else if (state === '이동 중') {
+      return styles.carStateMoving;
+    } else {
+      return '';
     }
   };
 

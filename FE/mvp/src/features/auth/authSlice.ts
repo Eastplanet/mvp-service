@@ -15,8 +15,8 @@ interface AuthState {
 
 const initialState: AuthState = {
   user: null,
-  token: null,
-  isAuthenticated: false,
+  token: localStorage.getItem('apiKey'),
+  isAuthenticated: !!localStorage.getItem('apiKey'),
   loading: false,
   error: null,
 };
@@ -29,27 +29,18 @@ export const login = createAsyncThunk(
   }
 );
 
-export const logout = createAsyncThunk('auth/logout', async () => {
-  await axios.post('/api/logout');
-});
+// export const logout = createAsyncThunk('auth/logout', async (_, { dispatch }) => {
+//   localStorage.removeItem('apiKey');
+//   dispatch(logoutSuccess());
+// });
 
 const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    loginSuccess: (state) => {
-      state.user = {
-        name: 'John Doe',
-        email: 'johndoe@example.com',
-        phoneNumber: '123-456-7890'
-      };
-      state.token = 'dummy-token';
-      state.isAuthenticated = true;
-      state.loading = false;
-      state.error = null;
-    },
     logoutSuccess: (state) => {
-      state.user = {name: null, email: null}
+      state.user = null;
+      state.token = null;
       state.isAuthenticated = false;
     },
   },
@@ -60,27 +51,20 @@ const authSlice = createSlice({
     });
     builder.addCase(login.fulfilled, (state, action) => {
       state.loading = false;
-      state.user = {
-        name: action.payload.data.name,
-        email: action.payload.data.email,
-        phoneNumber: action.payload.data.phoneNumber
-      };
-      state.token = action.payload.token || null;
+      const { name, email, phoneNumber, apiKey } = action.payload.data;
+      state.user = { name, email, phoneNumber };
+      state.token = apiKey;
       state.isAuthenticated = true;
       state.error = null;
+      localStorage.setItem('apiKey', apiKey);
     });
     builder.addCase(login.rejected, (state, action) => {
       state.loading = false;
       state.error = action.error.message || '로그인에 실패했습니다.';
     });
-    builder.addCase(logout.fulfilled, (state) => {
-      state.user = null;
-      state.token = null;
-      state.isAuthenticated = false;
-    });
   },
 });
 
-export const { loginSuccess, logoutSuccess } = authSlice.actions;
+export const { logoutSuccess } = authSlice.actions;
 
 export default authSlice.reducer;
