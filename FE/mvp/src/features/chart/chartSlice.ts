@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import axios from 'axios';
+import api from '../../api/axios';
 
 interface RevenueData {
   date: string;
@@ -32,7 +32,7 @@ export const fetchChartData = createAsyncThunk<ChartData, void>(
   'chart/fetchChartData',
   async (_, thunkAPI) => {
     try {
-      const response = await axios.get('https://mvp-project.shop/api/stats/revenue');
+      const response = await api.get('https://mvp-project.shop/api/stats/revenue');
       console.log(response.data.data)
       return response.data.data;
     } catch (error) {
