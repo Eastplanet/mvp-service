@@ -19,6 +19,7 @@ import com.mvp.vehicle.repository.ParkedVehicleRepository;
 import com.mvp.vehicle.repository.ParkingLotSpotRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -55,6 +56,7 @@ public class ParkingBotService {
      * @param enterRequestDTO
      * @return
      */
+    @Transactional
     public Task handleEnterRequest(EnterRequestDTO enterRequestDTO) {
         // 주차공간 확인
         Optional<ParkingLotSpot> availableSpot = parkingLotSpotRepository.findFirstByStatus(LOT_EMPTY);
@@ -116,6 +118,7 @@ public class ParkingBotService {
      * @param licensePlate
      * @return
      */
+    @Transactional
     public boolean handleExitRequest(String licensePlate) {
         // 차량 정보 확인
         ParkedVehicle parkedVehicle = parkedVehicleRepository.findByLicensePlate(licensePlate);
@@ -181,6 +184,8 @@ public class ParkingBotService {
      * @param moveRequestDTO
      * @return
      */
+
+    @Transactional
     public Task handleMoveRequest(MoveRequestDTO moveRequestDTO) {
         int start = moveRequestDTO.getStart();
         int end = moveRequestDTO.getEnd();
@@ -231,6 +236,7 @@ public class ParkingBotService {
      * @param moveVehicleRequestDTO
      * @return
      */
+    @Transactional
     public Task handleMoveVehicleRequest(MoveVehicleRequestDTO moveVehicleRequestDTO) {
         //MoveVehicleRequestDTO -> moveRequestDTO
         ParkingLotSpot parkingLotSpot = parkingLotSpotRepository.findByParkedVehicle_LicensePlate(moveVehicleRequestDTO.getLicensePlate());
@@ -258,6 +264,7 @@ public class ParkingBotService {
      * @param serialNumber, status
      * @return
      */
+    @Transactional
     public ParkingBotDTO updateStatus(Integer serialNumber, Integer status) {
         ParkingBot parkingBot = parkingBotRepository.findBySerialNumber(serialNumber);
         if(parkingBot == null){
@@ -272,6 +279,7 @@ public class ParkingBotService {
      * @param status
      * @return
      */
+    @Transactional
     public List<ParkingBotDTO> updateAllStatus(Integer status) {
 
         List<ParkingBot> parkingBotList = parkingBotRepository.findAll();
@@ -285,6 +293,7 @@ public class ParkingBotService {
      * @param parkingBotDTO
      * @return
      */
+    @Transactional
     public ParkingBotDTO createParkingBot(ParkingBotDTO parkingBotDTO) {
         ParkingBot parkingBot = ParkingBot.builder()
                 .serialNumber(parkingBotDTO.getSerialNumber())
@@ -299,6 +308,7 @@ public class ParkingBotService {
      * @param serialNumber
      * @return
      */
+    @Transactional
     public boolean deleteParkingBot(Integer serialNumber) {
         ParkingBot parkingBot = parkingBotRepository.findBySerialNumber(serialNumber);
         if(parkingBot == null){
@@ -321,6 +331,7 @@ public class ParkingBotService {
     /**
      * 주차봇에게 작업 전달
      */
+    @Transactional
     public Task handleTask() {
         // 작업 가져오기
         Task task = taskQueue.getNextTask();
@@ -345,6 +356,7 @@ public class ParkingBotService {
         return task;
     }
 
+    @Transactional
     public boolean completeTask(Task task) {
         // 주차봇 상태 변경
         ParkingBot parkingBot = parkingBotRepository.findBySerialNumber(task.getParkingBotSerialNumber());
