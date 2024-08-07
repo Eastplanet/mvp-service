@@ -62,13 +62,26 @@ const Members: React.FC = () => {
     setAllSelected(!allSelected);
   };
 
+  // const handleDelete = () => {
+  //   if (selectedCars.length > 0) {
+  //     dispatch(deleteMembersFromServer(selectedCars));
+  //     setSelectedCars([]);
+  //     setAllSelected(false);
+  //   }
+  // };
+
   const handleDelete = () => {
     if (selectedCars.length > 0) {
-      dispatch(deleteMembersFromServer(selectedCars));
-      setSelectedCars([]);
-      setAllSelected(false);
+      const confirmDelete = window.confirm("해당 회원을 정말 삭제하겠습니까?");
+      if (confirmDelete) {
+        dispatch(deleteMembersFromServer(selectedCars));
+        setSelectedCars([]);
+        setAllSelected(false);
+      }
     }
   };
+  
+
 
   const handleEdit = (member: Member) => {
     setEditingMemberId(member.id);
