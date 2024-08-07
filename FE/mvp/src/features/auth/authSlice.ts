@@ -29,14 +29,21 @@ export const login = createAsyncThunk(
   }
 );
 
-export const logout = createAsyncThunk('auth/logout', async () => {
-  localStorage.removeItem('apiKey');
-});
+// export const logout = createAsyncThunk('auth/logout', async (_, { dispatch }) => {
+//   localStorage.removeItem('apiKey');
+//   dispatch(logoutSuccess());
+// });
 
 const authSlice = createSlice({
   name: 'auth',
   initialState,
-  reducers: {},
+  reducers: {
+    logoutSuccess: (state) => {
+      state.user = null;
+      state.token = null;
+      state.isAuthenticated = false;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(login.pending, (state) => {
       state.loading = true;
@@ -55,12 +62,9 @@ const authSlice = createSlice({
       state.loading = false;
       state.error = action.error.message || '로그인에 실패했습니다.';
     });
-    builder.addCase(logout.fulfilled, (state) => {
-      state.user = null;
-      state.token = null;
-      state.isAuthenticated = false;
-    });
   },
 });
+
+export const { logoutSuccess } = authSlice.actions;
 
 export default authSlice.reducer;

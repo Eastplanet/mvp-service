@@ -83,6 +83,8 @@ const CarInfoModal: React.FC<CarInfoModalProps> = ({ carLog, onClose }) => {
     }
   };
 
+  console.log(carLog.imageBase64)
+
   return (
     <div className={styles.modalOverlay}>
       <div className={styles.modalContent}>
@@ -90,7 +92,7 @@ const CarInfoModal: React.FC<CarInfoModalProps> = ({ carLog, onClose }) => {
         <div className={styles.modalBody}>
           <div className={styles.imageContainer}>
             {carLog.imageBase64 ? (
-              <img src={`data:image/png;base64,${carLog.imageBase64}`} alt="Car" className={styles.carImage} />
+              <img src={carLog.imageBase64} alt="Car" className={styles.carImage} />
             ) : (
               <div className={styles.noImage}>이미지 없음</div>
             )}

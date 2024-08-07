@@ -4,12 +4,22 @@ import Sidebar from '../sidebar/Sidebar';
 import styles from './Chart.module.css';
 import { fetchChartData } from './chartSlice';
 import { RootState, AppDispatch } from '../../store/store';
+import Graph from './graph/Graph';
 
-const calculateComparison = (current: number, previous: number): string => {
-  if (!previous || previous === 0) return 'N/A';
+const calculateComparison = (current: number, previous: number): { comparison: string, status: string } => {
+  if (!previous || previous === 0) return { comparison: 'N/A', status: 'same' };
   const difference = current - previous;
   const percentage = (difference / previous) * 100;
-  return `${difference > 0 ? '+' : ''}${percentage.toFixed(1)}%`;
+  let status = 'same';
+  if (percentage > 0) {
+    status = 'up';
+  } else if (percentage < 0) {
+    status = 'down';
+  }
+  return {
+    comparison: `${difference > 0 ? '+' : ''}${percentage.toFixed(1)}%`,
+    status
+  };
 };
 
 const Chart: React.FC = () => {
@@ -20,61 +30,65 @@ const Chart: React.FC = () => {
     dispatch(fetchChartData());
   }, [dispatch]);
 
+  useEffect(() => {
+    console.log("Chart state:", { data, loading, error });
+  }, [data, loading, error]);
+
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
   if (!data) return null;
+  
+  const todayData = data.dailyRevenues && data.dailyRevenues.length > 0 ? data.dailyRevenues[data.dailyRevenues.length - 1] : null;
+  const yesterdayData = data.dailyRevenues && data.dailyRevenues.length > 1 ? data.dailyRevenues[data.dailyRevenues.length - 2] : null;
+  const thisMonthData = data.monthlyRevenues && data.monthlyRevenues.length > 0 ? data.monthlyRevenues[data.dailyRevenues.length - 1] : null;
+  const lastMonthData = data.monthlyRevenues && data.monthlyRevenues.length > 1 ? data.monthlyRevenues[data.dailyRevenues.length - 2] : null;
 
-  const todayData = data.dailyRevenue && data.dailyRevenue.length > 0 ? data.dailyRevenue[data.dailyRevenue.length - 1] : null;
-  const yesterdayData = data.dailyRevenue && data.dailyRevenue.length > 1 ? data.dailyRevenue[data.dailyRevenue.length - 2] : null;
-  const thisMonthData = data.monthlyRevenue && data.monthlyRevenue.length > 0 ? data.monthlyRevenue[data.monthlyRevenue.length - 1] : null;
-  const lastMonthData = data.monthlyRevenue && data.monthlyRevenue.length > 1 ? data.monthlyRevenue[data.monthlyRevenue.length - 2] : null;
+  const dailyRevenuesComparison = todayData && yesterdayData ? calculateComparison(todayData.revenue, yesterdayData.revenue) : { comparison: 'N/A', status: 'same' };
+  const dailyParkingComparison = todayData && yesterdayData ? calculateComparison(todayData.parkingCount, yesterdayData.parkingCount) : { comparison: 'N/A', status: 'same' };
+  const monthlyRevenuesComparison = thisMonthData && lastMonthData ? calculateComparison(thisMonthData.revenue, lastMonthData.revenue) : { comparison: 'N/A', status: 'same' };
+  const monthlyParkingComparison = thisMonthData && lastMonthData ? calculateComparison(thisMonthData.parkingCount, lastMonthData.parkingCount) : { comparison: 'N/A', status: 'same' };
 
-  const dailyRevenueComparison = todayData && yesterdayData ? calculateComparison(todayData.revenue, yesterdayData.revenue) : 'N/A';
-  const dailyParkingComparison = todayData && yesterdayData ? calculateComparison(todayData.parkingCount, yesterdayData.parkingCount) : 'N/A';
-  const monthlyRevenueComparison = thisMonthData && lastMonthData ? calculateComparison(thisMonthData.revenue, lastMonthData.revenue) : 'N/A';
-  const monthlyParkingComparison = thisMonthData && lastMonthData ? calculateComparison(thisMonthData.parkingCount, lastMonthData.parkingCount) : 'N/A';
 
   return (
     <div className={styles.chartPage}>
       <Sidebar />
       <div className={styles.page}>
         <div className={styles.mainContent}>
-          <div className={styles.summaryContainer}>
-            <div className={styles.summary}>
-              <p className={styles.summaryTitle}>이번 달 매출</p>
+        <div className={styles.summaryContainer}>
+          <div className={styles.summary}>
+              <p className={styles.summaryTitle}>당월 매출</p>
               <h3 className={styles.summaryData}>{thisMonthData ? thisMonthData.revenue.toLocaleString() : 'N/A'} 원</h3>
-              <p className={styles.summaryComparison}>지난 달 대비 <span className={styles.up}>{monthlyRevenueComparison}</span></p>
+              <p className={styles.summaryComparison}>전월 대비 <span className={styles[monthlyRevenuesComparison.status]}>{monthlyRevenuesComparison.comparison}</span></p>
             </div>
             <div className={styles.summary}>
-              <p className={styles.summaryTitle}>이번 달 주차량</p>
+              <p className={styles.summaryTitle}>당월 주차량</p>
               <h3 className={styles.summaryData}>{thisMonthData ? thisMonthData.parkingCount.toLocaleString() : 'N/A'} 대</h3>
-              <p className={styles.summaryComparison}>지난 달 대비 <span className={styles.down}>{monthlyParkingComparison}</span></p>
+              <p className={styles.summaryComparison}>전월 대비 <span className={styles[monthlyParkingComparison.status]}>{monthlyParkingComparison.comparison}</span></p>
             </div>
             <div className={styles.summary}>
-              <p className={styles.summaryTitle}>오늘 매출</p>
+              <p className={styles.summaryTitle}>당일 매출</p>
               <h3 className={styles.summaryData}>{todayData ? todayData.revenue.toLocaleString() : 'N/A'} 원</h3>
-              <p className={styles.summaryComparison}>어제 대비 <span className={styles.up}>{dailyRevenueComparison}</span></p>
+              <p className={styles.summaryComparison}>전일 대비 <span className={styles[dailyRevenuesComparison.status]}>{dailyRevenuesComparison.comparison}</span></p>
             </div>
             <div className={styles.summary}>
-              <p className={styles.summaryTitle}>오늘 주차량</p>
+              <p className={styles.summaryTitle}>당일 주차량</p>
               <h3 className={styles.summaryData}>{todayData ? todayData.parkingCount.toLocaleString() : 'N/A'} 대</h3>
-              <p className={styles.summaryComparison}>어제 대비 <span className={styles.up}>{dailyParkingComparison}</span></p>
+              <p className={styles.summaryComparison}>전일 대비 <span className={styles[dailyParkingComparison.status]}>{dailyParkingComparison.comparison}</span></p>
             </div>
           </div>
           <div className={styles.chartContainer}>
-            {/* 여기에 차트 컴포넌트 또는 이미지를 추가하세요 */}
-            <img src="path_to_chart_image" alt="차트" />
+            <Graph dailyRevenues={data.dailyRevenues} monthlyRevenues={data.monthlyRevenues} />
           </div>
         </div>
         <div className={styles.details}>
-          <p>이번 달 총수익</p>
-          <h3 className={styles.summaryData}>{thisMonthData ? thisMonthData.revenue.toLocaleString() : 'N/A'} 원</h3>
-          <p>회원권 주차 매출</p>
-          <h3 className={styles.summaryData}>{thisMonthData ? thisMonthData.parkingCount.toLocaleString() : 'N/A'} 대</h3>
-          <p>평균 이용 시간</p>
-          <h3 className={styles.summaryData}>{todayData ? todayData.revenue.toLocaleString() : 'N/A'} 원</h3>
-          <p>평균 금액</p>
-          <h3 className={styles.summaryData}>{todayData ? todayData.parkingCount.toLocaleString() : 'N/A'} 대</h3>
+        <p>이번 달 총수익</p>
+        <h3 className={styles.summaryData}>{data.totalRevenue.toLocaleString()} 원</h3>
+        <p>회원권 주차 매출</p>
+        <h3 className={styles.summaryData}>{data.totalMembershipsRevenue.toLocaleString()} 원</h3>
+        <p>평균 이용 시간</p>
+        <h3 className={styles.summaryData}>{data.usingTimeAvg.toLocaleString()} 분</h3>
+        <p>평균 금액</p>
+        <h3 className={styles.summaryData}>{data.revenueAvg.toLocaleString()} 원</h3>
         </div>
       </div>
     </div>

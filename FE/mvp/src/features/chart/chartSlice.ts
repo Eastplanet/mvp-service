@@ -8,10 +8,10 @@ interface RevenueData {
 }
 
 interface ChartData {
-  dailyRevenue: RevenueData[];
-  monthlyRevenue: RevenueData[];
+  dailyRevenues: RevenueData[];
+  monthlyRevenues: RevenueData[];
   totalRevenue: number;
-  membershipProfit: number;
+  totalMembershipsRevenue: number;
   usingTimeAvg: number;
   revenueAvg: number;
 }
@@ -33,7 +33,7 @@ export const fetchChartData = createAsyncThunk<ChartData, void>(
   async (_, thunkAPI) => {
     try {
       const response = await api.get('https://mvp-project.shop/api/stats/revenue');
-      console.log(response.data.data)
+      // console.log(response.data.data)
       return response.data.data;
     } catch (error) {
       console.error('Failed to fetch data:', error);
@@ -54,6 +54,7 @@ const chartSlice = createSlice({
       })
       .addCase(fetchChartData.fulfilled, (state, action: PayloadAction<ChartData>) => {
         state.data = action.payload;
+        console.log(state.data)
         state.loading = false;
         state.error = null;
       })
