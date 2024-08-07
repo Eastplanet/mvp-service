@@ -9,8 +9,7 @@ class VehicleSelectionPage(QWidget):
         self.main_window = main_window
 
         layout = QVBoxLayout()
-        layout.setContentsMargins(20, 20, 20, 20)
-        layout.setSpacing(20)
+        layout.setContentsMargins(20, 60, 20, 20)
         self.setLayout(layout)
         
         # 상단 라벨
@@ -61,7 +60,7 @@ class VehicleSelectionPage(QWidget):
 
         # 차량 리스트 항목 추가
         for vehicle in vehicles:
-            item = VehicleListItem(vehicle['image'], vehicle['licensePlate'], vehicle['entranceTime'], main_window, self)
+            item = VehicleListItem(vehicle, main_window, self)
             scroll_layout.addWidget(item)
 
         scroll_area.setWidget(scroll_widget)

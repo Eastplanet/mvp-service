@@ -13,7 +13,7 @@ class SettlementPage(QWidget):
         self.vehicle_info = vehicle_info
 
         layout = QVBoxLayout()
-        layout.setContentsMargins(40, 30, 40, 0)
+        layout.setContentsMargins(40, 80, 40, 0)
         self.setLayout(layout)
 
         # 차량 정보 카드

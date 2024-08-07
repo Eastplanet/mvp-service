@@ -5,20 +5,26 @@ from PyQt6.QtGui import QPixmap
 from PyQt6.QtCore import Qt
 
 class VehicleListItem(QWidget):
-    def __init__(self, imageBase64, licensePlate, entranceTimeStr, main_window, parent=None):
+    def __init__(self, vehicle, main_window, parent=None):
         super(VehicleListItem, self).__init__(parent)
         self.main_window = main_window
-        self.imageBase64 = imageBase64
-        self.licensePlate = licensePlate
+        self.imageBase64 = vehicle['image']
+        self.licensePlate = vehicle['licensePlate']
+        self.discount = vehicle['discount']
+        self.fee = vehicle['fee']
         try:
-            self.entranceTime = datetime.strptime(entranceTimeStr, '%Y-%m-%dT%H:%M:%S.%f')
+            self.entranceTime = datetime.strptime(vehicle['entrance_time'], '%Y-%m-%dT%H:%M:%S.%f')
         except ValueError:
-            self.entranceTime = datetime.strptime(entranceTimeStr, '%Y-%m-%dT%H:%M:%S')
+            self.entranceTime = datetime.strptime(vehicle['entrance_time'], '%Y-%m-%dT%H:%M:%S')
         
         # 입차 시간과 현재 시간의 차이 계산
         self.duration = datetime.now() - self.entranceTime
-        hours, remainder = divmod(self.duration.seconds, 3600)
-        minutes = remainder // 60
+        total_seconds = self.duration.total_seconds()
+        total_minutes = total_seconds // 60
+        total_hours = total_minutes // 60
+        hours = int(total_hours)
+        minutes = int(total_minutes % 60)
+
         duration_str = f"{hours}시간 {minutes}분"
         
         # 흰색 배경의 빈 위젯 생성
@@ -35,8 +41,8 @@ class VehicleListItem(QWidget):
         container_widget.setLayout(outer_layout)
         
         # Base64 이미지를 QPixmap으로 변환 또는 대체 이미지 사용
-        if imageBase64:
-            image_data = base64.b64decode(imageBase64)
+        if self.imageBase64:
+            image_data = base64.b64decode(self.imageBase64)
             pixmap = QPixmap()
             pixmap.loadFromData(image_data)
         else:
@@ -54,7 +60,7 @@ class VehicleListItem(QWidget):
         # 차량 정보 레이아웃
         info_layout = QVBoxLayout()
         info_layout.setContentsMargins(10, 0, 10, 0)
-        plate_label = QLabel(licensePlate, self)
+        plate_label = QLabel(self.licensePlate, self)
         plate_label.setStyleSheet("font-size: 18px; color: #333; font-weight: bold;")
         duration_label = QLabel(duration_str, self)
         duration_label.setStyleSheet("font-size: 16px; color: #666;")
@@ -73,15 +79,15 @@ class VehicleListItem(QWidget):
         
         # vehicle info
         self.vehicle_info = {
-            'image': imageBase64,
-            'license_plate': licensePlate,
+            'image': self.imageBase64,
+            'license_plate': self.licensePlate,
             'duration': duration_str,
-            'entry_time': entranceTimeStr,
+            'entry_time': self.entranceTime.isoformat(),
             'exit_time': datetime.now().isoformat(),
             'fee_type': '일반',
-            'parking_fee': '3,500원',
-            'discount_fee': '-1,000원',
-            'total_fee': '2,500원'
+            'parking_fee': self.fee,
+            'discount_fee': self.discount,
+            'total_fee': self.fee - self.discount
         }
         
         # 클릭 이벤트 연결

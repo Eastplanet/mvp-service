@@ -17,6 +17,7 @@ class EntryPage(QWidget):
         
         # 레이아웃 설정
         layout = QVBoxLayout()
+        layout.setContentsMargins(40, 60, 40, 0)
         self.setLayout(layout)
 
         # 상단 라벨

@@ -11,6 +11,7 @@ class ExitPage(QWidget):
         self.main_window = main_window
 
         layout = QVBoxLayout()
+        layout.setContentsMargins(40, 60, 40, 0)
         self.setLayout(layout)
         
         # 상단 Spacer
@@ -20,7 +21,7 @@ class ExitPage(QWidget):
         # 상단 라벨
         top_label = QLabel("차량번호를 입력하세요", self)
         top_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        top_label.setStyleSheet("color: white; font-size: 24px;")
+        top_label.setStyleSheet("color: white; font-size: 24px; font-weight: bold;")
         layout.addWidget(top_label, alignment=Qt.AlignmentFlag.AlignCenter)
 
         # 상단 Spacer

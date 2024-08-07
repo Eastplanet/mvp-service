@@ -4,7 +4,19 @@ import base64
 import json
 import os
 import requests
-from config.config import SERVER_URL
+from config.config import SERVER_URL, get_api_key
+from config.config import set_api_key
+
+def kiosk_login():
+    url = SERVER_URL + "/api/manager/login"
+    
+    payload = {
+        "email": "kiosk",
+        "password": "1234"
+    }
+    
+    response = requests.post(url, data=json.dumps(payload), headers={'Content-Type': 'application/json'})
+    set_api_key(response.json().get('data').get('apiKey'))
 
 def handle_enter(image_path, license_plate, entrance_time):
     print('입차 명령 전송 시작')
@@ -22,6 +34,7 @@ def handle_enter(image_path, license_plate, entrance_time):
     }
     
     headers = {
+        'API-KEY': get_api_key(),
         'Content-Type': 'application/json'
     }
 
@@ -36,7 +49,12 @@ def handle_enter(image_path, license_plate, entrance_time):
     
 def handle_exit(licensePlate):
     url = SERVER_URL + "/api/parking-bot/exit/" + licensePlate
-    response = requests.delete(url)
+    
+    headers = {
+        'API-KEY': get_api_key()
+    }
+    
+    response = requests.delete(url, headers=headers)
     
     if response.status_code == 200:
         return True
@@ -47,7 +65,11 @@ def handle_exit(licensePlate):
 def handle_get_vehicles(license_plate):
     url = SERVER_URL + "/api/parked-vehicle?backNum=" + license_plate
     
-    response = requests.get(url)
+    headers = {
+        'API-KEY': get_api_key()
+    }
+    
+    response = requests.get(url, headers=headers)
     
     vehicles = []
     if response.status_code == 200:

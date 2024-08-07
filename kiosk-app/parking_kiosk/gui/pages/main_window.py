@@ -21,6 +21,8 @@ from gui.components.error_dialog import ErrorDialog
 from PyQt6.QtWidgets import QPushButton
 from PyQt6.QtGui import QIcon
 
+from core.thread.ocr_thread import OcrThread
+
 class MainWindow(QMainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
@@ -97,13 +99,10 @@ class MainWindow(QMainWindow):
         self.gif_widget.start()
             
         # OCR 결과 처리 후 입차 화면으로 전환
-        threading.Thread(target=self.run_ocr_reader).start()
+        self.ocr_thread = OcrThread()
+        self.ocr_thread.ocr_complete_signal.connect(self.on_ocr_complete)
+        self.ocr_thread.start()
         
-    # OCR 결과 처리
-    def run_ocr_reader(self):
-        ocr_result = self.camera.ocr_reader()
-        self.on_ocr_complete(ocr_result)
-    
     # OCR 결과 처리 콜백
     def on_ocr_complete(self, ocr_result):
         if ocr_result:

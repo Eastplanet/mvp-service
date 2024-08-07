@@ -77,5 +77,5 @@ class Camera:
 
     def kor_converter(self, lp_string):
         for eng, kor in ko_en_mapper.items():
-            lp_string = lp_string.replace(eng, kor)
+            lp_string = lp_string.replace(eng, kor + "-")
         return lp_string

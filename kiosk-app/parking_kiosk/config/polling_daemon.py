@@ -2,6 +2,8 @@ import threading
 import time
 import requests
 
+from config.config import get_api_key
+
 class PollingDaemon(threading.Thread):
     def __init__(self, mqtt_client, server_url, poll_interval=5):
         super(PollingDaemon, self).__init__()
@@ -14,7 +16,11 @@ class PollingDaemon(threading.Thread):
     def run(self):
         while self.running:
             try:
-                response = requests.get(self.server_url)
+                headers = {
+                    'API-KEY': get_api_key()
+                }
+                response = requests.get(self.server_url, headers=headers)
+
                 if(response.status_code == 200 and response.json().get('data')):
                     print("Polling success")
                     # 작업이 있는 경우

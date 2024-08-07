@@ -7,6 +7,7 @@ from core.mqtt_client import MQTTClient  # MQTT 클라이언트 임포트
 from config.mqtt_broker import MQTTBroker
 from config.config import MQTT_PORT, MQTT_BROKER_IP, MQTT_TOPIC_PUB, MQTT_TOPIC_SUB, SERVER_URL
 from config.polling_daemon import PollingDaemon
+from core.handlers import kiosk_login
 
 def main():
     mosquitto_process = MQTTBroker.start_mosquitto()
@@ -14,6 +15,10 @@ def main():
     app = QApplication(sys.argv)
     loop = QEventLoop(app)
     asyncio.set_event_loop(loop)
+    
+    # 서버에 인증키 가져오기
+    kiosk_login()
+    
     
     # MQTT 클라이언트 초기화
     mqtt_client = MQTTClient(broker=MQTT_BROKER_IP, port=MQTT_PORT, sub_topic=MQTT_TOPIC_SUB, pub_topic=MQTT_TOPIC_PUB)

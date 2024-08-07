@@ -6,4 +6,4 @@ class TopLabel(QLabel):
         super(TopLabel, self).__init__(parent)
         self.setText("이 차량 번호가 맞나요?")
         self.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.setStyleSheet("color: white; font-size: 30px;")
+        self.setStyleSheet("color: white; font-size: 24px; font-weight: bold;")
