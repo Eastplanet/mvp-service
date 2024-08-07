@@ -208,7 +208,7 @@ public class ParkingBotService {
         ParkedVehicle parkedVehicle = startSpot.getParkedVehicle();
         parkedVehicle.updateStatus(VEHICLE_WAIT);
         startSpot.updateVehicleAndStatus(null,LOT_IMPOSSIBLE);
-        endSpot.updateVehicleAndStatus(parkedVehicle,LOT_IMPOSSIBLE);
+        endSpot.updateVehicleAndStatus(parkedVehicle,LOT_OCCUPIED);
 
         // 주차봇 할당
         ParkingBot availableBot = parkingBotRepository.findFirstByStatus(BOT_IDLE).orElse(null);
