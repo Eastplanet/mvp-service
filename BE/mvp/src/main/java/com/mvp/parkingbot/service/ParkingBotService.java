@@ -385,7 +385,7 @@ public class ParkingBotService {
             parkedVehicle.updateStatus(VEHICLE_PARKED);
         } else if(task.getType() == EXIT){
             parkingLotSpotStart.updateVehicleAndStatus(null,LOT_EMPTY);
-            parkingBotRepository.delete(parkingBot);
+            parkedVehicleRepository.delete(parkedVehicle);
         } else{
             parkingLotSpotStart.updateVehicleAndStatus(null,LOT_EMPTY);
             parkingLotSpotEnd.updateVehicleAndStatus(parkedVehicle,LOT_OCCUPIED);
