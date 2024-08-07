@@ -24,6 +24,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 0 30px;
   /* margin-bottom: 20px; */
 }
 
@@ -32,7 +33,7 @@
   border-radius: 20px;
   box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.25);
   padding: 10px;
-  margin-right: 50px;
+
   height: 20px;
   font-size: large;
 }
@@ -55,6 +56,7 @@
   display: flex;
   margin-bottom: 10px;
   justify-content: space-between;
+  padding: 10px 0;
 }
 
 .summaryItem {
@@ -155,11 +157,6 @@
   background: #f0f0f0;
 }
 
-.actionButtons {
-  display: flex;
-  justify-content: flex-end;
-  /* margin-top: 20px; */
-}
 .editButton {
   flex: 1;
   background: none;
@@ -167,6 +164,11 @@
   color: #c0c0c0;
   cursor: pointer;
   /* text-decoration: underline; */
+}
+
+.actionButtons {
+  display: flex;
+  justify-content: flex-end;
 }
 
 

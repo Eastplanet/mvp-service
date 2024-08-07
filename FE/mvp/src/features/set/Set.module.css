@@ -129,7 +129,7 @@ font-weight: bold; /* 글자를 볼드체로 설정 */
   color: white;
   font-size: large;
   font-weight: bold;
-  background-color: #ef9f99;
+  background-color: #edc4c1;
   border-radius: 20px;
   border: rgb(99, 0, 0) 3px solid;
   box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.25);
@@ -146,7 +146,7 @@ font-weight: bold; /* 글자를 볼드체로 설정 */
   color: #fff;
   font-size: large;
   font-weight: bold;
-  background-color: #85b486;
+  background-color: #9bb59c;
   border-radius: 20px;
   border: rgb(99, 0, 0) 3px solid;
   box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.25);
@@ -155,6 +155,10 @@ font-weight: bold; /* 글자를 볼드체로 설정 */
 
 .button_activate.active {
   background-color: #4caf50;
+}
+
+.button_deactivate:active, .button_activate:active {
+  transform: translateY(2px); /* 버튼이 살짝 눌리는 효과 */
 }
 
 /* 기본 회색 상태 */
@@ -180,6 +184,10 @@ font-weight: bold; /* 글자를 볼드체로 설정 */
   cursor: pointer;
 }
 
+.save.active:active{
+  background-color: #1663a2;
+}
+
 
 /* 저장 버튼 비활성화 상태 */
 .disabled {
@@ -191,7 +199,7 @@ font-weight: bold; /* 글자를 볼드체로 설정 */
 
 .statusMessage {
   font-size: 16px;
-  margin-top: 10px;
+  margin-top: 2px;
   padding: 5px;
   color: #ffffff;
   background-color: #373D5C;

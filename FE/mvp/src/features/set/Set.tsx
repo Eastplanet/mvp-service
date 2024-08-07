@@ -125,10 +125,16 @@ const Set: React.FC = () => {
         }
       });
       console.log('성공:', response.data);
+      alert('변경사항이 저장되었습니다.'); // 알림 추가
     } catch (error) {
       console.error('실패:', error);
     }
   };
+  //     console.log('성공:', response.data);
+  //   } catch (error) {
+  //     console.error('실패:', error);
+  //   }
+  // };
   
 
   return (

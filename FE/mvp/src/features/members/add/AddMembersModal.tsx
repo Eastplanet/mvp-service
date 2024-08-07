@@ -5,6 +5,7 @@ import styles from './AddMembersModal.module.css';
 import { fetchMembers } from '../membersSlice';
 import { AppDispatch } from '../../../store/store';
 import backIcon from '../../../assets/images/icons/back.png';
+import doneIcon from '../../../assets/images/icons/arrow.png';
 
 
 interface AddMemberModalProps {
@@ -90,7 +91,9 @@ const AddMemberModal: React.FC<AddMemberModalProps> = ({ onClose }) => {
           />
         </div>
         <div className={styles.buttonContainer}>
-          <button className={styles.submitButton} onClick={handleSubmit}>완료</button>
+          <button className={styles.submitButton} onClick={handleSubmit}>
+            <img src={doneIcon} alt="done" />
+          </button>
         </div>
       </div>
     </div>
