@@ -4,30 +4,40 @@
   background-color: #f9fafc;
 }
 
+.page {
+  flex: 1; /* 남은 공간을 채우도록 설정 */
+  padding: 20px;
+  background-color: #f9fafc;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .mainContent {
   flex: 3;
   display: flex;
   flex-direction: column;
-  margin-top: 30px;
-  margin-left: 15px;
-  padding: 5px;
+  max-width: 1200px;
+  /* margin-top: 30px;
+  margin-left: 15px; */
+  padding: 5px; 
 }
 
-/* 상단 요약 데이터 */
 .summaryContainer {
   display: flex;
   justify-content: space-between;
   margin-bottom: 20px;
+  flex: 1; /* 전체 너비의 100%를 사용 */
 }
 
 .summary {
-  flex: 1;
+  flex: 1; /* 1:1:1 비율로 설정 */
   background-color: white;
   padding: 0px 15px;
-  margin: 0 20px;
+  margin: 0 10px; /* 주변에 여백 추가 */
   border-radius: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
-  /* text-align: center; */
+  min-width: 150px;
 }
 
 .summaryTitle {
@@ -46,11 +56,12 @@
 
 .summaryComparison {
   margin: 5px 0 10px 0;
-  text-align: right;
+  justify-content: flex-end;
+  display: flex;
+  align-items: center;
 }
 
 /* 차트 */
-
 .chartContainer {
   background-color: white;
   padding: 20px;
@@ -59,16 +70,14 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 474px;
+  flex: 2; /* 비율 설정: 전체의 2/6 */
   margin: 0px 10px;
+  min-height: 350px;
 }
 
-
-
 /* 우측 데이터 */
-
 .details {
-  flex: 1;
+  flex: 1; /* 비율 설정: 전체의 1/6 */
   padding: 20px;
   background-color: white;
   border-radius: 10px;
@@ -78,8 +87,9 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  height: 600px;
   overflow-y: auto;
+  max-width: 400px;
+  min-height: 500px;
 }
 
 .details p {
@@ -92,10 +102,11 @@
   font-size: 2.5rem;
 }
 
-.details .detailsTotal{
+.details .detailsTotal {
   margin: 0;
   font-size: 2.5rem;
 }
+
 .up {
   color: red;
   font-weight: bold;
@@ -106,8 +117,60 @@
   font-weight: bold;
 }
 
-.totalUp {
-  color: green;
-  font-weight: bold;
-  font-size: 1.2rem;
+.arrowUp{
+  width: 0px;
+  height: 0px;
+  border-bottom: 10px solid red;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  margin-left: 5px;
+  position: relative;
+  top: 2px; 
 }
+
+.arrowDown{
+  width: 0px;
+  height: 0px;
+  border-top: 10px solid blue;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  margin-left: 5px;
+  position: relative;
+  top: 2px; 
+}
+
+.totalUp {
+  display: flex;
+  justify-content: flex-end;
+  color: red;
+  font-weight: bold;
+  font-size: 28px;
+}
+.totalDown {
+  display: flex;
+  justify-content: flex-end;
+  color: blue;
+  font-weight: bold;
+  font-size: 28px;
+}
+.totalUp .arrowUp{
+  width: 0px;
+  height: 0px;
+  border-bottom: 20px solid red;
+  border-left: 12px solid transparent;
+  border-right: 12px solid transparent;
+  margin-left: 5px;
+  position: relative;
+  top: 10px; 
+}
+.totalDown .arrowDown{
+  width: 0px;
+  height: 0px;
+  border-top: 20px solid blue;
+  border-left: 12px solid transparent;
+  border-right: 12px solid transparent;
+  margin-left: 5px;
+  position: relative;
+  top: 10px; 
+}
+ 

@@ -1,226 +1,238 @@
 .main {
-    display: flex;
-    background-color: #f9fafc;
+  display: flex;
+  background-color: #f9fafc;
+  width: 100%;
+  height: 100vh;
 }
 
 .mainContent {
-    flex-grow: 1;
-    display: flex;
+  max-width: 1800px;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-  
+
 .parkingInfo {
-    width: 70%;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
+  max-width: 900px;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  margin: auto;
 }
 
 .parkingMap {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 4%;
-    background-color: black;
-    border-radius: 20px;
-    width: 90%;
-    height: 450px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: black;
+  border-radius: 20px;
+  width: 100%;
+  height: 400px
+  
 }
 
 .dataTables {
-    width: 90%;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    margin-top: 50px;   
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: 20px;   
 }
 
 .todayIn {
-    position: relative;
-    background-color: #3f7dd9;
-    width: 200px;
-    height: 200px;
-    border-radius: 20px;
+  position: relative;
+  background-color: #3f7dd9;
+  width: 200px;
+  height: 200px;
+  border-radius: 20px;
 }
 
 .todayOut {
-    position: relative;
-    background-color: #1bab88;
-    width: 200px;
-    height: 200px;
-    border-radius: 20px;
+  position: relative;
+  background-color: #1bab88;
+  width: 200px;
+  height: 200px;
+  border-radius: 20px;
 }
 
 .todayIncome {
-    position: relative;
-    background-color: #373d5c;
-    width: 200px;
-    height: 200px;
-    border-radius: 20px;
+  position: relative;
+  background-color: #373d5c;
+  width: 200px;
+  height: 200px;
+  border-radius: 20px;
 }
 
 .dataName {
-    position: absolute;
-    color: white;
-    top: 2px;
-    left: 10px;
-    font-size: 20px;
+  position: absolute;
+  color: white;
+  top: 2px;
+  left: 10px;
+  font-size: 20px;
 }
 
 .dataValue {
-    position: absolute;
-    color: white;
-    bottom: 8px;
-    right: 20px;
-    font-size: 40px;
+  position: absolute;
+  color: white;
+  bottom: 8px;
+  right: 20px;
+  font-size: 40px;
 }
 
 .searchSection {
-    flex: 1;
-    border-radius: 20px;
-    background-color: white;
-    margin: 2.4% 4% 2.7% 2%;
-    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.25);
-    min-height: 704px;
+  max-width: 380px;
+  /* min-width: 300px; */
+  flex: 1;
+  border-radius: 20px;
+  background-color: white;
+  margin: auto;
+  margin-left: 0;
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.25);
+  min-height: 500px;
+  max-height: 600px;
+  overflow-y: auto; 
 }
-  
+
 .searchArea {
-    border-bottom: 1px solid #d9d9d9;
-    padding-bottom: 20px;
+  border-bottom: 1px solid #d9d9d9;
+  padding-bottom: 20px;
 }
 
 .searchBar {
-    position: relative;
+  position: relative;
 }
 
 .searchInput {
-    width: 250px;
-    height: 40px;
-    border: none;
-    border-radius: 20px;
-    background-color: #eff1f8;
-    margin: 0px 20px;
-    padding: 0px 60px 0px 20px;
+  width: 250px;
+  height: 40px;
+  border: none;
+  border-radius: 20px;
+  background-color: #eff1f8;
+  margin: 0px 20px;
+  padding: 0px 60px 0px 20px;
 }
 
 .searchButton {
-    position: absolute;
-    top: 5px;
-    right: 26px;
-    border: none;
-    background: none;
-    cursor: pointer;
-    padding: 5px;
+  position: absolute;
+  top: 5px;
+  right: 26px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 5px;
 }
 
 .searchDate {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    margin-top: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  margin-top: 10px;
 }
 
 .dateInput {
-    width: 100px;
-    height: 40px;
-    border: none;
-    border-radius: 20px;
-    background-color: #eff1f8;
-    padding: 0px 22px;
+  width: 100px;
+  height: 40px;
+  border: none;
+  border-radius: 20px;
+  background-color: #eff1f8;
+  padding: 0px 22px;
 }
 
 .icon {
-    width: 25px;
-    height: 20px;
+  width: 25px;
+  height: 20px;
 }
 
 .searchData {
-    max-height: 475px;
-    overflow-y: auto;
-    padding: 0px 25px;
+  max-height: 475px;
+  overflow-y: auto;
+  padding: 0px 25px;
 }
 
 .now {
-    max-height: 525px;
+  max-height: 525px;
 }
 
 .log {
-    max-height: 475px;
+  max-height: 475px;
 }
-  
+
 .searchData ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
 } 
-  
+
 .searchData li {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
 }
-  
+
 .licensePlate {
-    font-size: 24px;
-    font-weight: 700;
+  font-size: 24px;
+  font-weight: 700;
 }
-  
+
 .parkingDate {
-    margin: 10px 10px 0px 5px;
-    font-size: 16px;
+  margin: 10px 10px 0px 5px;
+  font-size: 16px;
 }
 
 .carStateParked {
-    font-size: 20px;
-    font-weight: 700;
-    color: blue;
+  font-size: 20px;
+  font-weight: 700;
+  color: blue;
 }
-  
+
 .carStateExited {
-    font-size: 20px;
-    font-weight: 700;
-    color: black;
+  font-size: 20px;
+  font-weight: 700;
+  color: black;
 }
 
 .carStateMoving {
-    font-size: 20px;
-    font-weight: 700;
-    color: red;
+  font-size: 20px;
+  font-weight: 700;
+  color: red;
 }
 
 .leftData {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
 /* 스크롤바 스타일링 */
 .searchData::-webkit-scrollbar {
-    width: 12px; /* 스크롤바 너비 */
+  width: 12px; /* 스크롤바 너비 */
 }
 
 .searchData::-webkit-scrollbar-thumb {
-    background-color: #888; /* 스크롤바 핸들 색상 */
-    border-radius: 6px; /* 핸들 모서리 둥글게 */
-    border: 3px solid #f9f9f9; /* 핸들 테두리 */
+  background-color: #888; /* 스크롤바 핸들 색상 */
+  border-radius: 6px; /* 핸들 모서리 둥글게 */
+  border: 3px solid #f9f9f9; /* 핸들 테두리 */
 }
 
 .searchData::-webkit-scrollbar-thumb:hover {
-    background-color: #555; /* 핸들에 마우스가 올라갔을 때 색상 */
+  background-color: #555; /* 핸들에 마우스가 올라갔을 때 색상 */
 }
 
 .tabContainer {
-    display: flex;
-    justify-content: space-around;
-    margin-bottom: 20px;
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 20px;
 }
 
 .tab {
-    cursor: pointer;
-    padding: 10px;
-    border-bottom: 2px solid transparent;
+  cursor: pointer;
+  padding: 10px;
+  border-bottom: 2px solid transparent;
 }
 
 .activeTab {
-    border-bottom: 2px solid #000;
+  border-bottom: 2px solid #000;
 }

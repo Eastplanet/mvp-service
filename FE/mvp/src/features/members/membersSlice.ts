@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
+import api from '../../api/axios';
+import { setLicensePlate } from '../main/mainSlice';
 
 interface Member {
   id: number;
@@ -24,7 +25,7 @@ const initialState: MembersState = {
 
 export const fetchMembers = createAsyncThunk<Member[]>('members/fetchMembers', async () => {
   try {
-    const response = await axios.get('https://mvp-project.shop/api/memberships/list');
+    const response = await api.get('https://mvp-project.shop/api/memberships/list');
     const data = response.data.data;
     return data.map((item: any, index: number) => ({
       id: index + 1,
@@ -35,30 +36,29 @@ export const fetchMembers = createAsyncThunk<Member[]>('members/fetchMembers', a
       secession_date: new Date(item.endDate),
     }));
   } catch (error) {
-    if (axios.isAxiosError(error) && error.response) {
-      throw new Error(error.response.data);
-    }
-    throw new Error('Failed to fetch members');
+    console.error(error);
   }
 });
 
 export const deleteMembersFromServer = createAsyncThunk<void, string[]>('members/deleteMembers', async (licensePlates) => {
   await Promise.all(
-    licensePlates.map((licensePlate) => axios.delete(`https://mvp-project.shop/api/memberships/${licensePlate}`))
+    licensePlates.map((licensePlate) => api.delete(`https://mvp-project.shop/api/memberships/${licensePlate}`))
   );
 });
 
 export const updateMemberOnServer = createAsyncThunk<Member, Member>(
   'members/updateMemberOnServer',
   async (member) => {
-    const response = await axios.patch(`https://mvp-project.shop/api/memberships/${member.car}`, {
+    console.log([member.car,member.secession_date.toISOString(),member.phone,member.name])
+    const response = await api.patch(`https://mvp-project.shop/api/memberships`, {
+      licensePlate: member.car,
       endDate: member.secession_date.toISOString(),
       phoneNumber: member.phone,
       name: member.name,
     });
     return {
       ...member,
-      secession_date: new Date(response.data.endDate),
+      secession_date: response.data.endDate.toISOString(),
       phone: response.data.phoneNumber,
       name: response.data.name,
     };

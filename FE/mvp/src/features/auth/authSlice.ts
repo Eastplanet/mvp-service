@@ -15,8 +15,8 @@ interface AuthState {
 
 const initialState: AuthState = {
   user: null,
-  token: null,
-  isAuthenticated: false,
+  token: localStorage.getItem('apiKey'),
+  isAuthenticated: !!localStorage.getItem('apiKey'),
   loading: false,
   error: null,
 };
@@ -30,29 +30,13 @@ export const login = createAsyncThunk(
 );
 
 export const logout = createAsyncThunk('auth/logout', async () => {
-  await axios.post('/api/logout');
+  localStorage.removeItem('apiKey');
 });
 
 const authSlice = createSlice({
   name: 'auth',
   initialState,
-  reducers: {
-    loginSuccess: (state) => {
-      state.user = {
-        name: 'John Doe',
-        email: 'johndoe@example.com',
-        phoneNumber: '123-456-7890'
-      };
-      state.token = 'dummy-token';
-      state.isAuthenticated = true;
-      state.loading = false;
-      state.error = null;
-    },
-    logoutSuccess: (state) => {
-      state.user = {name: null, email: null}
-      state.isAuthenticated = false;
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder.addCase(login.pending, (state) => {
       state.loading = true;
@@ -60,14 +44,12 @@ const authSlice = createSlice({
     });
     builder.addCase(login.fulfilled, (state, action) => {
       state.loading = false;
-      state.user = {
-        name: action.payload.data.name,
-        email: action.payload.data.email,
-        phoneNumber: action.payload.data.phoneNumber
-      };
-      state.token = action.payload.token || null;
+      const { name, email, phoneNumber, apiKey } = action.payload.data;
+      state.user = { name, email, phoneNumber };
+      state.token = apiKey;
       state.isAuthenticated = true;
       state.error = null;
+      localStorage.setItem('apiKey', apiKey);
     });
     builder.addCase(login.rejected, (state, action) => {
       state.loading = false;
@@ -80,7 +62,5 @@ const authSlice = createSlice({
     });
   },
 });
-
-export const { loginSuccess, logoutSuccess } = authSlice.actions;
 
 export default authSlice.reducer;

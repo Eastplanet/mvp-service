@@ -1,6 +1,6 @@
 // features/main/mainSlice.ts
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import axios from 'axios';
+import api from '../../api/axios';
 
 interface CarLog {
   licensePlate: string;
@@ -9,6 +9,7 @@ interface CarLog {
   entryTime: string;
   exitTime?: string;
   fee: number;
+  lotState?: number;
   imageBase64?: string;
 }
 
@@ -50,17 +51,20 @@ const getDefaultDateRange = () => {
 };
 
 export const fetchParkingData = createAsyncThunk('main/fetchParkingData', async () => {
-  const response = await axios.get('https://mvp-project.shop/api/stats/home-init');
+  const response = await api.get('https://mvp-project.shop/api/stats/home-init');
   const data = response.data.data;
   const parkingLots = data.parkingLots.map((lot: any) => ({
     licensePlate: lot.licensePlate,
     parkingDate: lot.parkingDate,
-    carState: lot.carState === 1 ? '주차 중' : lot.carState === 0 ? '출차 완료' : '이동 중',
+    carState: lot.carState === 0 ? '주차 중' : lot.carState === 1 ? '대기 중' : lot.carState === 2 ? '이동 중' : '',
     entryTime: new Date(lot.entranceTime).toISOString(),
     exitTime: lot.exitTime ? new Date(lot.exitTime).toISOString() : undefined,
     fee: lot.fee,
+    lotState: lot.lotState,
     imageBase64: lot.image,
   }));
+  console.log(parkingLots)
+  console.log(data)
   
   return {
     todayIn: data.todayIn,
@@ -82,15 +86,16 @@ export const fetchSearchData = createAsyncThunk(
       endDate = new Date(endDate).toISOString();
     }
 
-    const response = await axios.get('https://mvp-project.shop/api/stats/parking-log', {
+    const response = await api.get('https://mvp-project.shop/api/stats/parking-log', {
       params: { licensePlate, startDate, endDate }
     });
 
     const data = response.data.data;
+    console.log(data);
     const parkingLots = data.map((lot: any) => ({
       licensePlate: lot.licensePlate,
       parkingDate: lot.parkingDate,
-      carState: lot.parkingState === 1 ? '주차 중' : lot.carState === 0 ? '출차 완료' : '이동 중',
+      carState: lot.parkingState === 1 ? '출차' : '입차',
       entryTime: new Date(lot.entranceTime).toISOString(),
       exitTime: lot.exitTime ? new Date(lot.exitTime).toISOString() : undefined,
       fee: lot.fee,
