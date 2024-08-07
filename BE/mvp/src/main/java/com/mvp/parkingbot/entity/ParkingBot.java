@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 @Table(name = "parking_bot")
@@ -17,9 +18,19 @@ public class ParkingBot {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "serial_number")
+    @Column(name = "serial_number", nullable = false)
     private Integer serialNumber;
 
     @Column(name = "status")
+    @ColumnDefault("0")
     private Integer status;
+
+    public void updateSerialNumberAndStatus(Integer serialNumber, Integer status) {
+        this.serialNumber = serialNumber;
+        this.status = status;
+    }
+
+    public void updateStatus(Integer status) {
+        this.status = status;
+    }
 }

@@ -19,10 +19,10 @@ public class ParkingLot {
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
-    @Column(name = "name", length = 255)
+    @Column(name = "name", length = 255, nullable = false)
     private String name;
 
-    @Column(name = "address", length = 255)
+    @Column(name = "address", length = 255, nullable = false)
     private String address;
 
     @ManyToOne(fetch = FetchType.LAZY)

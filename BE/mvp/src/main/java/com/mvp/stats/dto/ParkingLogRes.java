@@ -7,16 +7,14 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-@Builder
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ParkingLotSpotStats {
-    private Integer parkingLotSpotNumber;
+public class ParkingLogRes {
     private String licensePlate;
     private LocalDateTime parkingDate;
-    private Integer carState;
-    private Integer lotState;
+    private Integer parkingState;
     private LocalDateTime entranceTime;
     private LocalDateTime exitTime;
     private Long fee;
