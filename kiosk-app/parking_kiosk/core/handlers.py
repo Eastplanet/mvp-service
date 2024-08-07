@@ -14,6 +14,8 @@ def handle_enter(image_path, license_plate, entrance_time):
     with open(image_path, 'rb') as image_file:
         image_data = base64.b64encode(image_file.read()).decode('utf-8')
     
+    print(f"Image Data: {image_data}")
+    
     # JSON 데이터 구성
     payload = {
         'image': image_data,

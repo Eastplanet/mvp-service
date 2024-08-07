@@ -10,8 +10,10 @@ class VehicleListItem(QWidget):
         self.main_window = main_window
         self.imageBase64 = vehicle['image']
         self.licensePlate = vehicle['licensePlate']
-        self.discount = vehicle['discount']
+        self.discount = 0 if vehicle['discount'] is None else vehicle['discount']
         self.fee = vehicle['fee']
+        self.total_fee = self.fee - self.discount
+        
         try:
             self.entranceTime = datetime.strptime(vehicle['entranceTime'], '%Y-%m-%dT%H:%M:%S.%f')
         except ValueError:
@@ -42,6 +44,8 @@ class VehicleListItem(QWidget):
         
         # Base64 이미지를 QPixmap으로 변환 또는 대체 이미지 사용
         if self.imageBase64:
+            print(self.imageBase64[:100])
+            
             image_data = base64.b64decode(self.imageBase64)
             pixmap = QPixmap()
             pixmap.loadFromData(image_data)
@@ -85,9 +89,9 @@ class VehicleListItem(QWidget):
             'entry_time': self.entranceTime.isoformat(),
             'exit_time': datetime.now().isoformat(),
             'fee_type': '일반',
-            'parking_fee': self.fee.__str__(),
-            'discount_fee': self.discount.__str__(),
-            'total_fee': (self.fee - self.discount).__str__()
+            'parking_fee': (self.fee.__str__() + " 원"),
+            'discount_fee': (self.discount.__str__() + " 원"),
+            'total_fee': (self.total_fee.__str__() + " 원")
         }
         
         # 클릭 이벤트 연결
