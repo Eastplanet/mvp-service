@@ -57,7 +57,6 @@ public class VehicleController {
     @GetMapping
     public ResponseEntity<ResponseDto> getParkedVehicleByBackNum(@RequestParam String backNum){
         List<ParkedVehicleSettleDTO> parkedVehicleList = vehicleService.getParkedVehicleListByBackNum(backNum);
-        System.out.println("parkedVehicleList = " + parkedVehicleList);
         if(!parkedVehicleList.isEmpty()){
             return ResponseDto.response(StatusCode.SUCCESS, parkedVehicleList);
         } else {
