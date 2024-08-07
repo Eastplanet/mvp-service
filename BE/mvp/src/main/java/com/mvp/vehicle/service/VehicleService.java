@@ -1,9 +1,11 @@
 package com.mvp.vehicle.service;
 
+import com.mvp.calculator.service.CalculatorService;
 import com.mvp.vehicle.converter.ParkedVehicleConverter;
 import com.mvp.vehicle.converter.ParkingLotSpotConverter;
 import com.mvp.vehicle.dto.DiscountDTO;
 import com.mvp.vehicle.dto.ParkedVehicleDTO;
+import com.mvp.vehicle.dto.ParkedVehicleSettleDTO;
 import com.mvp.vehicle.dto.ParkingLotSpotDTO;
 import com.mvp.vehicle.entity.ParkedVehicle;
 import com.mvp.vehicle.entity.ParkingLotSpot;
@@ -14,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -21,6 +24,7 @@ import java.util.List;
 public class VehicleService {
     private final ParkedVehicleRepository parkedVehicleRepository;
     private final ParkingLotSpotRepository parkingLotSpotRepository;
+    private final CalculatorService calculatorService;
 
     /**
      * 주차된 차량 정보 조회
@@ -59,11 +63,21 @@ public class VehicleService {
      * @param backNum
      * @return
      */
-    public List<ParkedVehicleDTO> getParkedVehicleListByBackNum(String backNum) {
+    public List<ParkedVehicleSettleDTO> getParkedVehicleListByBackNum(String backNum) {
         List<ParkedVehicle> parkedVehicleList = parkedVehicleRepository.findByLicensePlateEndingWith(backNum);
 
         if (!parkedVehicleList.isEmpty()) {
-            return ParkedVehicleConverter.entityListToDtoList(parkedVehicleList);
+            List<ParkedVehicleSettleDTO> result = new ArrayList<>();
+            for(ParkedVehicle parkedVehicle : parkedVehicleList){
+                ParkedVehicleDTO parkedVehicleDTO = ParkedVehicleConverter.entityToDto(parkedVehicle);
+                Long fee = calculatorService.calculatePrice(parkedVehicleDTO);
+
+                ParkedVehicleSettleDTO parkedVehicleSettleDTO = new ParkedVehicleSettleDTO();
+                parkedVehicleSettleDTO.setParkedVehicleDTO(parkedVehicleDTO, fee);
+
+                result.add(parkedVehicleSettleDTO);
+            }
+            return result;
         } else {
             return null;
         }
