@@ -162,7 +162,7 @@ public class StatsService {
         // 이번 달을 포함한 지난 12개월 동안의 데이터를 가져오기 위한 리스트
         List<MonthlyRevenue> monthlyRevenues = new ArrayList<>();
         // 현재 날짜를 기준으로 지난 12개월 동안의 데이터를 가져옴
-        for (int i = 0; i < 12; i++) {
+        for (int i = 11; i >= 0; i--) {
             // 현재 달에서 i 달 전의 첫째 날
             LocalDate firstDayOfMonth = LocalDate.now().minusMonths(i).withDayOfMonth(1);
             LocalDateTime startOfMonth = firstDayOfMonth.atStartOfDay();
