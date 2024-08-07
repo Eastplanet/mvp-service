@@ -135,7 +135,7 @@ public class StatsService {
         RevenueResDTO revenueResDTO = new RevenueResDTO();
 
         List<DailyRevenue> daily = new ArrayList<>();
-        for (int i = 0; i < 7; i++) {
+        for (int i = 6; i >= 0; i--) {
             LocalDateTime startOfDay = LocalDate.now().minusDays(i).atStartOfDay();
             LocalDateTime endOfDay = LocalDate.now().minusDays(i).atTime(LocalTime.MAX);
             List<VehicleLogDTO> dailyLogs = loggerService.findAllByExitTimeBetween(startOfDay, endOfDay);
