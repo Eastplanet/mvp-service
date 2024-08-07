@@ -14,7 +14,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Task {
+    private Long parkedVehicleId;
     private Integer parkingBotSerialNumber;
     private Integer start;
     private Integer end;
+    private Integer type;
 }

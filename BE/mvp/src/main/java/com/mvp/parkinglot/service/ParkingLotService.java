@@ -17,6 +17,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -28,7 +29,11 @@ public class ParkingLotService {
     private final ParkingLotSettingRepository parkingLotSettingRepository;
 
     public ParkingLotDTO getParkingLot(){
-        ParkingLot parkingLot = parkingLotRepository.findAll().get(0);
+        List<ParkingLot> all = parkingLotRepository.findAll();
+        if(all.isEmpty()){
+            return null;
+        }
+        ParkingLot parkingLot = all.get(0);
         return ParkingLotConverter.entityToDto(parkingLot);
     }
 
@@ -45,7 +50,11 @@ public class ParkingLotService {
     }
 
     public ParkingLotMapDTO getMap(){
-        ParkingLotMap parkingLotMap = parkingLotMapRepository.findAll().get(0);
+        List<ParkingLotMap> all = parkingLotMapRepository.findAll();
+        if(all.isEmpty()){
+            return null;
+        }
+        ParkingLotMap parkingLotMap = all.get(0);
         return ParkingLotMapConverter.entityToDto(parkingLotMap);
     }
 
@@ -56,13 +65,17 @@ public class ParkingLotService {
     }
 
     public ParkingLotSettingDTO getSetting(){
-        ParkingLotSetting setting = parkingLotSettingRepository.findAll().get(0);
-        return ParkingLotSettingConverter.entityToDto(setting);
+        List<ParkingLotSetting> all = parkingLotSettingRepository.findAll();
+        if(all.isEmpty())return null;
+        return ParkingLotSettingConverter.entityToDto(all.get(0));
     }
 
     @Transactional
     public ParkingLotSettingDTO updateSetting(ParkingLotSettingDTO parkingLotSettingDTO) {
-        ParkingLotSetting parkingLotSetting = parkingLotSettingRepository.findAll().get(0);
+        List<ParkingLotSetting> all = parkingLotSettingRepository.findAll();
+        if(all.isEmpty())return null;
+        ParkingLotSetting parkingLotSetting = all.get(0);
+
         parkingLotSetting.update(parkingLotSettingDTO);
         Optional<ParkingLotSetting> result = parkingLotSettingRepository.findById(parkingLotSetting.getId());
         if(result.isPresent()){
