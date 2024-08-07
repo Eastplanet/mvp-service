@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import axios from 'axios';
+import api from '../../../api/axios';
 import styles from './AddMembersModal.module.css';
 import { fetchMembers } from '../membersSlice';
 import { AppDispatch } from '../../../store/store';
@@ -34,7 +34,7 @@ const AddMemberModal: React.FC<AddMemberModalProps> = ({ onClose }) => {
     const formattedEndDate = getISODateString(endDate);
   
     try {
-      await axios.post('https://mvp-project.shop/api/memberships', { name, licensePlate, phoneNumber, endDate: formattedEndDate, startDate });
+      await api.post('https://mvp-project.shop/api/memberships', { name, licensePlate, phoneNumber, endDate: formattedEndDate, startDate });
       dispatch(fetchMembers());
       onClose();
     } catch (error) {

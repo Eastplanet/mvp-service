@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../store/store';
 import styles from './Login.module.css';
 import logo from '../../assets/images/logos/logo.png'
-import { login, loginSuccess } from './authSlice';
+import { login } from './authSlice';
 import { RootState } from '../../store/store';
 
 const Login: React.FC = () => {

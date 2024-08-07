@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Sidebar from '../sidebar/Sidebar';
 import styles from './Set.module.css';
-import axios from 'axios'
+import api from '../../api/axios'
 
 // 초기 상태의 타입 정의
 interface InitialState {
@@ -42,7 +42,7 @@ const Set: React.FC = () => {
   // 데이터 로드 함수
   const fetchData = async () => {
     try {
-      const response = await axios.get('https://mvp-project.shop/api/parking-lots/setting');
+      const response = await api.get('https://mvp-project.shop/api/parking-lots/setting');
       const data = response.data.data;
       // 받아온 데이터로 상태 업데이트
       setBasicTime(data.baseParkingTime ?? 0);
@@ -119,7 +119,7 @@ const Set: React.FC = () => {
     };
   
     try {
-      const response = await axios.put('https://mvp-project.shop/api/parking-lots/setting', data, {
+      const response = await api.put('https://mvp-project.shop/api/parking-lots/setting', data, {
         headers: {
           'Content-Type': 'application/json'
         }

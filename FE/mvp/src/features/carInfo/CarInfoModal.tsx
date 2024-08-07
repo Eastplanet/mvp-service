@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchParkingData } from '../main/mainSlice';
 import styles from './CarInfoModal.module.css';
-import axios from 'axios';
+import api from '../../api/axios';
 import ExitModal from './exit/ExitModal';
 import MoveModal from './move/MoveModal';
 import DiscountModal from './discount/DiscountModal';
@@ -32,7 +32,7 @@ const CarInfoModal: React.FC<CarInfoModalProps> = ({ carLog, onClose }) => {
   const currentParkedCars = useSelector((state: RootState) => state.main.currentParkedCars);
 
   const handleConfirmExit = () => {
-    axios.delete(`https://mvp-project.shop/api/parking-bot/exit/${carLog.licensePlate}`)
+    api.delete(`https://mvp-project.shop/api/parking-bot/exit/${carLog.licensePlate}`)
       .then(response => {
         setShowExitModal(false);
         dispatch(fetchParkingData());
@@ -46,7 +46,7 @@ const CarInfoModal: React.FC<CarInfoModalProps> = ({ carLog, onClose }) => {
 
   const handleApplyDiscount = (discount: number) => {
     console.log([carLog.licensePlate, discount])
-    axios.post('https://mvp-project.shop/api/parked-vehicle/discount', {
+    api.post('https://mvp-project.shop/api/parked-vehicle/discount', {
       licensePlate: carLog.licensePlate,
       discountAmount: discount
     })
