@@ -39,7 +39,10 @@ const Graph: React.FC<GraphProps> = ({ dailyRevenues, monthlyRevenues }) => {
 
   const formatDate = (date: string, mode: 'daily' | 'monthly') => {
     const dateObj = new Date(date);
-    return mode === 'daily' ? dateObj.toISOString().split('T')[0] : dateObj.toISOString().substring(0, 7);
+    const year = dateObj.getFullYear();
+    const month = (`0${dateObj.getMonth() + 1}`).slice(-2);
+    const day = (`0${dateObj.getDate()}`).slice(-2);
+    return mode === 'daily' ? `${year}-${month}-${day}` : `${year}-${month}`;
   };
 
   const data = mode === 'daily'
@@ -156,7 +159,7 @@ const Graph: React.FC<GraphProps> = ({ dailyRevenues, monthlyRevenues }) => {
         display: true,
         position: 'right',
         grid: {
-          drawOnChartArea: false, // Only gridlines for y1 axis
+          drawOnChartArea: false,
         },
         ticks: {
           color: 'rgba(255,159,64,1)',

@@ -40,8 +40,8 @@ const Chart: React.FC = () => {
   
   const todayData = data.dailyRevenues && data.dailyRevenues.length > 0 ? data.dailyRevenues[data.dailyRevenues.length - 1] : null;
   const yesterdayData = data.dailyRevenues && data.dailyRevenues.length > 1 ? data.dailyRevenues[data.dailyRevenues.length - 2] : null;
-  const thisMonthData = data.monthlyRevenues && data.monthlyRevenues.length > 0 ? data.monthlyRevenues[data.dailyRevenues.length - 1] : null;
-  const lastMonthData = data.monthlyRevenues && data.monthlyRevenues.length > 1 ? data.monthlyRevenues[data.dailyRevenues.length - 2] : null;
+  const thisMonthData = data.monthlyRevenues && data.monthlyRevenues.length > 0 ? data.monthlyRevenues[data.monthlyRevenues.length - 1] : null;
+  const lastMonthData = data.monthlyRevenues && data.monthlyRevenues.length > 1 ? data.monthlyRevenues[data.monthlyRevenues.length - 2] : null;
 
   const dailyRevenuesComparison = todayData && yesterdayData ? calculateComparison(todayData.revenue, yesterdayData.revenue) : { comparison: 'N/A', status: 'same' };
   const dailyParkingComparison = todayData && yesterdayData ? calculateComparison(todayData.parkingCount, yesterdayData.parkingCount) : { comparison: 'N/A', status: 'same' };
