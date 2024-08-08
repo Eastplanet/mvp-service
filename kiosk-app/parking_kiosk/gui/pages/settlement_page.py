@@ -37,20 +37,20 @@ class SettlementPage(QWidget):
         else:
             pixmap = QPixmap('parking_kiosk/gui/res/test-image1.png')  # 대체 이미지 경로
 
-        pixmap = pixmap.scaled(80, 80, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
+        pixmap = pixmap.scaled(100, 100, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
         
         image_label = QLabel(self)
         image_label.setPixmap(pixmap)
-        image_label.setFixedSize(80, 80)
+        image_label.setFixedSize(150, 100)
         image_label.setStyleSheet("border-radius: 10px;")
         header_layout.addWidget(image_label)
 
         info_layout = QVBoxLayout()
         plate_label = QLabel(vehicle_info['license_plate'], self)
-        plate_label.setStyleSheet("font-size: 24px; color: black; font-weight: bold;")
+        plate_label.setStyleSheet("font-size: 18px; color: black; font-weight: bold;")
         plate_label.setAlignment(Qt.AlignmentFlag.AlignLeft)
         duration_label = QLabel(vehicle_info['duration'], self)
-        duration_label.setStyleSheet("font-size: 18px; color: black;")
+        duration_label.setStyleSheet("font-size: 16px; color: black;")
         duration_label.setAlignment(Qt.AlignmentFlag.AlignLeft)
         info_layout.addWidget(plate_label)
         info_layout.addWidget(duration_label)

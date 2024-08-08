@@ -33,7 +33,7 @@ class VehicleListItem(QWidget):
         container_widget = QWidget(self)
         container_widget.setStyleSheet("""
             background-color: white;
-            border-radius: 15px;
+            border-radius: 8px;
             border: 1px solid #ddd;
             padding: 10px;
         """)
@@ -52,14 +52,16 @@ class VehicleListItem(QWidget):
         else:
             pixmap = QPixmap('parking_kiosk/gui/res/test-image1.png')  # 대체 이미지 경로
 
-        pixmap = pixmap.scaled(80, 80, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
+        pixmap = pixmap.scaled(100, 100, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
 
         # 차량 이미지
         image_label = QLabel(self)
         image_label.setPixmap(pixmap)
-        image_label.setFixedSize(100, 100)
+        image_label.setFixedSize(120, 120)
         image_label.setStyleSheet("border-radius: 10px; background-color: white;")
         outer_layout.addWidget(image_label)
+        
+        outer_layout.addItem(QSpacerItem(80, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum))
         
         # 차량 정보 레이아웃
         info_layout = QVBoxLayout()
