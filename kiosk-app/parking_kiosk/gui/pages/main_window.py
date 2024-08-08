@@ -84,9 +84,13 @@ class MainWindow(QMainWindow):
         self.home_button.clicked.connect(self.return_to_main)
         self.home_button.move(10, 10)  # 절대 위치 설정
         
+        # 홈 버튼을 기본적으로 숨김
+        self.home_button.hide()
+        
     # 출차 페이지
     def show_exit_page(self):
         self.stacked_widget.setCurrentWidget(self.exit_page)
+        self.home_button.show()
     
     # 비동기 차량 번호판 분석
     def show_enter_page(self):
@@ -107,6 +111,7 @@ class MainWindow(QMainWindow):
     def on_ocr_complete(self, ocr_result):
         if ocr_result:
             self.entry_page.number_plate_labels.set_all_label_text(ocr_result)
+            self.home_button.show()
             self.stacked_widget.setCurrentWidget(self.entry_page)
         else:
             self.show_error_dialog("번호판을 인식할 수 없습니다.")
@@ -146,6 +151,7 @@ class MainWindow(QMainWindow):
     def show_settlement_page(self, vehicle_info):
         settlement_page = SettlementPage(vehicle_info, self)
         self.stacked_widget.addWidget(settlement_page)
+        self.home_button.show()
         self.stacked_widget.setCurrentWidget(settlement_page)
         
     def show_vehicle_selection_page(self, license_plate):
@@ -161,9 +167,11 @@ class MainWindow(QMainWindow):
         
         vehicle_selection_page = VehicleSelectionPage(vehicles, self, self)
         self.stacked_widget.addWidget(vehicle_selection_page)
+        self.home_button.show()
         self.stacked_widget.setCurrentWidget(vehicle_selection_page)
     
     def return_to_main(self):
+        self.home_button.hide()
         self.stacked_widget.setCurrentWidget(self.main_button_page)
         
     def show_error_dialog(self, message):
