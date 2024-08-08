@@ -16,7 +16,7 @@ public class NotiTestController {
     @GetMapping()
     public void sendMsg(){
         System.out.println("요청 받음");
-        String content = "테스트메시지입니다.";
+        String content = "data changed";
         notificationService.send(content,"/temp-url");
     }
 
