@@ -27,37 +27,45 @@ function App() {
   // const token = localStorage.getItem('apiKey');
   useEffect(() => {
     if (isAuthenticated && token) {
-      const EventSource = EventSourcePolyfill || NativeEventSource;
-      eventSourceRef.current = new EventSource(`https://mvp-project.shop/api/notify/subscribe/testEmail`, {
-        headers: {
-          'API-KEY': token,
-        },
-        withCredentials: true,
-      });
+      try {
+        const fetchSse = async () => {
+          const EventSource = EventSourcePolyfill || NativeEventSource;
+          eventSourceRef.current = new EventSource(`https://mvp-project.shop/api/notify/subscribe/testEmail`, {
+            headers: {
+              "Content-Type": "text/event-stream",
+              'API-KEY': token,
+            },
+            withCredentials: true,
+          });
 
-      eventSourceRef.current.onmessage = (event: MessageEvent) => {
-        console.log('Received new message:', event.data);
-        const newMessage: Message = JSON.parse(event.data);
+          eventSourceRef.current.onmessage = (event: MessageEvent) => {
+            console.log('Received new message:', event.data);
+            const newMessage: Message = JSON.parse(event.data);
 
-        console.log('message', newMessage);
+            console.log('message', newMessage);
 
-        dispatch(fetchParkingData() as any);
+            dispatch(fetchParkingData() as any);
 
-        setMessages((prevMessages) => [...prevMessages, newMessage]);
-      };
-
-      eventSourceRef.current.onerror = (event: Event) => {
-        console.error('EventSource failed:', event);
-        if (eventSourceRef.current) {
-          eventSourceRef.current.close();
+            setMessages((prevMessages) => [...prevMessages, newMessage]);
+          };
+          eventSourceRef.current.onerror = (event: Event) => {
+            console.error('EventSource failed:', event);
+            if (eventSourceRef.current) {
+              eventSourceRef.current.close();
+            }
+          };
         }
-      };
+        fetchSse();
+      } catch (error) {
+        throw error;
+      }
 
-      return () => {
-        if (eventSourceRef.current) {
-          eventSourceRef.current.close();
-        }
-      };
+      
+      // return () => {
+      //   if (eventSourceRef.current) {
+      //     eventSourceRef.current.close();
+      //   }
+      // };
     }
   }, [isAuthenticated, token, dispatch]);
 
