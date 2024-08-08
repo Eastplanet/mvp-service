@@ -1,14 +1,10 @@
-package com.mvp.parkingbot.dto;
+package com.mvp.task.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-/**
- * 주차봇 작업 DTO
-
- */
 @Getter
 @Builder
 @NoArgsConstructor

@@ -1,6 +1,6 @@
-package com.mvp.utils;
+package com.mvp.task.repository;
 
-import com.mvp.parkingbot.dto.Task;
+import com.mvp.task.dto.Task;
 import org.springframework.stereotype.Component;
 
 import java.util.Queue;
