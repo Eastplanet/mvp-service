@@ -1,12 +1,10 @@
 package com.mvp.notify.controller;
 
-import com.mvp.common.ResponseDto;
-import com.mvp.common.exception.StatusCode;
 import com.mvp.notify.service.NotificationService;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
@@ -18,9 +16,16 @@ public class NotificationController {
 
     private final NotificationService notificationService;
 
-    @GetMapping(value = "/subscribe/{email}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public SseEmitter subscribe(@PathVariable String email, @RequestHeader(value = "Last-Event-ID", required = false, defaultValue = "") String lastEventId){
-        return notificationService.subscribe(email, lastEventId);
+    //구독 페이지
+    @GetMapping(value = "/subscribe/{id}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public SseEmitter subscribe(@PathVariable String id, HttpServletResponse response) {
+        System.out.println("id = " + id);
+        return notificationService.subscribe(id, response);
+    }
+
+    @PostMapping("/send-data/{id}")
+    public void sendData(@PathVariable String id) {
+        notificationService.sendEvent(id, "data");
     }
 
 }
