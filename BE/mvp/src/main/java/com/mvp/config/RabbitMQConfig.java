@@ -11,7 +11,7 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 public class RabbitMQConfig {
     @Bean
     public Queue queue(){
-        return new Queue("task_queue", false);
+        return new Queue("task_queue", true);
     }
 
     @Bean
