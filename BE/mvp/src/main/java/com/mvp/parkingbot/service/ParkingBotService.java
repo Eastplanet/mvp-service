@@ -12,7 +12,8 @@ import com.mvp.parkingbot.dto.*;
 import com.mvp.parkingbot.entity.ParkingBot;
 import com.mvp.parkingbot.repository.ParkingBotRepository;
 import com.mvp.stats.service.StatsService;
-import com.mvp.utils.TaskQueue;
+import com.mvp.task.dto.Task;
+import com.mvp.task.service.TaskService;
 import com.mvp.vehicle.converter.ParkedVehicleConverter;
 import com.mvp.vehicle.entity.ParkedVehicle;
 import com.mvp.vehicle.entity.ParkingLotSpot;
@@ -51,7 +52,7 @@ public class ParkingBotService {
     private final StatsService statsService;
     private final MembershipService membershipService;
     private final CalculatorService calculatorService;
-    private TaskQueue taskQueue;
+    private final TaskService taskService;
 
     /**
      * 입차 처리
@@ -85,6 +86,7 @@ public class ParkingBotService {
         Optional<ParkingBot> availableBot = parkingBotRepository.findFirstByStatus(BOT_IDLE);
         Task task;
         if (availableBot.isEmpty()) {
+            // 대기열에 추가
             task = Task.builder()
                     .parkedVehicleId(vehicle.getId())
                     .parkingBotSerialNumber(null)
@@ -92,8 +94,10 @@ public class ParkingBotService {
                     .end(spot.getSpotNumber())
                     .type(ENTRANCE)
                     .build();
-            taskQueue.addWaitingTask(task);
+            taskService.addWaitingTask(task);
         } else{
+            availableBot.get().updateStatus(BOT_BUSY);
+            // 바로 전송
             task = Task.builder()
                     .parkingBotSerialNumber(availableBot.get().getSerialNumber())
                     .parkedVehicleId(vehicle.getId())
@@ -101,7 +105,7 @@ public class ParkingBotService {
                     .end(spot.getSpotNumber())
                     .type(ENTRANCE)
                     .build();
-            taskQueue.addTask(task);
+            taskService.sendMessage(task);
         }
 
         // 로그 추가
@@ -151,8 +155,9 @@ public class ParkingBotService {
                     .end(1)
                     .type(EXIT)
                     .build();
-            taskQueue.addWaitingTask(task);
+            taskService.addWaitingTask(task);
         } else{
+            availableBot.get().updateStatus(BOT_BUSY);
             task = Task.builder()
                     .parkedVehicleId(parkedVehicle.getId())
                     .parkingBotSerialNumber(availableBot.get().getSerialNumber())
@@ -160,7 +165,7 @@ public class ParkingBotService {
                     .end(1)
                     .type(EXIT)
                     .build();
-            taskQueue.addTask(task);
+            taskService.sendMessage(task);
         }
 
         long price = calculatorService.calculatePrice(ParkedVehicleConverter.entityToDto(parkedVehicle));
@@ -174,11 +179,6 @@ public class ParkingBotService {
         LoggerService.createExitLog(logDto);
 
         return true;
-    }
-
-    // 주차봇에게 할당된 작업을 가져옴
-    public Task getTaskfromQueue() {
-        return taskQueue.getNextTask();
     }
 
     /**
@@ -224,9 +224,10 @@ public class ParkingBotService {
 
         // 작업 추가
         if(availableBot != null){
-            taskQueue.addTask(task);
+            availableBot.updateStatus(BOT_BUSY);
+            taskService.sendMessage(task);
         } else{
-            taskQueue.addWaitingTask(task);
+            taskService.addWaitingTask(task);
         }
 
         return task;
@@ -329,35 +330,6 @@ public class ParkingBotService {
         return ParkingBotConverter.entityToDtoList(parkingBotList);
     }
 
-
-    /**
-     * 주차봇에게 작업 전달
-     */
-    @Transactional
-    public Task handleTask() {
-        // 작업 가져오기
-        Task task = taskQueue.getNextTask();
-        if(task == null){
-            return null;
-        }
-
-        ParkingBot parkingBot = parkingBotRepository.findBySerialNumber(task.getParkingBotSerialNumber());
-        if(parkingBot == null){
-            throw new RestApiException(StatusCode.NOT_FOUND);
-        }
-
-        // 차량 상태 변경
-        ParkedVehicle parkedVehicle = parkedVehicleRepository.findById(task.getParkedVehicleId()).orElse(null);
-        if(parkedVehicle == null){
-            throw new RestApiException(StatusCode.NOT_FOUND);
-        }
-
-        parkingBot.updateStatus(BOT_BUSY);
-        parkedVehicle.updateStatus(VEHICLE_MOVE);
-
-        return task;
-    }
-
     @Transactional
     public boolean completeTask(Task task) {
         // 주차봇 상태 변경
@@ -392,8 +364,8 @@ public class ParkingBotService {
             parkedVehicle.updateStatus(VEHICLE_PARKED);
         }
 
-        if(taskQueue.hasWaitingTasks()){
-            Task waitingTask = taskQueue.getNextWaitingTask();
+        if(taskService.hasWaitingTasks()){
+            Task waitingTask = taskService.getNextWaitingTask();
             if(waitingTask != null){
                 waitingTask = Task.builder()
                         .parkingBotSerialNumber(parkingBot.getSerialNumber())
@@ -401,7 +373,7 @@ public class ParkingBotService {
                         .end(waitingTask.getEnd())
                         .type(waitingTask.getType())
                         .build();
-                taskQueue.addTask(waitingTask);
+                taskService.sendMessage(waitingTask);
             }
         }
 

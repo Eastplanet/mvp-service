@@ -5,6 +5,7 @@ import com.mvp.common.exception.RestApiException;
 import com.mvp.common.exception.StatusCode;
 import com.mvp.parkingbot.dto.*;
 import com.mvp.parkingbot.service.ParkingBotService;
+import com.mvp.task.dto.Task;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -56,15 +57,15 @@ public class ParkingBotController {
      *
      * @return
      */
-    @GetMapping("/poll")
-    public ResponseEntity<ResponseDto> pollTask() {
-        Task nextTask = parkingBotService.handleTask();
-        if (nextTask != null) {
-            return ResponseDto.response(StatusCode.SUCCESS, nextTask);
-        } else {
-            throw new RestApiException(StatusCode.BAD_REQUEST);
-        }
-    }
+//    @GetMapping("/poll")
+//    public ResponseEntity<ResponseDto> pollTask() {
+//        Task nextTask = parkingBotService.handleTask();
+//        if (nextTask != null) {
+//            return ResponseDto.response(StatusCode.SUCCESS, nextTask);
+//        } else {
+//            throw new RestApiException(StatusCode.BAD_REQUEST);
+//        }
+//    }
 
     /**
      * 임의 이동
