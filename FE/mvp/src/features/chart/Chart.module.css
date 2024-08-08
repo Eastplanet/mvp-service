@@ -89,7 +89,7 @@
   justify-content: center;
   overflow-y: auto;
   max-width: 400px;
-  min-height: 500px;
+  min-height: 600px;
 }
 
 .details p {
@@ -130,7 +130,6 @@
   border-right: 6px solid transparent;
   margin-left: 5px;
   position: relative;
-  top: 2px; 
 }
 
 .arrowDown{
@@ -141,7 +140,6 @@
   border-right: 6px solid transparent;
   margin-left: 5px;
   position: relative;
-  top: 2px; 
 }
 
 .totalUp {
