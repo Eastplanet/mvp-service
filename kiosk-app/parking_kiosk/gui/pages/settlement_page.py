@@ -127,7 +127,10 @@ class SettlementPage(QWidget):
 
     def confirm_settle(self):
         # 정산 핸들러 실행
-        success = handle_exit(self.vehicle_info['license_plate'])
+        response = handle_exit(self.vehicle_info['license_plate'])
         # 정산 완료 시 메인페이지로 전환
-        if success:
+        if response.get('status') == 200:
             self.main_window.return_to_main()
+        else:
+            self.main_window.show_error_dialog(response.get("message"))
+            

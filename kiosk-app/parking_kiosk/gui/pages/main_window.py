@@ -149,7 +149,12 @@ class MainWindow(QMainWindow):
         self.stacked_widget.setCurrentWidget(settlement_page)
         
     def show_vehicle_selection_page(self, license_plate):
-        vehicles = handle_get_vehicles(license_plate)
+        response = handle_get_vehicles(license_plate)
+        if response.get("status") != 200:
+            self.show_error_dialog(response.get("message"))
+            return
+        
+        vehicles = response.get("data")
         if vehicles.__len__() == 0:
             self.show_error_dialog("차량 정보를 찾을 수 없습니다.")
             return

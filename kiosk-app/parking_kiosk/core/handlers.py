@@ -43,11 +43,7 @@ def handle_exit(licensePlate):
         'API-KEY': get_api_key()
     }
     response = requests.delete(url, headers=headers)
-    
-    if response.status_code == 200:
-        return True
-    else:
-        return False
+    return response.json() 
 
 # 차량 정보 가져오기
 def handle_get_vehicles(license_plate):
@@ -57,13 +53,7 @@ def handle_get_vehicles(license_plate):
     }
     response = requests.get(url, headers=headers)
     
-    vehicles = []
-    if response.status_code == 200:
-        vehicles = response.json().get('data')
-    
-    print(vehicles)
-    
-    return vehicles
+    return response.json()
 
 def kiosk_login():
     url = SERVER_URL + "/manager/login"
