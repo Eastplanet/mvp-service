@@ -5,6 +5,10 @@ import { fetchMembers, updateMemberOnServer, deleteMembersFromServer } from './m
 import styles from './Members.module.css';
 import Sidebar from '../sidebar/Sidebar';
 import AddMembersModal from './add/AddMembersModal';
+import totalMember from '../../assets/images/icons/total.png';
+import newMember from '../../assets/images/icons/new.png';
+import expiredMember from '../../assets/images/icons/expired.png';
+import soonMember from '../../assets/images/icons/soon.png';
 
 interface Member {
   id: number;
@@ -247,34 +251,42 @@ const Members: React.FC = () => {
       <Sidebar />
       <div className={styles.page}>
         <div className={styles.content}>
-          <div className={styles.header}>
+          {/* <div className={styles.header}>
             <h1>Members</h1>
             <input className={styles.search} type="text" placeholder='Car Number' value={searchTerm} onChange={handleSearchChange}/>
-          </div>
+          </div> */}
           <div className={styles.summary}>
             <div className={styles.summaryItem}>
-              <div className={styles.icon}>🏁</div>
+              <div className={styles.icon}>
+                <img src={totalMember} alt="totalMember" />
+              </div>
               <div>
                 <p className={styles.item}>전체 회원</p>
                 <p className={styles.stat}>{stats.total}</p>
               </div>
             </div>
             <div className={styles.summaryItem}>
-              <div className={styles.icon}>🆕</div>
+              <div className={styles.icon}>
+                <img src={newMember} alt="newMember" />
+              </div>
               <div>
                 <p className={styles.item}>신규 회원</p>
                 <p className={styles.stat}>{stats.newMembers}</p>
               </div>
             </div>
             <div className={styles.summaryItem}>
-              <div className={styles.icon}>🕒</div>
+              <div className={styles.icon}>
+                <img src={expiredMember} alt="expiredMember" />
+              </div>
               <div>
                 <p className={styles.item}>최근 만료</p>
                 <p className={styles.stat}>{stats.recentExpired}</p>
               </div>
             </div>
             <div className={styles.summaryItem}>
-              <div className={styles.icon}>🔄</div>
+              <div className={styles.icon}>
+                <img src={soonMember} alt="soonMember" />
+              </div>
               <div>
                 <p className={styles.item}>만료 예정</p>
                 <p className={styles.stat}>{stats.expiringSoon}</p>
@@ -301,41 +313,42 @@ const Members: React.FC = () => {
               <div className={styles.date}>Secession Date</div>
               <div className={styles.action}>Actions</div>
             </div>
-                    
-            {paginatedMembers.map((member) => (
-              <div className={styles.tableBody} key={member.id}>
-                <div>
-                  <input
-                    type="checkbox"
-                    checked={selectedCars.includes(member.car)}
-                    onChange={() => handleSelect(member.car)}
-                  />
-                </div>
-                <div className={styles.name}>
-                  {editingMemberId === member.id ? (
+
+            <div className={styles.tableBodyContainer}>                    
+              {paginatedMembers.map((member) => (
+                <div className={styles.tableBody} key={member.id}>
+                  <div>
                     <input
+                      type="checkbox"
+                      checked={selectedCars.includes(member.car)}
+                      onChange={() => handleSelect(member.car)}
+                      />
+                  </div>
+                  <div className={styles.name}>
+                    {editingMemberId === member.id ? (
+                      <input
                       type="text"
                       value={editingData?.name || ''}
                       onChange={(e) => handleInputChange(e, 'name')}
-                    />
-                  ) : (
-                    member.name
-                  )}
-                </div>
-                <div className={styles.car}>
-                  {editingMemberId === member.id ? (
-                    <input
+                      />
+                    ) : (
+                      member.name
+                    )}
+                  </div>
+                  <div className={styles.car}>
+                    {editingMemberId === member.id ? (
+                      <input
                       type="text"
                       value={editingData?.car || ''}
                       onChange={(e) => handleInputChange(e, 'car')}
-                    />
-                  ) : (
-                    member.car
-                  )}
-                </div>
-                <div className={styles.phone}>
-                  {editingMemberId === member.id ? (
-                    <input
+                      />
+                    ) : (
+                      member.car
+                    )}
+                  </div>
+                  <div className={styles.phone}>
+                    {editingMemberId === member.id ? (
+                      <input
                       type="text"
                       value={editingData?.phone || ''}
                       onChange={(e) => handleInputChange(e, 'phone')}
@@ -354,10 +367,18 @@ const Members: React.FC = () => {
                       type="date"
                       value={editingData?.secession_date ? editingData.secession_date.toISOString().split('T')[0] : ''}
                       onChange={(e) => handleInputChange(e, 'secession_date')}
-                    />
-                  ) : (
-                    member.secession_date ? formatDate(member.secession_date) : 'N/A'
-                  )}
+                      />
+                    ) : (
+                      member.secession_date ? formatDate(member.secession_date) : 'N/A'
+                    )}
+                  </div>
+                  <div>
+                    {editingMemberId === member.id ? (
+                      <button className={styles.editButton} onClick={handleSave}>Save</button>
+                    ) : (
+                      <button className={styles.editButton} onClick={() => handleEdit(member)}>Edit</button>
+                    )}
+                  </div>
                 </div>
                 <div>
                   {editingMemberId === member.id ? (
