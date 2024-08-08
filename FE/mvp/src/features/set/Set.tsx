@@ -42,7 +42,7 @@ const Set: React.FC = () => {
   // 데이터 로드 함수
   const fetchData = async () => {
     try {
-      const response = await api.get('https://mvp-project.shop/api/parking-lots/setting');
+      const response = await api.get('/parking-lots/setting');
       const data = response.data.data;
       // 받아온 데이터로 상태 업데이트
       setBasicTime(data.baseParkingTime ?? 0);
@@ -119,7 +119,7 @@ const Set: React.FC = () => {
     };
   
     try {
-      const response = await api.put('https://mvp-project.shop/api/parking-lots/setting', data, {
+      const response = await api.put('/parking-lots/setting', data, {
         headers: {
           'Content-Type': 'application/json'
         }

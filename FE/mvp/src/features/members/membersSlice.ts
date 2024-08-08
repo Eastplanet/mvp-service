@@ -25,7 +25,7 @@ const initialState: MembersState = {
 
 export const fetchMembers = createAsyncThunk<Member[]>('members/fetchMembers', async () => {
   try {
-    const response = await api.get('https://mvp-project.shop/api/memberships/list');
+    const response = await api.get('/memberships/list');
     const data = response.data.data;
     return data.map((item: any, index: number) => ({
       id: index + 1,
@@ -42,7 +42,7 @@ export const fetchMembers = createAsyncThunk<Member[]>('members/fetchMembers', a
 
 export const deleteMembersFromServer = createAsyncThunk<void, string[]>('members/deleteMembers', async (licensePlates) => {
   await Promise.all(
-    licensePlates.map((licensePlate) => api.delete(`https://mvp-project.shop/api/memberships/${licensePlate}`))
+    licensePlates.map((licensePlate) => api.delete(`/memberships/${licensePlate}`))
   );
 });
 
@@ -50,7 +50,7 @@ export const updateMemberOnServer = createAsyncThunk<Member, Member>(
   'members/updateMemberOnServer',
   async (member) => {
     console.log([member.car,member.secession_date.toISOString(),member.phone,member.name])
-    const response = await api.patch(`https://mvp-project.shop/api/memberships`, {
+    const response = await api.patch(`/memberships`, {
       licensePlate: member.car,
       endDate: member.secession_date.toISOString(),
       phoneNumber: member.phone,

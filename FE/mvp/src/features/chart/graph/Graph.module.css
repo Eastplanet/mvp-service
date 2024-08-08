@@ -41,6 +41,7 @@
 
 .toggleButton.active {
   color: white;
+  pointer-events: none;
 }
 
 .toggleButton.active.daily {

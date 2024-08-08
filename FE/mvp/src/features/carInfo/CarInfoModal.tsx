@@ -32,7 +32,7 @@ const CarInfoModal: React.FC<CarInfoModalProps> = ({ carLog, onClose }) => {
   const currentParkedCars = useSelector((state: RootState) => state.main.currentParkedCars);
 
   const handleConfirmExit = () => {
-    api.delete(`https://mvp-project.shop/api/parking-bot/exit/${carLog.licensePlate}`)
+    api.delete(`/parking-bot/exit/${carLog.licensePlate}`)
       .then(response => {
         setShowExitModal(false);
         dispatch(fetchParkingData());
@@ -46,7 +46,7 @@ const CarInfoModal: React.FC<CarInfoModalProps> = ({ carLog, onClose }) => {
 
   const handleApplyDiscount = (discount: number) => {
     console.log([carLog.licensePlate, discount])
-    api.post('https://mvp-project.shop/api/parked-vehicle/discount', {
+    api.post('/parked-vehicle/discount', {
       licensePlate: carLog.licensePlate,
       discountAmount: discount
     })

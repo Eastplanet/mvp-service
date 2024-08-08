@@ -32,7 +32,7 @@ export const fetchChartData = createAsyncThunk<ChartData, void>(
   'chart/fetchChartData',
   async (_, thunkAPI) => {
     try {
-      const response = await api.get('https://mvp-project.shop/api/stats/revenue');
+      const response = await api.get('/stats/revenue');
       // console.log(response.data.data)
       return response.data.data;
     } catch (error) {
