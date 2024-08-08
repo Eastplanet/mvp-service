@@ -58,6 +58,7 @@ function App() {
         }
       };
       fetchSse();
+
       return () => {
         if (eventSourceRef.current) {
           eventSourceRef.current.close();
