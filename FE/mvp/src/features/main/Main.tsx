@@ -34,6 +34,13 @@ const Main: React.FC = () => {
   useEffect(() => {
   }, [searchData, currentParkedCars]);
 
+  useEffect(() => {
+    if (activeTab === 'parkingLog') {
+      dispatch(fetchSearchData({ licensePlate, startDate, endDate }));
+      setSearchPerformed(true);
+    }
+  }, [activeTab, dispatch, licensePlate, startDate, endDate]);
+
   const handleSearch = () => {
     if (activeTab === 'currentStatus') {
       const filteredCars = currentParkedCars.filter(car =>
@@ -118,7 +125,11 @@ const Main: React.FC = () => {
               </p>
               <p
                 className={`${styles.tab} ${activeTab === 'parkingLog' ? styles.activeTab : ''}`}
-                onClick={() => setActiveTab('parkingLog')}>
+                onClick={() => {
+                  setActiveTab('parkingLog');
+                  handleSearch();
+                }}
+              >
                 주차 로그
               </p>
             </div>
