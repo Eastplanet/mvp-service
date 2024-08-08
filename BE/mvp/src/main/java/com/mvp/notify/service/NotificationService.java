@@ -95,12 +95,14 @@ public class NotificationService {
     // receiver 등록된 사람들에게 전송
     public void send(String content, String urlValue) {
 
+
         for(String receiver : receivers){
             Notification notification = createNotification(receiver, content, urlValue);
 
+            System.out.println(notification);
+
             // 로그인 한 유저의 SseEmitter 모두 가져오기
             Map<String, SseEmitter> sseEmitters = emitterRepository.findAllEmitterStartWithByEmail(receiver);
-
             sseEmitters.forEach(
                     (key, emitter) -> {
                         // 데이터 캐시 저장(유실된 데이터 처리하기 위함)

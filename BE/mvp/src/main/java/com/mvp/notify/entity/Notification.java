@@ -1,14 +1,12 @@
 package com.mvp.notify.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class Notification {
 
     private String receiver; //알림을 받는 유저의 정보
