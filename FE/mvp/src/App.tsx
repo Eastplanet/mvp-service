@@ -27,8 +27,8 @@ function App() {
   // const token = localStorage.getItem('apiKey');
   useEffect(() => {
     if (isAuthenticated && token) {
-      try {
-        const fetchSse = async () => {
+      const fetchSse = async () => {
+        try {
           const EventSource = EventSourcePolyfill || NativeEventSource;
           eventSourceRef.current = new EventSource(`https://mvp-project.shop/api/notify/subscribe/testEmail`, {
             headers: {
@@ -41,31 +41,28 @@ function App() {
           eventSourceRef.current.onmessage = (event: MessageEvent) => {
             console.log('Received new message:', event.data);
             const newMessage: Message = JSON.parse(event.data);
-
             console.log('message', newMessage);
 
             dispatch(fetchParkingData() as any);
-
             setMessages((prevMessages) => [...prevMessages, newMessage]);
           };
+
           eventSourceRef.current.onerror = (event: Event) => {
             console.error('EventSource failed:', event);
             if (eventSourceRef.current) {
               eventSourceRef.current.close();
             }
           };
+        } catch (error) {
+          console.error('Error initializing EventSource:', error);
         }
-        fetchSse();
-      } catch (error) {
-        throw error;
-      }
-
-      
-      // return () => {
-      //   if (eventSourceRef.current) {
-      //     eventSourceRef.current.close();
-      //   }
-      // };
+      };
+      fetchSse();
+      return () => {
+        if (eventSourceRef.current) {
+          eventSourceRef.current.close();
+        }
+      };
     }
   }, [isAuthenticated, token, dispatch]);
 
