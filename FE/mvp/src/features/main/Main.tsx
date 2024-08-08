@@ -113,14 +113,12 @@ const Main: React.FC = () => {
             <div className={styles.tabContainer}>
               <p
                 className={`${styles.tab} ${activeTab === 'currentStatus' ? styles.activeTab : ''}`}
-                onClick={() => setActiveTab('currentStatus')}
-              >
+                onClick={() => setActiveTab('currentStatus')}>
                 현재 주차 현황
               </p>
               <p
                 className={`${styles.tab} ${activeTab === 'parkingLog' ? styles.activeTab : ''}`}
-                onClick={() => setActiveTab('parkingLog')}
-              >
+                onClick={() => setActiveTab('parkingLog')}>
                 주차 로그
               </p>
             </div>
