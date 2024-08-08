@@ -2,6 +2,7 @@
   display: flex;
   width: 70%;
   height: 80%;
+  min-height: 350px;
   background-color: #333;
   box-sizing: border-box;
   margin: auto;
@@ -45,7 +46,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
   flex: 1;
+  position: relative;
 }
 
 .empty {
@@ -76,4 +79,16 @@
   background-color: grey;
   pointer-events: none;
   opacity: 0.5;
+}
+
+.moving {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+}
+
+.clickableParkingSpace {
+  cursor: pointer;
 }

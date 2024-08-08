@@ -120,9 +120,7 @@
   background: none;
   font-size: 18px;
   color: #c0c0c0;
-  /* padding: 0;
-  margin: 0; */
-  width: 100%;
+  width: 85%;
 }
 
 .name {
@@ -172,6 +170,12 @@
   padding: 10px 20px;
   cursor: pointer;
   margin-right: 10px;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.addButton:hover {
+  background-color: #0056b3;
+  color: #ffffff;
 }
 
 .deleteButton {
@@ -183,6 +187,12 @@
   border-radius: 10px;
   padding: 10px 20px;
   cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.deleteButton:hover {
+  background-color: #dc3545;
+  color: #ffffff;
 }
 
 .pagination {
@@ -198,12 +208,12 @@
   padding: 5px 10px;
   margin: 0 4px;
   cursor: pointer;
-  border-radius: 50%; /* 동그란 버튼을 만들기 위한 속성 */
-  transition: background-color 0.3s; /* 배경색이 부드럽게 변하도록 */
+  border-radius: 50%;
+  transition: background-color 0.3s;
 }
 
 .pagination button:hover {
-  background: #e0e0e0; /* 마우스 오버 시 배경색 변경 */
+  background: #e0e0e0;
 }
 
 .pagination button:disabled {

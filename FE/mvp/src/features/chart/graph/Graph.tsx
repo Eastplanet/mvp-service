@@ -33,8 +33,8 @@ interface GraphProps {
 const Graph: React.FC<GraphProps> = ({ dailyRevenues, monthlyRevenues }) => {
   const [mode, setMode] = useState<'daily' | 'monthly'>('daily');
 
-  const toggleMode = () => {
-    setMode((prevMode) => (prevMode === 'daily' ? 'monthly' : 'daily'));
+  const toggleMode = (selectedMode: 'daily' | 'monthly') => {
+    setMode(selectedMode);
   };
 
   const formatDate = (date: string, mode: 'daily' | 'monthly') => {
@@ -134,7 +134,7 @@ const Graph: React.FC<GraphProps> = ({ dailyRevenues, monthlyRevenues }) => {
           display: false,
         },
         ticks: {
-          color: 'rgba(75,192,192,1)',
+          color: 'black',  // 날짜 색을 검은색으로 변경
           font: {
             size: 14,
           }
@@ -148,7 +148,7 @@ const Graph: React.FC<GraphProps> = ({ dailyRevenues, monthlyRevenues }) => {
           color: 'rgba(200,200,200,0.2)',
         },
         ticks: {
-          color: 'rgba(75,192,192,1)',
+          color: mode === 'daily' ? 'rgba(75,192,192,1)' : 'rgba(153,102,255,1)', // 일별, 월별 그래프 색깔 맞춤
           font: {
             size: 14,
           }
@@ -162,7 +162,7 @@ const Graph: React.FC<GraphProps> = ({ dailyRevenues, monthlyRevenues }) => {
           drawOnChartArea: false,
         },
         ticks: {
-          color: 'rgba(255,159,64,1)',
+          color: mode === 'daily' ? 'rgba(255,159,64,1)' : 'rgba(255,206,86,1)', // 일별, 월별 그래프 색깔 맞춤
           font: {
             size: 14,
           }
@@ -173,10 +173,20 @@ const Graph: React.FC<GraphProps> = ({ dailyRevenues, monthlyRevenues }) => {
 
   return (
     <div>
-      <label className={styles.switch}>
-        <input type="checkbox" checked={mode === 'monthly'} onChange={toggleMode} />
-        <span className={styles.slider}></span>
-      </label>
+      <div className={styles.buttonContainer}>
+        <button
+          className={`${styles.toggleButton} ${styles.daily} ${mode === 'daily' ? styles.active : ''}`}
+          onClick={() => toggleMode('daily')}
+        >
+          일별
+        </button>
+        <button
+          className={`${styles.toggleButton} ${styles.monthly} ${mode === 'monthly' ? styles.active : ''}`}
+          onClick={() => toggleMode('monthly')}
+        >
+          월별
+        </button>
+      </div>
       <div style={{ width: '800px', height: '400px' }}>
         <Line data={data} options={options} />
       </div>
