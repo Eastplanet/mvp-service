@@ -5,6 +5,10 @@ from PyQt6.QtGui import QPixmap
 from PyQt6.QtCore import Qt
 from core.handlers import handle_exit
 from gui.components.home_button import HomeButton
+from PyQt6.QtCore import QTimer
+
+from gui.components.gif_widget import GifWidget
+from core.thread.settle_thread import SettleThread
 
 class SettlementPage(QWidget):
     def __init__(self, vehicle_info, main_window, parent=None):
@@ -59,12 +63,14 @@ class SettlementPage(QWidget):
         card_layout.addLayout(header_layout)
         
         # 구분선 추가
-        line = QFrame(self)
+        line = QFrame()
         line.setFrameShape(QFrame.Shape.HLine)
         line.setFrameShadow(QFrame.Shadow.Sunken)
-        line.setStyleSheet("color: gray;")
+        line.setStyleSheet("background-color: #D8D8D8;")
         card_layout.addWidget(line)
-
+        
+        card_layout.addItem(QSpacerItem(20, 10))
+        
         # 정산 세부 정보
         details_layout = QVBoxLayout()
         details_layout.setSpacing(2)
@@ -126,11 +132,21 @@ class SettlementPage(QWidget):
         return dt.strftime("%m-%d %H:%M")
 
     def confirm_settle(self):
-        # 정산 핸들러 실행
-        response = handle_exit(self.vehicle_info['license_plate'])
-        # 정산 완료 시 메인페이지로 전환
+        self.gif_widget = GifWidget("parking_kiosk/gui/res/car-anime.gif", main_msg="출차 중입니다..", sub_msg="잠시만 기다려주세요..", duration=3000, parent=self)
+        centerPoint = self.rect().center()
+        newX = int(centerPoint.x() - self.gif_widget.rect().width() / 2)  # 정수로 변환
+        newY = int(centerPoint.y() - self.gif_widget.rect().height() / 2)  # 정수로 변환
+        self.gif_widget.move(newX, newY)
+        self.gif_widget.start()
+        
+        self.settle_thread = SettleThread(license_plate=self.vehicle_info['license_plate'])
+        self.settle_thread.settle_complete_signal.connect(self.on_settle_complete)
+        self.settle_thread.start()
+        
+    # OCR 결과 처리 콜백
+    def on_settle_complete(self, response):
         if response.get('status') == 200:
             self.main_window.return_to_main()
         else:
-            self.main_window.show_error_dialog(response.get("message"))
-            
+            self.show_error_dialog("번호판을 인식할 수 없습니다.")
+        QTimer.singleShot(0, self.gif_widget.stop)

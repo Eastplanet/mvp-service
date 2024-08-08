@@ -94,7 +94,7 @@ class MainWindow(QMainWindow):
     
     # 비동기 차량 번호판 분석
     def show_enter_page(self):
-        self.gif_widget = GifWidget("parking_kiosk/gui/res/car-anime.gif", main_msg="번호판 인식 중..", sub_msg="잠시만 기다려주세요..", duration=3000, parent=self)
+        self.gif_widget = GifWidget("parking_kiosk/gui/res/camera.gif", main_msg="번호판 인식 중..", sub_msg="잠시만 기다려주세요..", duration=3000, parent=self)
         centerPoint = self.rect().center()
         newX = int(centerPoint.x() - self.gif_widget.rect().width() / 2)  # 정수로 변환
         newY = int(centerPoint.y() - self.gif_widget.rect().height() / 2)  # 정수로 변환
@@ -122,7 +122,6 @@ class MainWindow(QMainWindow):
         response = handle_enter("./result/temp_image.jpeg", license_plate, datetime.datetime.now())
         
         self.gif_widget = GifWidget("parking_kiosk/gui/res/car-anime.gif", main_msg="입차가 진행됩니다", sub_msg="잠시만 기다려주세요..", duration=3000, parent=self)
-        self.gif_widget.move(self.rect().center() - self.gif_widget.rect().center())
         centerPoint = self.rect().center()
         newX = int(centerPoint.x() - self.gif_widget.rect().width() / 2)  # 정수로 변환
         newY = int(centerPoint.y() - self.gif_widget.rect().height() / 2)  # 정수로 변환

@@ -8,18 +8,28 @@ from config.mqtt_broker import MQTTBroker
 from config.config import MQTT_PORT, MQTT_BROKER_IP, MQTT_TOPIC_PUB, MQTT_TOPIC_SUB, RABBIT_MQ_HOST, RABBIT_Q_NAME
 from config.consumer_daemon import ConsumerDaemon
 from core.handlers import kiosk_login
+from PyQt6.QtGui import QFontDatabase
+from PyQt6.QtGui import QFont
 
 def main():
     mosquitto_process = MQTTBroker.start_mosquitto()
-    
+
     app = QApplication(sys.argv)
+    font_id = QFontDatabase.addApplicationFont("/Users/kimsejin/Documents/S11P12E101/kiosk-app/parking_kiosk/gui/res/fonts/GothicA1-Medium.ttf")
+    if font_id == -1:
+        print("Font load failed")
+    else:
+        font_family = QFontDatabase.applicationFontFamilies(font_id)[0]
+        font = QFont(font_family)
+        app.setFont(font)
+        
     loop = QEventLoop(app)
     asyncio.set_event_loop(loop)
-    
+
     # 서버에 인증키 가져오기
     kiosk_login()
-    
-    
+
+
     # MQTT 클라이언트 초기화
     mqtt_client = MQTTClient(broker=MQTT_BROKER_IP, port=MQTT_PORT, sub_topic=MQTT_TOPIC_SUB, pub_topic=MQTT_TOPIC_PUB)
     

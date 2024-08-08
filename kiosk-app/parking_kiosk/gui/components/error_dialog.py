@@ -42,14 +42,14 @@ class ErrorDialog(QWidget):
 
         # 오류 메시지
         error_label = QLabel(message, self)
-        error_label.setStyleSheet("font-size: 16px; color: red; font-weight: bold;")
+        error_label.setStyleSheet("font-size: 20px; color: red; font-weight: bold;")
         error_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         message_layout.addWidget(error_label, alignment=Qt.AlignmentFlag.AlignCenter)
 
         layout.addLayout(message_layout)
 
         # Spacer
-        layout.addSpacerItem(QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding))
+        # layout.addSpacerItem(QSpacerItem(20, 40))
 
         # 확인 버튼
         ok_button = QPushButton("확인", self)
