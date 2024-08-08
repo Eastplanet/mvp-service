@@ -53,21 +53,6 @@ public class ParkingBotController {
     }
 
     /**
-     * 주차봇에게 할당된 작업을 가져옴
-     *
-     * @return
-     */
-//    @GetMapping("/poll")
-//    public ResponseEntity<ResponseDto> pollTask() {
-//        Task nextTask = parkingBotService.handleTask();
-//        if (nextTask != null) {
-//            return ResponseDto.response(StatusCode.SUCCESS, nextTask);
-//        } else {
-//            throw new RestApiException(StatusCode.BAD_REQUEST);
-//        }
-//    }
-
-    /**
      * 임의 이동
      *
      * @param moveRequestDTO
