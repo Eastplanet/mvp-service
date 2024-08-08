@@ -1,4 +1,6 @@
 # config/config.py
+RABBIT_MQ_HOST = "mvp-project.shop"
+RABBIT_Q_NAME = "task_queue"
 MQTT_PORT = 1883
 MQTT_BROKER_IP = "192.168.30.151"
 MQTT_TOPIC_SUB = "/parking/complete"

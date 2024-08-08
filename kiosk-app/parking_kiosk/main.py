@@ -5,8 +5,8 @@ from qasync import QEventLoop
 from gui.pages.main_window import MainWindow
 from core.mqtt_client import MQTTClient  # MQTT 클라이언트 임포트
 from config.mqtt_broker import MQTTBroker
-from config.config import MQTT_PORT, MQTT_BROKER_IP, MQTT_TOPIC_PUB, MQTT_TOPIC_SUB, SERVER_URL
-from config.polling_daemon import PollingDaemon
+from config.config import MQTT_PORT, MQTT_BROKER_IP, MQTT_TOPIC_PUB, MQTT_TOPIC_SUB, RABBIT_MQ_HOST, RABBIT_Q_NAME
+from config.consumer_daemon import ConsumerDaemon
 from core.handlers import kiosk_login
 
 def main():
@@ -22,18 +22,17 @@ def main():
     
     # MQTT 클라이언트 초기화
     mqtt_client = MQTTClient(broker=MQTT_BROKER_IP, port=MQTT_PORT, sub_topic=MQTT_TOPIC_SUB, pub_topic=MQTT_TOPIC_PUB)
-    server_url = SERVER_URL + "/parking-bot/poll"
     
     # 데몬 프로세스 시작
-    polling_daemon = PollingDaemon(mqtt_client, server_url=server_url, poll_interval=5)
-    polling_daemon.start()
+    consumer_daemon = ConsumerDaemon(mqtt_client, rabbitmq_host=RABBIT_MQ_HOST, queue_name=RABBIT_Q_NAME) 
+    consumer_daemon.start()
     
     window = MainWindow()
     window.show()
     
     def on_exit():
-        polling_daemon.stop()
-        polling_daemon.join()
+        consumer_daemon.stop()
+        consumer_daemon.join()
         MQTTBroker.stop_mosquitto(mosquitto_process)
     
     app.aboutToQuit.connect(on_exit)
