@@ -35,7 +35,7 @@ function App() {
               "Content-Type": "text/event-stream",
               'API-KEY': token,
             },
-            withCredentials: true,
+            // withCredentials: true,
           });
 
           eventSourceRef.current.onmessage = (event: MessageEvent) => {
