@@ -30,7 +30,7 @@ function App() {
       const EventSource = EventSourcePolyfill || NativeEventSource;
       eventSourceRef.current = new EventSource(`https://mvp-project.shop/api/notify/subscribe/testEmail`, {
         headers: {
-          Authorization: `Bearer ${token}`,
+          'API-KEY': token,
         },
         withCredentials: true,
       });
