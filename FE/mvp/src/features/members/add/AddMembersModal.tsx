@@ -35,7 +35,7 @@ const AddMemberModal: React.FC<AddMemberModalProps> = ({ onClose }) => {
     const formattedEndDate = getISODateString(endDate);
   
     try {
-      await api.post('https://mvp-project.shop/api/memberships', { name, licensePlate, phoneNumber, endDate: formattedEndDate, startDate });
+      await api.post('/memberships', { name, licensePlate, phoneNumber, endDate: formattedEndDate, startDate });
       dispatch(fetchMembers());
       onClose();
     } catch (error) {

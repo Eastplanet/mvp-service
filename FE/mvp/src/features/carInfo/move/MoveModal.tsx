@@ -19,10 +19,10 @@ const MoveModal: React.FC<MoveModalProps> = ({ carLog, currentParkedCars, onClos
 
   const handleEmptySlotClick = async (slotId: number) => {
     try {
-      const response = await api.post('https://mvp-project.shop/api/parking-bot/move-vehicle', {
+      const response = await api.post('/parking-bot/move-vehicle', {
         licensePlate: carLog.licensePlate,
         endSpot: slotId,
-      });
+      })
       console.log('이동 요청 성공:', response.data);
       dispatch(fetchParkingData());
       onClose();

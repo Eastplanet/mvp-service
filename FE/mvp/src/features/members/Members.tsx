@@ -84,6 +84,12 @@ const Members: React.FC = () => {
   const handleSave = async () => {
     if (editingData) {
       const { name, car, secession_date, phone, join_date } = editingData;
+  
+      if (phone.replace(/\D/g, '').length !== 11) {
+        setError('전화번호를 전부 입력하세요.');
+        return;
+      }
+  
       if (!name || !car || !secession_date || !phone) {
         setError('이름, 차량 번호, 만료 기간, 전화번호는 필수 항목입니다.');
         return;
@@ -106,6 +112,12 @@ const Members: React.FC = () => {
       }
     }
   };
+  
+  const handleCancel = () => {
+    setEditingMemberId(null);
+    setEditingData(null);
+    setError(null);
+  };
 
   const handleAddMember = () => {
     setShowModal(true);
@@ -119,12 +131,32 @@ const Members: React.FC = () => {
     if (editingData) {
       let value: string | Date = e.target.value;
       if (field === 'phone') {
-        value = value.replace(/\D/g, '');
+        // 입력된 전화번호에서 숫자만 추출
+        let numericValue = value.replace(/\D/g, '').slice(0, 11);
+  
+        // 백스페이스로 삭제할 때 처리
+        const inputEvent = e.nativeEvent as InputEvent;
+        if (inputEvent.inputType === 'deleteContentBackward') {
+          setEditingData({ ...editingData, [field]: value });
+          return;
+        }
+  
+        // 숫자를 형식에 맞게 변환
+        if (numericValue.length > 6) {
+          value = `${numericValue.slice(0, 3)}-${numericValue.slice(3, 7)}-${numericValue.slice(7, 11)}`;
+        } else if (numericValue.length > 3) {
+          value = `${numericValue.slice(0, 3)}-${numericValue.slice(3)}`;
+        } else {
+          value = numericValue;
+        }
+  
+        setEditingData({ ...editingData, [field]: value });
       } else if (field === 'join_date' || field === 'secession_date') {
         value = new Date(value);
+        setEditingData({ ...editingData, [field]: value });
+      } else {
+        setEditingData({ ...editingData, [field]: value });
       }
-  
-      setEditingData({ ...editingData, [field]: value });
     }
   };
 
@@ -250,6 +282,8 @@ const Members: React.FC = () => {
             </div>
           </div>
   
+          
+          {error && <div className={styles.errorMessage}>{error}</div>}
           {/* 표 */}
           <div className={styles.membersTable}>     
             <div className={styles.tableHead}>
@@ -305,7 +339,7 @@ const Members: React.FC = () => {
                       type="text"
                       value={editingData?.phone || ''}
                       onChange={(e) => handleInputChange(e, 'phone')}
-                      maxLength={13} // 최대 길이를 13으로 설정
+                      maxLength={13}
                     />
                   ) : (
                     member.phone
@@ -328,6 +362,7 @@ const Members: React.FC = () => {
                 <div>
                   {editingMemberId === member.id ? (
                     <button className={styles.editButton} onClick={handleSave}>Save</button>
+                    // <button className={styles.cancelButton} onClick={handleCancel}>Cancel</button>
                   ) : (
                     <button className={styles.editButton} onClick={() => handleEdit(member)}>Edit</button>
                   )}
