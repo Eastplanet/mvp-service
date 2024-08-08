@@ -36,6 +36,7 @@ function App() {
       });
 
       eventSourceRef.current.onmessage = (event: MessageEvent) => {
+        console.log('Received new message:', event.data);
         const newMessage: Message = JSON.parse(event.data);
 
         console.log('message', newMessage);
