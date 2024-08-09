@@ -24,49 +24,6 @@ function App() {
   const token = useSelector((state: RootState) => state.auth.token);
   const eventSourceRef = useRef<EventSource | null>(null);
   
-  // const token = localStorage.getItem('apiKey');
-  // useEffect(() => {
-  //   if (isAuthenticated && token) {
-  //     const fetchSse = async () => {
-  //       try {
-  //         const EventSource = EventSourcePolyfill || NativeEventSource;
-  //         eventSourceRef.current = new EventSource(`https://mvp-project.shop/api/notify/subscribe/testEmail`, {
-  //           headers: {
-  //             "Content-Type": "text/event-stream",
-  //             'API-KEY': token,
-  //           },
-  //           // withCredentials: true,
-  //         });
-
-  //         eventSourceRef.current.onmessage = (event: MessageEvent) => {
-  //           console.log('Received new message:', event.data);
-  //           const newMessage: Message = JSON.parse(event.data);
-  //           console.log('message', newMessage);
-
-  //           dispatch(fetchParkingData() as any);
-  //           setMessages((prevMessages) => [...prevMessages, newMessage]);
-  //         };
-
-  //         eventSourceRef.current.onerror = (event: Event) => {
-  //           console.error('EventSource failed:', event);
-  //           if (eventSourceRef.current) {
-  //             eventSourceRef.current.close();
-  //           }
-  //         };
-  //       } catch (error) {
-  //         console.error('Error initializing EventSource:', error);
-  //       }
-  //     };
-  //     fetchSse();
-
-  //     return () => {
-  //       if (eventSourceRef.current) {
-  //         eventSourceRef.current.close();
-  //       }
-  //     };
-  //   }
-  // }, [isAuthenticated, token, dispatch]);
-  
   useEffect(() => {
     const eventSource = new EventSource('https://mvp-project.shop/api/notify/subscribe/test');
     console.log('start 1')
@@ -76,13 +33,11 @@ function App() {
     };
     
     console.log('start 2')
-    // eventSource.onmessage = (event) => {
-    //   console.log("start3");
-    //   // 데이터가 event.data에 포함되어 있으며, 이를 그대로 사용
-    //   console.log("Received message:", event.data);
-    //   // 데이터가 단순 문자열이라면 직접 사용
-    //   setMessages((prev) => [...prev, event.data]);
-    // };
+    
+    eventSource.onmessage = (event) => {
+      console.log("Received message:", event.data);
+      setMessages((prev) => [...prev, event.data]);
+    };
 
     eventSource.onerror = (error) => {
       console.log("start4");
@@ -90,7 +45,7 @@ function App() {
     };
 
     eventSource.addEventListener('업무수정', (event) => {
-      fetchParkingData()
+      dispatch(fetchParkingData() as any);
       console.log(event.data);
     });
 
