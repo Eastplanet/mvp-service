@@ -14,6 +14,7 @@
     "@types/react-router-dom": "^5.3.3",
     "axios": "^1.7.2",
     "chart.js": "^4.4.3",
+    "event-source-polyfill": "^1.0.31",
     "react": "^18.3.1",
     "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.3.1",
@@ -50,6 +51,7 @@
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@types/event-source-polyfill": "^1.0.5",
     "@types/react-redux": "^7.1.33",
     "react-app-rewired": "^2.2.1"
   }
