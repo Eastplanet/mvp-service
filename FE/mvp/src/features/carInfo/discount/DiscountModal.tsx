@@ -27,7 +27,7 @@ const DiscountModal: React.FC<DiscountModalProps> = ({ carLog, onClose, onApplyD
   return (
     <div className={styles.modalOverlay}>
       <div className={styles.modalContent}>
-        <button className={styles.closeButton} onClick={onClose} aria-label="Close">X</button>
+        <button className={styles.closeButton} onClick={onClose} aria-label="Close">x</button>
         <div className={styles.modalBody}>
           <div className={styles.imageContainer}>
             {carLog.imageBase64 ? (
