@@ -20,8 +20,10 @@ public enum StatusCode {
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "서버 오류"),
     NO_SUCH_ELEMENT(HttpStatus.BAD_REQUEST,"존재하지 않는 요소입니다."),
     DUPLICATE_EMAIL(HttpStatus.BAD_REQUEST, "중복된 이메일 입니다."),
-    INVALID_EMAIL_OR_PASSWORD(HttpStatus.BAD_REQUEST,"이메일 혹은 비밀번호가 일치하지 않습니다");
-
+    INVALID_EMAIL_OR_PASSWORD(HttpStatus.BAD_REQUEST,"이메일 혹은 비밀번호가 일치하지 않습니다"),
+    NO_TARGET_VEHICLE(HttpStatus.BAD_REQUEST, "해당 차량이 존재하지 않습니다."),
+    NO_AVAILABLE_LOT(HttpStatus.BAD_REQUEST, "주차 가능한 주차 공간이 없습니다."),
+    NO_ALLOCATED_LOT(HttpStatus.BAD_REQUEST, "해당 차량에 할당된 주차 공간이 없습니다.");
     private final HttpStatus httpStatus;
     private final String message;
 }
