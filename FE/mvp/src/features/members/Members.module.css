@@ -184,8 +184,8 @@
 
 
 .addButton {
-  background-color: #007bff;
-  color: white;
+  background-color: #ffffff;
+  color: #007bff;
   font-size: 18px;
   font-weight: bold;
   border: #007bff solid 1px;;
@@ -197,7 +197,7 @@
 }
 
 .addButton:hover {
-  background-color: #0056b3;
+  background-color: #0066d2;
   color: #ffffff;
 }
 
