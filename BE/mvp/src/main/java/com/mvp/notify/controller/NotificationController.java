@@ -19,7 +19,6 @@ public class NotificationController {
     //구독 페이지
     @GetMapping(value = "/subscribe/{id}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public SseEmitter subscribe(@PathVariable String id, HttpServletResponse response) {
-        System.out.println("id = " + id);
         return notificationService.subscribe(id, response);
     }
 
