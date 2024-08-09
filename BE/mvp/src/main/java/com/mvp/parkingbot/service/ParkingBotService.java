@@ -351,7 +351,7 @@ public class ParkingBotService {
         parkingBot.updateStatus(BOT_IDLE);
 
         if(task.getType() == ENTRANCE){
-            if(parkingLotSpotEnd.getParkedVehicle() != null){
+            if(parkingLotSpotEnd.getParkedVehicle() == null){
                 throw new RestApiException(StatusCode.NO_SUCH_ELEMENT);
             }
             parkingLotSpotEnd.updateVehicleAndStatus(parkedVehicle,LOT_OCCUPIED);
@@ -363,7 +363,7 @@ public class ParkingBotService {
             parkingLotSpotStart.updateVehicleAndStatus(null,LOT_EMPTY);
             parkedVehicleRepository.delete(parkedVehicle);
         } else{
-            if(parkingLotSpotStart.getParkedVehicle() == null || parkingLotSpotEnd.getParkedVehicle() != null){
+            if(parkingLotSpotStart.getParkedVehicle() == null || parkingLotSpotEnd.getParkedVehicle() == null){
                 throw new RestApiException(StatusCode.NO_SUCH_ELEMENT);
             }
             parkingLotSpotStart.updateVehicleAndStatus(null,LOT_EMPTY);
