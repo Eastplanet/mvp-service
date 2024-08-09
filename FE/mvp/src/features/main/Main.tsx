@@ -27,6 +27,19 @@ const Main: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'currentStatus' | 'parkingLog'>('currentStatus');
   const [filteredCurrentParkedCars, setFilteredCurrentParkedCars] = useState<CarLog[]>([]);
 
+  const getDefaultDateRange = () => {
+    const today = new Date();
+    const lastMonth = new Date(today);
+    lastMonth.setMonth(today.getMonth() - 1);
+  
+    const formatDate = (date: Date) => date.toISOString().split('T')[0];
+  
+    return {
+      startDate: formatDate(lastMonth),
+      endDate: formatDate(today)
+    };
+  };
+
   useEffect(() => {
     dispatch(fetchParkingData());
   }, [dispatch]);
@@ -35,23 +48,38 @@ const Main: React.FC = () => {
   }, [searchData, currentParkedCars]);
 
   useEffect(() => {
-    if (activeTab === 'parkingLog') {
-      dispatch(fetchSearchData({ licensePlate, startDate, endDate }));
-      setSearchPerformed(true);
-    }
-  }, [activeTab, dispatch, licensePlate, startDate, endDate]);
-
-  const handleSearch = () => {
     if (activeTab === 'currentStatus') {
       const filteredCars = currentParkedCars.filter(car =>
         car.licensePlate && car.licensePlate.includes(licensePlate)
       );
       setFilteredCurrentParkedCars(filteredCars);
-    } else {
+    }
+  }, [licensePlate, currentParkedCars, activeTab]);
+
+  useEffect(() => {
+    if (activeTab === 'parkingLog') {
+      handleSearch();
+    }
+  }, [activeTab]);
+
+  const handleTabChange = (tab: 'currentStatus' | 'parkingLog') => {
+    setActiveTab(tab);
+
+    const { startDate, endDate } = getDefaultDateRange();
+    
+    // 입력 필드 초기화
+    dispatch(setLicensePlate(''));
+    dispatch(setStartDate(startDate));
+    dispatch(setEndDate(endDate));
+    setSearchPerformed(false);
+  };
+
+  const handleSearch = () => {
+    if (activeTab === 'parkingLog') {
       dispatch(fetchSearchData({ licensePlate, startDate, endDate }));
       setSearchPerformed(true);
     }
-  };  
+  };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
@@ -140,14 +168,13 @@ const Main: React.FC = () => {
             <div className={styles.tabContainer}>
               <p
                 className={`${styles.tab} ${activeTab === 'currentStatus' ? styles.activeTab : ''}`}
-                onClick={() => setActiveTab('currentStatus')}>
+                onClick={() => handleTabChange('currentStatus')}>
                 현재 주차 현황
               </p>
               <p
                 className={`${styles.tab} ${activeTab === 'parkingLog' ? styles.activeTab : ''}`}
                 onClick={() => {
-                  setActiveTab('parkingLog');
-                  handleSearch();
+                  handleTabChange('parkingLog');
                 }}
               >
                 주차 로그
