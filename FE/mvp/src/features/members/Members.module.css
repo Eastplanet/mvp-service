@@ -32,17 +32,16 @@
   border: none;
   border-radius: 20px;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
-  padding: 10px;
-
+  padding: 10px 15px;
   height: 20px;
-  font-size: large;
+  font-size: medium;
 }
 
-.search input {
+/* .search input {
   padding: 5px;
   border-radius: 5px;
   border: 1px solid #ddd;
-}
+} */
 
 .search button {
   background: none;
