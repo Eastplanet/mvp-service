@@ -23,6 +23,8 @@ function App() {
   const [messages, setMessages] = useState<Message[]>([]);
   const token = useSelector((state: RootState) => state.auth.token);
   const eventSourceRef = useRef<EventSource | null>(null);
+    
+  const parkingData = useSelector((state: RootState) => state.main.currentParkedCars);
   
   useEffect(() => {
     const eventSource = new EventSource('https://mvp-project.shop/api/notify/subscribe/test');
@@ -43,8 +45,6 @@ function App() {
       console.log("start4");
       console.error("EventSource failed:", error);
     };
-    
-    const parkingData = useSelector((state: RootState) => state.main.currentParkedCars);
 
     eventSource.addEventListener('업무수정', (event) => {
       dispatch(fetchParkingData() as any);
