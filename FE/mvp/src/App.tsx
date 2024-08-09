@@ -46,6 +46,8 @@ function App() {
 
     eventSource.addEventListener('업무수정', (event) => {
       dispatch(fetchParkingData() as any);
+      const parkingData = useSelector((state: RootState) => state.main.currentParkedCars);
+      console.log("Fetched Parking Data:", parkingData);
       console.log(event.data);
     });
 
