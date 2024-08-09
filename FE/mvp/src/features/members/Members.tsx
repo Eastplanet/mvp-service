@@ -304,7 +304,7 @@ const Members: React.FC = () => {
             <input
               className={styles.search}
               type="text"
-              placeholder='Car Number'
+              placeholder='차량 번호 검색'
               value={searchTerm}
               onChange={handleSearchChange}
             />
@@ -321,12 +321,12 @@ const Members: React.FC = () => {
                   onChange={handleSelectAll}
                 />
               </div>
-              <div className={styles.name}>Name</div>
-              <div className={styles.car}>Car</div>
-              <div className={styles.phone}>Phone</div>
-              <div className={styles.date}>Join Date</div>
-              <div className={styles.date}>Secession Date</div>
-              <div className={styles.action}>Actions</div>
+              <div className={styles.name}>이름</div>
+              <div className={styles.car}>차량 번호</div>
+              <div className={styles.phone}>연락처</div>
+              <div className={styles.date}>가입 날짜</div>
+              <div className={styles.date}>만료 날짜</div>
+              <div className={styles.action}>수정</div>
             </div>
             <div className={styles.tableBodyContainer}>
               {paginatedMembers.map((member) => (
