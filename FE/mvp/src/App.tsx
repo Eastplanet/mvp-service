@@ -43,10 +43,11 @@ function App() {
       console.log("start4");
       console.error("EventSource failed:", error);
     };
+    
+    const parkingData = useSelector((state: RootState) => state.main.currentParkedCars);
 
     eventSource.addEventListener('업무수정', (event) => {
       dispatch(fetchParkingData() as any);
-      const parkingData = useSelector((state: RootState) => state.main.currentParkedCars);
       console.log("Fetched Parking Data:", parkingData);
       console.log(event.data);
     });
