@@ -21,16 +21,16 @@ class EnterNumberPlate(QWidget):
         # 첫 번째 행의 레이아웃
         layout1 = QHBoxLayout()
         layout1.setAlignment(Qt.AlignmentFlag.AlignLeft)
-        layout1.setSpacing(5)
+        layout1.setSpacing(20)  # 간격을 크게 설정
         for i in range(4):
             label = ClickableLabel(" ", self)
-            label.setFixedSize(40, 40)
+            label.setFixedSize(120, 120)  # 레이블 크기를 크게 설정
             label.setAlignment(Qt.AlignmentFlag.AlignCenter)
             if i == 3:  # 4번째 레이블은 '-'로 설정하고 수정 불가
                 label.setText('-')
-                label.setStyleSheet("border: 1px solid black; background-color: gray; font-size: 20px; border-radius: 3px; color: white;")
+                label.setStyleSheet("border: 2px solid black; background-color: gray; font-size: 60px; border-radius: 10px; color: white;")
             else:
-                label.setStyleSheet("border: 1px solid black; background-color: white; font-size: 20px; border-radius: 3px; color: black;")
+                label.setStyleSheet("border: 2px solid black; background-color: white; font-size: 60px; border-radius: 10px; color: black;")
                 label.clicked.connect(self.label_clicked)
             layout1.addWidget(label)
             self.car_number_labels.append(label)
@@ -38,12 +38,12 @@ class EnterNumberPlate(QWidget):
         # 두 번째 행의 레이아웃
         layout2 = QHBoxLayout()
         layout2.setAlignment(Qt.AlignmentFlag.AlignRight)
-        layout2.setSpacing(5)
+        layout2.setSpacing(20)  # 간격을 크게 설정
         for i in range(4, 8):
             label = ClickableLabel(" ", self)
-            label.setFixedSize(40, 40)
+            label.setFixedSize(120, 120)  # 레이블 크기를 크게 설정
             label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-            label.setStyleSheet("border: 1px solid black; background-color: white; font-size: 20px; border-radius: 3px; color: black;")
+            label.setStyleSheet("border: 2px solid black; background-color: white; font-size: 60px; border-radius: 10px; color: black;")
             label.clicked.connect(self.label_clicked)
             layout2.addWidget(label)
             self.car_number_labels.append(label)
@@ -53,7 +53,7 @@ class EnterNumberPlate(QWidget):
         main_layout.addLayout(row1_layout)
 
         # 두 번째 행
-        row2_layout.addSpacerItem(QSpacerItem(80, 40, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum))
+        row2_layout.addSpacerItem(QSpacerItem(160, 120, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum))
         row2_layout.addLayout(layout2)
         main_layout.addLayout(row2_layout)
 
@@ -62,11 +62,11 @@ class EnterNumberPlate(QWidget):
     def update_current_label_color(self):
         for i, label in enumerate(self.car_number_labels):
             if i == self.current_label_index and i != 3:  # 4번째 레이블은 수정 불가
-                label.setStyleSheet("border: 1px solid black; background-color: lightblue; font-size: 20px; border-radius: 3px; color: black;")
+                label.setStyleSheet("border: 2px solid black; background-color: lightblue; font-size: 60px; border-radius: 10px; color: black;")
             elif i == 3:
-                label.setStyleSheet("border: 1px solid black; background-color: gray; font-size: 20px; border-radius: 3px; color: white;")
+                label.setStyleSheet("border: 2px solid black; background-color: gray; font-size: 60px; border-radius: 10px; color: white;")
             else:
-                label.setStyleSheet("border: 1px solid black; background-color: white; font-size: 20px; border-radius: 3px; color: black;")
+                label.setStyleSheet("border: 2px solid black; background-color: white; font-size: 60px; border-radius: 10px; color: black;")
 
     def label_clicked(self):
         label = self.sender()

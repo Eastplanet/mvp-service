@@ -6,7 +6,6 @@ from PyQt6.QtCore import Qt
 from core.handlers import handle_exit
 from gui.components.home_button import HomeButton
 from PyQt6.QtCore import QTimer
-
 from gui.components.gif_widget import GifWidget
 from core.thread.settle_thread import SettleThread
 
@@ -17,7 +16,7 @@ class SettlementPage(QWidget):
         self.vehicle_info = vehicle_info
 
         layout = QVBoxLayout()
-        layout.setContentsMargins(40, 80, 40, 0)
+        layout.setContentsMargins(60, 100, 60, 40)
         self.setLayout(layout)
 
         # 차량 정보 카드
@@ -25,13 +24,13 @@ class SettlementPage(QWidget):
         card.setStyleSheet("""
             QFrame {
                 background-color: white;
-                border-radius: 5px;
-                padding: 15px;
+                border-radius: 10px;
+                padding: 25px;
             }
         """)
         card_layout = QVBoxLayout(card)
-        card_layout.setContentsMargins(0, 0, 0, 0)
-        card_layout.setSpacing(5)
+        card_layout.setContentsMargins(10, 10, 10, 10)
+        card_layout.setSpacing(20)
 
         header_layout = QHBoxLayout()
         if vehicle_info['image']:
@@ -41,20 +40,20 @@ class SettlementPage(QWidget):
         else:
             pixmap = QPixmap('parking_kiosk/gui/res/test-image1.png')  # 대체 이미지 경로
 
-        pixmap = pixmap.scaled(100, 100, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
+        pixmap = pixmap.scaled(200, 150, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
         
         image_label = QLabel(self)
         image_label.setPixmap(pixmap)
-        image_label.setFixedSize(150, 100)
+        image_label.setFixedSize(200, 150)
         image_label.setStyleSheet("border-radius: 10px;")
         header_layout.addWidget(image_label)
 
         info_layout = QVBoxLayout()
         plate_label = QLabel(vehicle_info['license_plate'], self)
-        plate_label.setStyleSheet("font-size: 18px; color: black; font-weight: bold;")
+        plate_label.setStyleSheet("font-size: 36px; color: black; font-weight: bold;")
         plate_label.setAlignment(Qt.AlignmentFlag.AlignLeft)
         duration_label = QLabel(vehicle_info['duration'], self)
-        duration_label.setStyleSheet("font-size: 16px; color: black;")
+        duration_label.setStyleSheet("font-size: 30px; color: black;")
         duration_label.setAlignment(Qt.AlignmentFlag.AlignLeft)
         info_layout.addWidget(plate_label)
         info_layout.addWidget(duration_label)
@@ -69,11 +68,11 @@ class SettlementPage(QWidget):
         line.setStyleSheet("background-color: #D8D8D8;")
         card_layout.addWidget(line)
         
-        card_layout.addItem(QSpacerItem(20, 10))
+        card_layout.addItem(QSpacerItem(20, 20))
         
         # 정산 세부 정보
         details_layout = QVBoxLayout()
-        details_layout.setSpacing(2)
+        details_layout.setSpacing(10)
 
         details = [
             ("입차일시", self.format_datetime(vehicle_info['entry_time'])),
@@ -87,19 +86,19 @@ class SettlementPage(QWidget):
 
         for label, value in details:
             detail_frame = QFrame(self)
-            detail_frame.setStyleSheet("background-color: white; border-radius: 5px; padding: 2px;")
+            detail_frame.setStyleSheet("background-color: white; border-radius: 5px; padding: 10px;")
             detail_layout = QHBoxLayout(detail_frame)
             detail_layout.setContentsMargins(30, 0, 30, 0)
 
             detail_label = QLabel(label, self)
-            detail_label.setStyleSheet("font-size: 14px; color: black; font-weight: bold;")
+            detail_label.setStyleSheet("font-size: 20px; color: black; font-weight: bold;")
             detail_label.setAlignment(Qt.AlignmentFlag.AlignLeft)
             detail_value = QLabel(value, self)
             if label == "정산요금":
-                detail_label.setStyleSheet("font-size: 18px; color: black; font-weight: bold;")
-                detail_value.setStyleSheet("font-size: 18px; color: red; font-weight: bold;")
+                detail_label.setStyleSheet("font-size: 24px; color: black; font-weight: bold;")
+                detail_value.setStyleSheet("font-size: 24px; color: red; font-weight: bold;")
             else:
-                detail_value.setStyleSheet("font-size: 14px; color: black; font-weight: bold;")
+                detail_value.setStyleSheet("font-size: 20px; color: black; font-weight: bold;")
             detail_value.setAlignment(Qt.AlignmentFlag.AlignRight)
             detail_layout.addWidget(detail_label)
             detail_layout.addStretch()
@@ -112,13 +111,13 @@ class SettlementPage(QWidget):
 
         # 정산하기 버튼
         settle_button = QPushButton("정산하기", self)
-        settle_button.setFixedSize(200, 60)
+        settle_button.setFixedSize(300, 80)
         settle_button.setStyleSheet("""
             QPushButton {
                 background-color: #FFB300; 
                 color: white; 
-                font-size: 20px; 
-                border-radius: 5px;
+                font-size: 26px; 
+                border-radius: 10px;
             }
             QPushButton:hover {
                 background-color: #FFA000;
@@ -143,10 +142,9 @@ class SettlementPage(QWidget):
         self.settle_thread.settle_complete_signal.connect(self.on_settle_complete)
         self.settle_thread.start()
         
-    # OCR 결과 처리 콜백
     def on_settle_complete(self, response):
         if response.get('status') == 200:
             self.main_window.return_to_main()
         else:
-            self.show_error_dialog("번호판을 인식할 수 없습니다.")
+            self.show_error_dialog("정산에 실패했습니다.")
         QTimer.singleShot(0, self.gif_widget.stop)

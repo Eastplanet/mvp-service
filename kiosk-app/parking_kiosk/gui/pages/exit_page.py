@@ -11,17 +11,17 @@ class ExitPage(QWidget):
         self.main_window = main_window
 
         layout = QVBoxLayout()
-        layout.setContentsMargins(40, 60, 40, 0)
+        layout.setContentsMargins(60, 120, 60, 0)  # 마진 조정
         self.setLayout(layout)
         
         # 상단 Spacer
-        top_spacer = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+        top_spacer = QSpacerItem(20, 80, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
         layout.addSpacerItem(top_spacer)
 
         # 상단 라벨
         top_label = QLabel("차량번호를 입력하세요", self)
         top_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        top_label.setStyleSheet("color: white; font-size: 24px; font-weight: bold;")
+        top_label.setStyleSheet("color: white; font-size: 36px; font-weight: bold;")  # 폰트 크기 조정
         layout.addWidget(top_label, alignment=Qt.AlignmentFlag.AlignCenter)
 
         # 상단 Spacer
@@ -32,7 +32,7 @@ class ExitPage(QWidget):
         layout.addWidget(self.number_plate_labels, alignment=Qt.AlignmentFlag.AlignCenter)
 
         # 중간 Spacer
-        middle_spacer = QSpacerItem(20, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+        middle_spacer = QSpacerItem(20, 60, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
         layout.addSpacerItem(middle_spacer)
 
         # 키패드
@@ -40,10 +40,7 @@ class ExitPage(QWidget):
         layout.addWidget(self.keypad, alignment=Qt.AlignmentFlag.AlignCenter)
 
         # 하단 Spacer
-        bottom_spacer = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
-        layout.addSpacerItem(bottom_spacer)
-
-        # 하단 Spacer
+        bottom_spacer = QSpacerItem(20, 80, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
         layout.addSpacerItem(bottom_spacer)
 
     def go_back(self):
