@@ -123,15 +123,15 @@ const Main: React.FC = () => {
           <div className={styles.dataTables}>
             <div className={styles.todayIn}>
               <p className={styles.dataName}>당일 입차대수</p>
-              <p className={styles.dataValue}>{todayIn}대</p>
+              <p className={styles.dataValue}>{todayIn} 대</p>
             </div>
             <div className={styles.todayOut}>
               <p className={styles.dataName}>당일 출차대수</p>
-              <p className={styles.dataValue}>{todayOut}대</p>
+              <p className={styles.dataValue}>{todayOut} 대</p>
             </div>
             <div className={styles.todayIncome}>
               <p className={styles.dataName}>당일 매출액</p>
-              <p className={styles.dataValue}>{todayIncome}원</p>
+              <p className={styles.dataValue}>{(todayIncome / 10000).toFixed(1)}만원</p>
             </div>
           </div>
         </div>
