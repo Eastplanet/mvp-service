@@ -63,8 +63,6 @@ export const fetchParkingData = createAsyncThunk('main/fetchParkingData', async 
     lotState: lot.lotState,
     imageBase64: lot.image,
   }));
-  console.log(parkingLots)
-  console.log(data)
   
   return {
     todayIn: data.todayIn,
@@ -77,21 +75,14 @@ export const fetchParkingData = createAsyncThunk('main/fetchParkingData', async 
 export const fetchSearchData = createAsyncThunk(
   'main/fetchSearchData',
   async ({ licensePlate, startDate, endDate }: { licensePlate: string; startDate: string; endDate: string }) => {
-    if (!startDate || !endDate) {
-      const defaultDates = getDefaultDateRange();
-      startDate = defaultDates.startDate;
-      endDate = defaultDates.endDate;
-    } else {
-      startDate = new Date(startDate).toISOString();
-      endDate = new Date(endDate).toISOString();
-    }
+    startDate = new Date(startDate).toISOString().split('.')[0];
+    endDate = new Date(endDate).toISOString().split('.')[0];
 
     const response = await api.get('/stats/parking-log', {
       params: { licensePlate, startDate, endDate }
     });
 
     const data = response.data.data;
-    console.log(data);
     const parkingLots = data.map((lot: any) => ({
       licensePlate: lot.licensePlate,
       parkingDate: lot.parkingDate,
