@@ -1,66 +1,55 @@
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QPushButton, QApplication, QGraphicsDropShadowEffect
-from PyQt6.QtCore import Qt, QPropertyAnimation, QRect
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QPushButton, QGraphicsDropShadowEffect
+from PyQt6.QtCore import Qt
 
-class AnimatedButton(QPushButton):
+class HoverButton(QPushButton):
     def __init__(self, text, color, hover_color, parent=None):
-        super(AnimatedButton, self).__init__(text, parent)
+        super(HoverButton, self).__init__(text, parent)
         self.default_color = color
         self.hover_color = hover_color
-        self.setFixedSize(200, 60)
+
+        # 버튼 크기와 폰트 크기 설정
+        self.setFixedSize(300, 80)  # 버튼 크기를 절대값으로 설정
         self.setStyleSheet(f"""
             QPushButton {{
                 background-color: {self.default_color}; 
                 color: white; 
-                font-size: 20px; 
-                border-radius: 10px;
-                border: 2px solid #FFF;
+                font-size: 24px;
+                border-radius: 15px;
+                border: 3px solid #FFF;
             }}
         """)
         self.setGraphicsEffect(self.create_shadow())
-        self.animation = None
 
     def create_shadow(self):
         shadow = QGraphicsDropShadowEffect()
-        shadow.setBlurRadius(10)
+        shadow.setBlurRadius(15)  # 그림자 효과 절대값 설정
         shadow.setOffset(0, 0)
         shadow.setColor(Qt.GlobalColor.black)
         return shadow
 
     def enterEvent(self, event):
-        self.animate_button(QRect(self.geometry().x(), self.geometry().y(), 190, 55))
         self.setStyleSheet(f"""
             QPushButton {{
                 background-color: {self.hover_color}; 
                 color: white; 
-                font-size: 20px; 
-                border-radius: 10px;
-                border: 2px solid #FFF;
+                font-size: 24px; 
+                border-radius: 15px; 
+                border: 3px solid #FFF;
             }}
         """)
         super().enterEvent(event)
 
     def leaveEvent(self, event):
-        self.animate_button(QRect(self.geometry().x(), self.geometry().y(), 200, 60))
         self.setStyleSheet(f"""
             QPushButton {{
                 background-color: {self.default_color}; 
                 color: white; 
-                font-size: 20px; 
-                border-radius: 10px;
-                border: 2px solid #FFF;
+                font-size: 24px; 
+                border-radius: 15px; 
+                border: 3px solid #FFF;
             }}
         """)
         super().leaveEvent(event)
-
-    def animate_button(self, geometry):
-        if self.animation:
-            self.animation.stop()
-
-        self.animation = QPropertyAnimation(self, b"geometry")
-        self.animation.setDuration(150)
-        self.animation.setStartValue(self.geometry())
-        self.animation.setEndValue(geometry)
-        self.animation.start()
 
 class MainButton(QWidget):
     def __init__(self, parent=None):
@@ -70,11 +59,11 @@ class MainButton(QWidget):
         self.setLayout(layout)
 
         # 입차 버튼
-        self.entry_button = AnimatedButton("입차", "#FFB300", "#FFA000", self)
+        self.entry_button = HoverButton("입차", "#FFB300", "#FFA000", self)
         layout.addWidget(self.entry_button, alignment=Qt.AlignmentFlag.AlignCenter)
         
-        layout.addSpacing(30)
+        layout.addSpacing(50)  # 버튼 간의 간격 절대값 설정
 
         # 출차 버튼
-        self.exit_button = AnimatedButton("출차", "#FF0000", "#CC0000", self)
+        self.exit_button = HoverButton("출차", "#FF0000", "#CC0000", self)
         layout.addWidget(self.exit_button, alignment=Qt.AlignmentFlag.AlignCenter)

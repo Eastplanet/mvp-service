@@ -53,12 +53,12 @@ class Keypad(QWidget):
         positions = [(i, j) for i in range(4) for j in range(3)]
         for position, key in zip(positions, keys):
             button = QPushButton(key, self)
-            button.setFixedSize(80, 60)
+            button.setFixedSize(160, 120)  # 키패드 버튼 크기 설정
             button.setStyleSheet("""
                 QPushButton {
                     background-color: white; 
-                    font-size: 20px; 
-                    border-radius: 5px;
+                    font-size: 40px;
+                    border-radius: 10px;
                     color: black;
                 }
                 QPushButton:hover {
@@ -67,7 +67,7 @@ class Keypad(QWidget):
             """)
             button.clicked.connect(self.keypad_clicked)
             layout.addWidget(button, *position)
-        layout.setSpacing(5)
+        layout.setSpacing(10)  # 버튼 간의 간격 설정
         return widget
 
     def create_number_keyboard(self):
@@ -79,12 +79,12 @@ class Keypad(QWidget):
         positions = [(i, j) for i in range(4) for j in range(3)]
         for position, key in zip(positions, keys):
             button = QPushButton(key, self)
-            button.setFixedSize(80, 60)
+            button.setFixedSize(160, 120)  # 키패드 버튼 크기 설정
             button.setStyleSheet("""
                 QPushButton {
                     background-color: white; 
-                    font-size: 20px; 
-                    border-radius: 5px;
+                    font-size: 40px;
+                    border-radius: 10px;
                     color: black;
                 }
                 QPushButton:hover {
@@ -93,7 +93,7 @@ class Keypad(QWidget):
             """)
             button.clicked.connect(self.keypad_clicked)
             layout.addWidget(button, *position)
-        layout.setSpacing(5)
+        layout.setSpacing(10)  # 버튼 간의 간격 설정
         return widget
 
     def show_cheonjiin_keyboard(self):

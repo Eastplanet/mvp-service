@@ -2,8 +2,8 @@ import asyncio
 import datetime
 import threading
 import time
-from PyQt6.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QStackedWidget, QLabel
-from PyQt6.QtGui import QPixmap
+from PyQt6.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QStackedWidget, QLabel, QApplication
+from PyQt6.QtGui import QPixmap, QScreen
 from gui.components.main_button import MainButton
 from gui.components.gif_widget import GifWidget
 from gui.pages.settlement_page import SettlementPage
@@ -26,8 +26,22 @@ from core.thread.ocr_thread import OcrThread
 class MainWindow(QMainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
+        
+        # 기준 해상도 설정 (1080x1920)
+        self.base_width = 1080
+        self.base_height = 1920
+        
+        # 현재 해상도 가져오기
+        screen = QScreen.availableGeometry(QApplication.primaryScreen())
+        self.current_width = screen.width()
+        self.current_height = screen.height()
+        
+        # 해상도 비율 계산
+        self.width_ratio = self.current_width / self.base_width
+        self.height_ratio = self.current_height / self.base_height
+        
         self.setWindowTitle("주차장 키오스크")
-        self.setGeometry(100, 100, 400, 600)
+        self.setGeometry(100, 100, self.current_width, self.current_height)
         self.setStyleSheet("background-color: #2E3348;")
         self.camera = Camera()
         self.parking_barrier = ParkingBarrierController()
@@ -47,17 +61,17 @@ class MainWindow(QMainWindow):
         main_button_layout = QVBoxLayout(self.main_button_page)
 
         # 상단 여백
-        main_button_layout.addSpacing(30)
+        main_button_layout.addSpacing(int(100 * self.height_ratio))
 
         # 로고 추가
         self.logo_label = QLabel(self)
-        self.logo_pixmap = QPixmap("parking_kiosk/gui/res/mvp-logo.png").scaled(QSize(200, 200), Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
+        self.logo_pixmap = QPixmap("parking_kiosk/gui/res/mvp-logo.png").scaled(int(400 * self.width_ratio), int(400 * self.height_ratio), Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
         self.logo_label.setPixmap(self.logo_pixmap)
         self.logo_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         main_button_layout.addWidget(self.logo_label, alignment=Qt.AlignmentFlag.AlignTop)
 
         # 사이 여백
-        main_button_layout.addSpacing(80)
+        main_button_layout.addSpacing(int(150 * self.height_ratio))
 
         # 메인 버튼 추가
         self.main_button = MainButton(self)
@@ -78,11 +92,11 @@ class MainWindow(QMainWindow):
         # 홈 버튼
         self.home_button = QPushButton(self)
         self.home_button.setIcon(QIcon("parking_kiosk/gui/res/home-icon.png"))  # 홈 아이콘 경로 설정
-        self.home_button.setIconSize(QSize(30, 30))
-        self.home_button.setFixedSize(40, 40)
+        self.home_button.setIconSize(QSize(int(60 * self.width_ratio), int(60 * self.height_ratio)))
+        self.home_button.setFixedSize(int(80 * self.width_ratio), int(80 * self.height_ratio))
         self.home_button.setStyleSheet("border: none;")
         self.home_button.clicked.connect(self.return_to_main)
-        self.home_button.move(10, 10)  # 절대 위치 설정
+        self.home_button.move(int(20 * self.width_ratio), int(20 * self.height_ratio))  # 절대 위치 설정
         
         # 홈 버튼을 기본적으로 숨김
         self.home_button.hide()
