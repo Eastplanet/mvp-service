@@ -53,7 +53,7 @@ const ParkingLot: React.FC<ParkingLotProps> = ({ parkingData, onCarLogClick, sel
               }}
             >
               {carLog.licensePlate && <img src={parkingCar} alt={carLog.licensePlate} className={styles.rotatedCar} />}
-              {carLog.licensePlate && carLog.lotState === 2 && <span className={styles.moving}>이동 중</span>}
+              {carLog.lotState === 2 && <span className={styles.moving}>이동 중</span>}
             </div>
           ))}
           <div
@@ -76,7 +76,7 @@ const ParkingLot: React.FC<ParkingLotProps> = ({ parkingData, onCarLogClick, sel
               }}
             >
               {carLog.licensePlate && <img src={parkingCar} alt={carLog.licensePlate} />}
-              {carLog.licensePlate && carLog.lotState === 2 && <span className={styles.moving}>이동 중</span>}
+              {carLog.lotState === 2 && <span className={styles.moving}>이동 중</span>}
             </div>
           ))}
         </div>
