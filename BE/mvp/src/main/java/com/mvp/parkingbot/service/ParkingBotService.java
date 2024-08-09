@@ -65,7 +65,7 @@ public class ParkingBotService {
         Optional<ParkingLotSpot> availableSpot = parkingLotSpotRepository.findFirstByStatus(LOT_EMPTY);
 
         if (availableSpot.isEmpty()) {
-            throw new RuntimeException("주차장에 공간이 없습니다!!");
+            throw new RestApiException(StatusCode.NO_AVAILABLE_LOT);
         }
 
         // 차량 정보 등록
@@ -97,6 +97,7 @@ public class ParkingBotService {
             taskService.addWaitingTask(task);
         } else{
             availableBot.get().updateStatus(BOT_BUSY);
+            vehicle.updateStatus(VEHICLE_MOVE);
             // 바로 전송
             task = Task.builder()
                     .parkingBotSerialNumber(availableBot.get().getSerialNumber())
@@ -129,7 +130,7 @@ public class ParkingBotService {
         // 차량 정보 확인
         ParkedVehicle parkedVehicle = parkedVehicleRepository.findByLicensePlate(licensePlate);
         if(parkedVehicle == null){
-            throw new RestApiException(StatusCode.NO_SUCH_ELEMENT);
+            throw new RestApiException(StatusCode.NO_TARGET_VEHICLE);
         }
 
         // 차량 상태변화
@@ -138,7 +139,7 @@ public class ParkingBotService {
         // 주차공간 상태변화
         ParkingLotSpot spot = parkingLotSpotRepository.findByParkedVehicleId(parkedVehicle.getId());
         if(spot == null){
-            throw new RestApiException(StatusCode.NO_SUCH_ELEMENT);
+            throw new RestApiException(StatusCode.NO_ALLOCATED_LOT);
         }
         spot.updateVehicleAndStatus(spot.getParkedVehicle(),LOT_IMPOSSIBLE);
 
@@ -152,17 +153,18 @@ public class ParkingBotService {
                     .parkedVehicleId(parkedVehicle.getId())
                     .parkingBotSerialNumber(null)
                     .start(spot.getSpotNumber())
-                    .end(1)
+                    .end(0)
                     .type(EXIT)
                     .build();
             taskService.addWaitingTask(task);
         } else{
             availableBot.get().updateStatus(BOT_BUSY);
+            parkedVehicle.updateStatus(VEHICLE_MOVE);
             task = Task.builder()
                     .parkedVehicleId(parkedVehicle.getId())
                     .parkingBotSerialNumber(availableBot.get().getSerialNumber())
                     .start(spot.getSpotNumber())
-                    .end(1)
+                    .end(0)
                     .type(EXIT)
                     .build();
             taskService.sendMessage(task);
@@ -186,7 +188,6 @@ public class ParkingBotService {
      * @param moveRequestDTO
      * @return
      */
-
     @Transactional
     public Task handleMoveRequest(MoveRequestDTO moveRequestDTO) {
         int start = moveRequestDTO.getStart();
@@ -197,13 +198,13 @@ public class ParkingBotService {
 
         // 주차공간 확인
         if(startSpot == null || endSpot == null){
-            return null;
+            throw new RestApiException(StatusCode.BAD_REQUEST);
         }
         if(startSpot.getParkedVehicle() == null){
-            return null;
+            throw new RestApiException(StatusCode.BAD_REQUEST);
         }
         if(endSpot.getParkedVehicle() != null){
-            return null;
+            throw new RestApiException(StatusCode.BAD_REQUEST);
         }
 
         // 주차공간 상태변화
@@ -225,6 +226,7 @@ public class ParkingBotService {
         // 작업 추가
         if(availableBot != null){
             availableBot.updateStatus(BOT_BUSY);
+            parkedVehicle.updateStatus(VEHICLE_MOVE);
             taskService.sendMessage(task);
         } else{
             taskService.addWaitingTask(task);
