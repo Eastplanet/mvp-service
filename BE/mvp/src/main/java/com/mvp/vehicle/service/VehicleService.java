@@ -100,4 +100,13 @@ public class VehicleService {
             return null;
         }
     }
+
+    @Transactional
+    public void updateVehicle(List<ParkedVehicleDTO> list) {
+        for(ParkedVehicleDTO parkedVehicleDTO : list){
+            ParkedVehicle find = parkedVehicleRepository.findByLicensePlate(parkedVehicleDTO.getLicensePlate());
+            find.updateImage(parkedVehicleDTO.getImage());
+
+        }
+    }
 }
