@@ -22,9 +22,9 @@ public class NotificationController {
         return notificationService.subscribe(id, response);
     }
 
-    @PostMapping("/send-data/{id}")
-    public void sendData(@PathVariable String id) {
-        notificationService.sendEvent(id, "data");
+    @PostMapping("/send-data")
+    public void sendData() {
+        notificationService.sendEvent("data");
     }
 
 }

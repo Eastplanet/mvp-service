@@ -28,7 +28,7 @@ public class NotificationRepository {
         return emitters.get(id);
     }
 
-    public List<SseEmitter> getAll() {
-        return new ArrayList<SseEmitter>(emitters.values());
+    public List<String> getAllKey() {
+        return new ArrayList<String>(emitters.keySet());
     }
 }
