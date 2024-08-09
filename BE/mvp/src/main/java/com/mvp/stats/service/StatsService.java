@@ -83,7 +83,12 @@ public class StatsService {
     }
 
     public List<ParkingLogRes> getParkingLot(ParkingLogReq parkingLogReq){
-        List<VehicleLogDTO> find = loggerService.findByEntranceTimeBetween(parkingLogReq.getStartDate(), parkingLogReq.getEndDate(), parkingLogReq.getLicensePlate());
+        // getStartDate()를 해당 날짜의 00시로 설정
+        LocalDateTime startDate = parkingLogReq.getStartDate().toLocalDate().atStartOfDay();
+        // getEndDate()를 해당 날짜의 23시 59분으로 설정
+        LocalDateTime endDate = parkingLogReq.getEndDate().toLocalDate().atTime(23, 59, 59);
+
+        List<VehicleLogDTO> find = loggerService.findByEntranceTimeBetween(startDate, endDate, parkingLogReq.getLicensePlate());
 
         List<ParkingLogRes> list = new ArrayList<>();
         for(VehicleLogDTO vehicleLogDTO : find){
@@ -106,6 +111,19 @@ public class StatsService {
                     .build();
             list.add(build);
         }
+        list.sort((o1, o2) -> {
+            if (o1.getExitTime() == null && o2.getExitTime() == null) {
+                return 0;
+            }
+            if (o1.getExitTime() == null) {
+                return 1; // exitTime이 없는 경우 뒤로 보냄
+            }
+            if (o2.getExitTime() == null) {
+                return -1; // exitTime이 없는 경우 뒤로 보냄
+            }
+            return o2.getExitTime().compareTo(o1.getExitTime()); // 내림차순 정렬
+        });
+
         return list;
     }
 
