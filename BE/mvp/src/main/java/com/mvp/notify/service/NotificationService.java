@@ -51,14 +51,32 @@ public class NotificationService {
                 }
             }
         }
+    }
 
+    public void sendEventOne(String userId, Object data) {
+
+        List<String> allKey = notificationRepository.getAllKey();
+        for(String sendId : allKey){
+            // 먼저 클라이언트의 SseEmitter를 가져온다
+            SseEmitter emitter = notificationRepository.get(sendId);
+            if (emitter != null) {
+                try {
+                    // 데이터를 클라이언트에게 실어보낸다.
+                    emitter.send(SseEmitter.event().id(String.valueOf(sendId)).name("업무수정").data(data));
+                } catch (IOException exception) {
+                    // 데이터 전송 중 오류가 발생하면 Emitter를 삭제하고 에러를 완료 상태로 처리
+                    notificationRepository.deleteById(sendId);
+                    emitter.completeWithError(exception);
+                }
+            }
+        }
     }
 
     public SseEmitter subscribe(String userId,final HttpServletResponse response) {
         SseEmitter emitter = createEmitter(userId);
         response.setContentType("text/event-stream");
         response.setCharacterEncoding("UTF-8");
-        sendEvent(userId, "더미데이터" + userId + "]");
+        sendEventOne(userId, "더미데이터" + userId + "]");
         return emitter;
     }
 
