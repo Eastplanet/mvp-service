@@ -6,5 +6,15 @@ module.exports = function override(config, env) {
     host: 'localhost',
     port: 8081,
   };
+  config.resolve = {
+    ...config.resolve,
+    alias: {
+        ...config.resolve.alias,
+        'faye-websocket': require.resolve('./src/empty-module.js'),
+        'sockjs-client': require.resolve('./src/empty-module.js'),
+        'websocket-driver': require.resolve('./src/empty-module.js'),
+        'websocket-extensions': require.resolve('./src/empty-module.js'),
+    },
+  };
   return config;
 };
