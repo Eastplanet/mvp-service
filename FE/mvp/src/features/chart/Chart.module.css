@@ -30,6 +30,13 @@
   flex: 1; /* 전체 너비의 100%를 사용 */
 }
 
+.summaryContainer hr {
+  margin: 0 5px;
+  width: 1.5px;
+  background-color: #DFDEDD;
+  border: none;
+}
+
 .summary {
   flex: 1; /* 1:1:1 비율로 설정 */
   background-color: white;
@@ -47,8 +54,16 @@
   color: #a8a8a8;
 }
 
+.dayHighlight {
+  color: #4BC0C0;
+}
+
+.monthHighlight {
+  color: #9966FF;
+}
+
 .summaryData {
-  font-size: 25px;
+  font-size: 22px;
   margin: 0;
   text-align: right;
   font-weight: 600;
@@ -76,36 +91,41 @@
 }
 
 /* 우측 데이터 */
+
+.deatilsContainer{
+  display: flex;
+  flex-direction: column;
+}
+
 .details {
-  flex: 1; /* 비율 설정: 전체의 1/6 */
-  padding: 20px;
+  /* flex: 1; */
+  padding: 0 20px;
   background-color: white;
   border-radius: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
-  margin: 35px 35px;
+  margin: 20px 35px;
   text-align: right;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  overflow-y: auto;
   max-width: 400px;
-  min-height: 500px;
+  min-height: 300px;
 }
 
 .details p {
-  margin: 0px 0;
+  margin: 0;
   font-size: 1.5rem;
 }
 
 .details h3 {
-  margin: 0 0 25px 0;
+  margin: 0 0 15px 0;
   font-size: 2.5rem;
 }
 
-.details .detailsTotal {
+/* .details .detailsTotal {
   margin: 0;
   font-size: 2.5rem;
-}
+} */
 
 .up {
   color: red;
@@ -130,7 +150,6 @@
   border-right: 6px solid transparent;
   margin-left: 5px;
   position: relative;
-  top: 2px; 
 }
 
 .arrowDown{
@@ -141,7 +160,6 @@
   border-right: 6px solid transparent;
   margin-left: 5px;
   position: relative;
-  top: 2px; 
 }
 
 .totalUp {

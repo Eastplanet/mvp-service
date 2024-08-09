@@ -92,6 +92,26 @@ const Main: React.FC = () => {
   ? (filteredCurrentParkedCars.length > 0 ? filteredCurrentParkedCars : currentParkedCars)
   : (searchPerformed && searchData.length === 0 ? [] : searchData);
 
+  const today = new Date().toISOString().split('T')[0];
+
+  const handleStartDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newStartDate = e.target.value;
+    dispatch(setStartDate(newStartDate));
+  
+    if (new Date(newStartDate) > new Date(endDate)) {
+      dispatch(setEndDate(newStartDate));
+    }
+  };
+  
+  const handleEndDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newEndDate = e.target.value;
+    dispatch(setEndDate(newEndDate));
+  
+    if (new Date(newEndDate) < new Date(startDate)) {
+      dispatch(setStartDate(newEndDate));
+    }
+  };
+
   return (
     <div className={styles.main}>
       <Sidebar />
@@ -153,18 +173,21 @@ const Main: React.FC = () => {
                   className={styles.dateInput} 
                   type="date" 
                   value={startDate}
-                  onChange={(e) => dispatch(setStartDate(e.target.value))}
+                  max={today}
+                  onChange={handleStartDateChange}
                 />
                 <input 
                   className={styles.dateInput} 
                   type="date" 
                   value={endDate}
-                  onChange={(e) => dispatch(setEndDate(e.target.value))}
+                  min={startDate}
+                  max={today}
+                  onChange={handleEndDateChange}
                 />
               </div>
             )}
           </div>
-          {searchPerformed && searchData.length === 0 && (
+          {searchPerformed && activeTab === 'parkingLog' && searchData.length === 0 && (
             <div className={styles.noResults}>
               <p>검색 결과가 없습니다.</p>
             </div>
