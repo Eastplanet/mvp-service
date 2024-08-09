@@ -104,7 +104,6 @@ public class VehicleService {
     @Transactional
     public void updateVehicle(List<ParkedVehicleDTO> list) {
         for(ParkedVehicleDTO parkedVehicleDTO : list){
-            System.out.println("parkedVehicleDTO = " + parkedVehicleDTO.getLicensePlate());
             ParkedVehicle find = parkedVehicleRepository.findByLicensePlate(parkedVehicleDTO.getLicensePlate());
             find.updateImage(parkedVehicleDTO.getImage());
 
