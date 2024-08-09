@@ -9,7 +9,6 @@ import totalMember from '../../assets/images/icons/total.png';
 import newMember from '../../assets/images/icons/new.png';
 import expiredMember from '../../assets/images/icons/expired.png';
 import soonMember from '../../assets/images/icons/soon.png';
-import { lstat } from 'fs';
 
 interface Member {
   id: number;
@@ -326,7 +325,7 @@ const Members: React.FC = () => {
               <div className={styles.phone}>연락처</div>
               <div className={styles.date}>가입 날짜</div>
               <div className={styles.date}>만료 날짜</div>
-              <div className={styles.action}>수정</div>
+              {/* <div className={styles.action}>수정</div> */}
             </div>
             <div className={styles.tableBodyContainer}>
               {paginatedMembers.map((member) => (
@@ -394,9 +393,14 @@ const Members: React.FC = () => {
                   </div>
                   <div>
                     {editingMemberId === member.id ? (
-                      <button className={styles.editButton} onClick={handleSave}>Save</button>
+                      <div className={styles.action}>
+                        <button className={styles.editButton} onClick={handleSave}>Save</button>
+                        <button className={styles.editButton} onClick={handleCancel}>Cancel</button>
+                      </div>
                     ) : (
-                      <button className={styles.editButton} onClick={() => handleEdit(member)}>Edit</button>
+                      <div className={styles.action}>
+                        <button className={styles.editButton} onClick={() => handleEdit(member)}>Edit</button>
+                      </div>
                     )}
                   </div>
                 </div>

@@ -148,11 +148,16 @@
 
 .date {
   flex: 0 0 15%;
-  margin-right: 5%;
+  margin-right: 2%;
 }
 
 .action{
   flex: 0 0 10%;
+  display: flex;
+  gap: 10px;
+  justify-content: flex-start;
+  padding: 5px;
+  box-sizing: border-box;
 }
 
 .editButton {
@@ -240,3 +245,4 @@
 .pagination span {
   margin: 0 5px;
 }
+

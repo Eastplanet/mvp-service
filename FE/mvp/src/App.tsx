@@ -20,9 +20,6 @@ interface Message {
 function App() {
   const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
   const dispatch = useDispatch();
-  const [messages, setMessages] = useState<Message[]>([]);
-  const token = useSelector((state: RootState) => state.auth.token);
-  const eventSourceRef = useRef<EventSource | null>(null);
     
   const parkingData = useSelector((state: RootState) => state.main.currentParkedCars);
   
@@ -38,7 +35,6 @@ function App() {
     
     eventSource.onmessage = (event) => {
       console.log("Received message:", event.data);
-      setMessages((prev) => [...prev, event.data]);
     };
 
     eventSource.onerror = (error) => {
