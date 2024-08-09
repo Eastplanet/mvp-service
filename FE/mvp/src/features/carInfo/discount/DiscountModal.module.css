@@ -42,7 +42,7 @@
 }
 
 .imageContainer {
-    flex: 1;
+    flex: 1.5;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -61,6 +61,7 @@
     flex-direction: column;
     justify-content: space-between;
     padding: 20px;
+    
 }
 
 .detailsContainer {
@@ -68,6 +69,7 @@
     border-radius: 10px;
     padding: 20px;
     margin-bottom: 20px; /* 버튼들과 구분 */
+    box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.25);
 }
 
 .carDetails {
@@ -93,6 +95,13 @@
     font-size: 1.1em;
 }
 
+.dataValue input {
+    border: none;
+    border-radius: 10px;
+    background-color: #f2f2f2;
+    height: 100%;
+}
+
 .buttonContainer {
     display: flex;
     justify-content: center;
@@ -108,14 +117,15 @@
 
 .modalButton {
     padding: 15px 0;
-    background-color: #f0f0f0;
+    background-color: #E2E8F0;
     color: #333;
-    border: 1px solid #ccc;
+    border: none;
     border-radius: 5px;
     cursor: pointer;
     text-align: center;
     font-size: 16px;
     min-height: 50px;
+    box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.25);
 }
 
 .modalButton:hover {

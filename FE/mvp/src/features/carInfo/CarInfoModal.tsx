@@ -7,6 +7,9 @@ import ExitModal from './exit/ExitModal';
 import MoveModal from './move/MoveModal';
 import DiscountModal from './discount/DiscountModal';
 import { RootState, AppDispatch } from '../../store/store';
+import out from '../../assets/images/icons/out.png';
+import move from '../../assets/images/icons/move.png';
+import discount from '../../assets/images/icons/discount.png';
 
 export interface CarLog {
   licensePlate: string;
@@ -130,35 +133,38 @@ const CarInfoModal: React.FC<CarInfoModalProps> = ({ carLog, onClose }) => {
               <button
                 className={styles.modalButton}
                 style={{
-                  backgroundColor: carLog.carState === '주차 중' ? '#4CAF50' : '#d3d3d3',
+                  backgroundColor: carLog.carState === '주차 중' ? '#92E973' : '#d3d3d3',
                   cursor: carLog.carState === '주차 중' ? 'pointer' : 'not-allowed'
                 }}
                 onClick={() => setShowExitModal(true)}
                 disabled={carLog.carState !== '주차 중'}
               >
                 출차
+                <img className={styles.imgOut} src={out} alt="출차" />
               </button>
               <button
                 className={styles.modalButton}
                 style={{
-                  backgroundColor: carLog.carState === '주차 중' ? '#2196F3' : '#d3d3d3',
+                  backgroundColor: carLog.carState === '주차 중' ? '#7391E9' : '#d3d3d3',
                   cursor: carLog.carState === '주차 중' ? 'pointer' : 'not-allowed'
                 }}
                 onClick={() => setShowMoveModal(true)}
                 disabled={carLog.carState !== '주차 중'}
               >
                 이동
+                <img className={styles.imgMove} src={move} alt="이동" />
               </button>
               <button
                 className={styles.modalButton}
                 style={{
-                  backgroundColor: carLog.carState === '주차 중' || carLog.carState === '이동 중' ? '#FF9800' : '#d3d3d3',
+                  backgroundColor: carLog.carState === '주차 중' || carLog.carState === '이동 중' ? '#FFB74B' : '#d3d3d3',
                   cursor: carLog.carState === '주차 중' || carLog.carState === '이동 중' ? 'pointer' : 'not-allowed'
                 }}
                 onClick={() => setShowDiscountModal(true)}
                 disabled={!(carLog.carState === '주차 중' || carLog.carState === '이동 중')}
               >
                 할인
+                <img className={styles.imgDiscount} src={discount} alt="할인" />
               </button>
             </div>
           </div>
