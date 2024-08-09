@@ -10,14 +10,10 @@ class BotController:
         end = message.get("end")
         
         print("Driving from {} to {}".format(start, end))
-        time.sleep(2)
-        self.complete_driving()
+        time.sleep(10)
+        self.complete_driving(message)
         
-    def complete_driving(self):
-        message = {
-            "parkingBotSerialNumber": "1001",
-            "status": "complete"
-        }
+    def complete_driving(self, message):
         self.mqtt_client.publish(message)
         
         

@@ -27,12 +27,16 @@ class ConsumerDaemon(threading.Thread):
         print("Received message from RabbitMQ")
         data = json.loads(body)
         parking_bot_serial_number = data.get('parkingBotSerialNumber')
+        parked_vehicle_id = data.get('parkedVehicleId')
         start = data.get('start')
         end = data.get('end')
+        type = data.get('type')
         mqtt_message = {
             "parkingBotSerialNumber": parking_bot_serial_number,
+            "parked_vehicle_id" : parked_vehicle_id,
             "start": start,
-            "end": end
+            "end": end,
+            "type": type
         }
         self.mqtt_client.publish_message(mqtt_message)
         ch.basic_ack(delivery_tag=method.delivery_tag)

@@ -29,6 +29,8 @@ class MQTTClient:
     def on_message(self, client, userdata, msg):
         command = json.loads(msg.payload.decode())
         
+        print("Received message: " + str(command))
+        
         serial_number = command.get("parkingBotSerialNumber")
         if(serial_number != SERIAL_NUMBER):
             return

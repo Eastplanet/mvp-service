@@ -6,6 +6,31 @@ import os
 import requests
 from config.config import SERVER_URL, get_api_key, set_api_key
 
+def handle_task_complete(data):
+    print(data)
+    
+    print("작업 완료 처리 시작")
+    url = SERVER_URL + "/parking-bot/status/complete"
+    
+    headers = {
+        'Content-Type': 'application/json',
+        'API-KEY': get_api_key()
+    }
+    
+    payload = {
+        'parkingBotSerialNumber': data.get('parkingBotSerialNumber'),
+        'parkedVehicleId': data.get('parked_vehicle_id'),
+        'start': data.get('start'),
+        'end': data.get('end'),
+        'type': data.get('type')
+    }
+    
+    response = requests.patch(url, data=json.dumps(payload), headers=headers)
+
+    while(response.status_code != 200):
+        response = requests.patch(url, data=json.dumps(payload), headers=headers)
+
+
 def handle_enter(image_path, license_plate, entrance_time):
     print('입차 명령 전송 시작')
     url = SERVER_URL + "/parking-bot/enter"  # 서버 엔드포인트 URL을 입력하세요
