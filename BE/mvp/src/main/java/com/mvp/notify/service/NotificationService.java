@@ -43,7 +43,11 @@ public class NotificationService {
             if (emitter != null) {
                 try {
                     // 데이터를 클라이언트에게 실어보낸다.
-                    emitter.send(SseEmitter.event().id(String.valueOf(sendId)).name("업무수정").data(data));
+                    emitter.send(SseEmitter.event()
+                            .id(String.valueOf(sendId))
+                            .name("업무수정")
+                                    .
+                            data(data));
                 } catch (IOException exception) {
                     // 데이터 전송 중 오류가 발생하면 Emitter를 삭제하고 에러를 완료 상태로 처리
                     notificationRepository.deleteById(sendId);

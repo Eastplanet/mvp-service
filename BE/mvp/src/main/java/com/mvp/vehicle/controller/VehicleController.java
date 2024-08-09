@@ -74,4 +74,10 @@ public class VehicleController {
             throw new RestApiException(StatusCode.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @PatchMapping("/update")
+    public ResponseEntity<ResponseDto> updateParkedVehicle(@RequestBody List<ParkedVehicleDTO> parkedVehicleDTOList){
+        vehicleService.updateVehicle(parkedVehicleDTOList);
+        return ResponseDto.response(StatusCode.SUCCESS, null);
+    }
 }
