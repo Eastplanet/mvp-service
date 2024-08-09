@@ -5,6 +5,9 @@ module.exports = function override(config, env) {
     ...config.devServer,
     host: 'localhost',
     port: 8081,
+    client: {
+      webSocketURL: { hostname: undefined, pathname: undefined, port: '0' },
+    },
   };
   config.resolve = {
     ...config.resolve,

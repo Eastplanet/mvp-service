@@ -90,6 +90,7 @@ function App() {
     };
 
     eventSource.addEventListener('업무수정', (event) => {
+      fetchParkingData()
       console.log(event.data);
     });
 
