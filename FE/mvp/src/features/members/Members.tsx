@@ -218,8 +218,11 @@ const Members: React.FC = () => {
 
   // Handle search input change
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(e.target.value);
+    // 숫자만 입력
+    const newValue = e.target.value.replace(/\D/g, '');
+    setSearchTerm(newValue);
   };
+  
 
   // Handle page change for pagination
   const handlePageChange = (page: number) => {
