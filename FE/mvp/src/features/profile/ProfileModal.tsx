@@ -41,7 +41,7 @@ const ProfileModal: React.FC<ProfileModalProps> = ({ onClose }) => {
           </div>
         </div>
         <div className={styles.logoutButtonContainer}>
-          <button className={styles.logoutButton} onClick={handleLogout}>Log Out</button>
+          <button className={styles.logoutButton} onClick={handleLogout}>LogOut</button>
         </div>
       </div>
     </div>
