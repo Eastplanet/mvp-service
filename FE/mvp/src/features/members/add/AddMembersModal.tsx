@@ -43,6 +43,24 @@ const AddMemberModal: React.FC<AddMemberModalProps> = ({ onClose }) => {
     }
   };
 
+  const handlePhoneNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let value = e.target.value.replace(/\D/g, '').slice(0, 11);
+    const inputEvent = e.nativeEvent as InputEvent;
+  
+    if (inputEvent.inputType === 'deleteContentBackward') {
+      setPhoneNumber(e.target.value); 
+      return;
+    }
+  
+    if (value.length > 6) {
+      value = `${value.slice(0, 3)}-${value.slice(3, 7)}-${value.slice(7)}`;
+    } else if (value.length > 3) {
+      value = `${value.slice(0, 3)}-${value.slice(3)}`;
+    }
+  
+    setPhoneNumber(value);
+  };
+
   return (
     <div className={styles.modalOverlay}>
       <div className={styles.modalContent}>
@@ -76,7 +94,7 @@ const AddMemberModal: React.FC<AddMemberModalProps> = ({ onClose }) => {
           <input 
             type="text" 
             value={phoneNumber} 
-            onChange={(e) => setPhoneNumber(e.target.value)} 
+            onChange={handlePhoneNumberChange}
             className={styles.input}
             placeholder="연락처" 
           />
