@@ -208,9 +208,10 @@ const Members: React.FC = () => {
     const future30Days = new Date(now);
     future30Days.setDate(now.getDate() + 30);
 
-    const newMembers = members.filter(member =>
-      new Date(member.join_date).getTime() > past30Days.getTime()
-    );
+    const newMembers = members.filter(member => {
+      const joinDate = new Date(member.join_date).getTime();
+      return joinDate >= past30Days.getTime() && joinDate <= now.getTime();
+    });
 
     const recentExpired = members.filter(member =>
       member.secession_date && new Date(member.secession_date).getTime() < now.getTime() &&
