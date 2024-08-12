@@ -40,7 +40,6 @@ export const fetchMembers = createAsyncThunk<Member[]>(
       }));
     } catch (error: any) {
       if (error.response && error.response.status === 401) {
-        localStorage.setItem('isAuthenticated', 'false');
         dispatch(logoutSuccess());
       }
       return rejectWithValue(error.message || '데이터 가져오기에 실패했습니다.');
