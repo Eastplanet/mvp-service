@@ -20,6 +20,14 @@ const AddMemberModal: React.FC<AddMemberModalProps> = ({ onClose }) => {
   const [endDate, setEndDate] = useState('');
   const [error, setError] = useState('');
 
+  const getTodayDate = () => {
+    const today = new Date();
+    const yyyy = today.getFullYear();
+    const mm = (today.getMonth() + 1).toString().padStart(2, '0');
+    const dd = today.getDate().toString().padStart(2, '0');
+    return `${yyyy}-${mm}-${dd}`;
+  };
+
   const getISODateString = (date: string) => {
     const dateObject = new Date(date);
     return dateObject.toISOString();
@@ -106,6 +114,7 @@ const AddMemberModal: React.FC<AddMemberModalProps> = ({ onClose }) => {
             value={endDate} 
             onChange={(e) => setEndDate(e.target.value)} 
             className={styles.input}
+            min={getTodayDate()}
           />
         </div>
         <div className={styles.buttonContainer}>
