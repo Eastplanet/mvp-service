@@ -61,11 +61,11 @@ class MainWindow(QMainWindow):
         main_button_layout = QVBoxLayout(self.main_button_page)
 
         # 상단 여백
-        main_button_layout.addSpacing(int(100 * self.height_ratio))
+        main_button_layout.addSpacing(int(150 * self.height_ratio))
 
         # 로고 추가
         self.logo_label = QLabel(self)
-        self.logo_pixmap = QPixmap("parking_kiosk/gui/res/mvp-logo.png").scaled(int(400 * self.width_ratio), int(400 * self.height_ratio), Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
+        self.logo_pixmap = QPixmap("parking_kiosk/gui/res/mvp-logo.png").scaled(int(500 * self.width_ratio), int(500 * self.height_ratio), Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
         self.logo_label.setPixmap(self.logo_pixmap)
         self.logo_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         main_button_layout.addWidget(self.logo_label, alignment=Qt.AlignmentFlag.AlignTop)

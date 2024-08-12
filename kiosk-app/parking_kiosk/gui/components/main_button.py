@@ -35,6 +35,7 @@ class HoverButton(QPushButton):
                 font-size: 24px; 
                 border-radius: 15px; 
                 border: 3px solid #FFF;
+                font-weight: bold;
             }}
         """)
         super().enterEvent(event)
@@ -47,6 +48,7 @@ class HoverButton(QPushButton):
                 font-size: 24px; 
                 border-radius: 15px; 
                 border: 3px solid #FFF;
+                font-weight: bold;
             }}
         """)
         super().leaveEvent(event)

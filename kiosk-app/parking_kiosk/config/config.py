@@ -2,7 +2,7 @@
 RABBIT_MQ_HOST = "mvp-project.shop"
 RABBIT_Q_NAME = "task_queue"
 MQTT_PORT = 1883
-MQTT_BROKER_IP = "192.168.30.151"
+MQTT_BROKER_IP = "localhost"
 MQTT_TOPIC_SUB = "/parking/complete"
 MQTT_TOPIC_PUB = "/parking/command"
 MQTT_BROKER_PATH_WIN = "C:\\Program Files\\mosquitto\\mosquitto.exe"
