@@ -184,7 +184,7 @@ const Main: React.FC = () => {
               <input 
                 className={styles.searchInput} 
                 type="text" 
-                placeholder="Search Car Number" 
+                placeholder="차량 번호 검색" 
                 value={licensePlate}
                 onChange={(e) => dispatch(setLicensePlate(e.target.value))}
                 onKeyDown={handleKeyDown}
