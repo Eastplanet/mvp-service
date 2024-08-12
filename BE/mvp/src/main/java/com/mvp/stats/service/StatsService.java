@@ -111,7 +111,14 @@ public class StatsService {
                     .build();
             list.add(build);
         }
+
         list.sort((o1, o2) -> {
+            // startTime 기준으로 정렬
+            int startTimeComparison = o1.getEntranceTime().compareTo(o2.getEntranceTime());
+            if (startTimeComparison != 0) {
+                return startTimeComparison;
+            }
+            // startTime이 같은 경우 출차 시간 기준으로 정렬
             if (o1.getExitTime() == null && o2.getExitTime() == null) {
                 return 0;
             }
@@ -121,7 +128,8 @@ public class StatsService {
             if (o2.getExitTime() == null) {
                 return -1; // exitTime이 없는 경우 뒤로 보냄
             }
-            return o2.getExitTime().compareTo(o1.getExitTime()); // 내림차순 정렬
+            // 출차 시간이 둘 다 존재하면 내림차순 정렬
+            return o2.getExitTime().compareTo(o1.getExitTime());
         });
 
         return list;
