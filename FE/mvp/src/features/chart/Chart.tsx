@@ -105,7 +105,7 @@ const Chart: React.FC = () => {
             <h3 className={styles.summaryData}>{Math.round(data.usingTimeAvg).toLocaleString()} 분</h3>
             <p>평균 금액</p>
             {/* <h3 className={styles.summaryData}>{Math.round(data.revenueAvg).toLocaleString()} 원</h3> */}
-            <h3 className={styles.summaryData}>{data.revenueAvg > 999999 ? `${Math.round(data.revenueAvg / 10000)}만원` : `${data.revenueAvg.toLocaleString()}원`}</h3>
+            <h3 className={styles.summaryData}>{data.revenueAvg > 999999 ? `${Math.round(data.revenueAvg / 10000)}만원` : `${Math.round(data.revenueAvg).toLocaleString()}원`}</h3>
             </div>
           <div className={styles.details}>
             <p>회원권 주차 매출</p>
