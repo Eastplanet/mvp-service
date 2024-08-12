@@ -93,6 +93,7 @@ const Members: React.FC = () => {
       showCancelButton: true,
       // confirmButtonText: "삭제",
       denyButtonText: "삭제",
+      cancelButtonText: "취소"
     }).then((result) => {
       /* Read more about isConfirmed, isDenied below */
       // if (result.isConfirmed) {
