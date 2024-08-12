@@ -20,6 +20,7 @@ class MQTTClient:
         self.client.loop_start()
 
     def on_connect(self, client, userdata, flags, rc, properties=None):
+        print(f"Connect: flags={flags}, rc={rc}, properties={properties}")
         if rc == 0:
             print("브로커 연결 성공!")
             self.client.subscribe(self.sub_topic)

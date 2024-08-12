@@ -1,4 +1,4 @@
- # lineTracing.py
+# lineTracing.py
 
 import sys
 import time
@@ -19,7 +19,7 @@ class ExitProgramException(Exception):
     pass
 
 
-def isOverElapsedTime(elapsedTime, threshold=1):
+def isOverElapsedTime(elapsedTime, threshold=1.0):
     """경과 시간이 주어진 임계값을 초과했는지 확인"""
     return elapsedTime >= threshold
 
@@ -46,19 +46,40 @@ def startLineTracing(startNode, endNode, queue):
     motorHat, kit = motorControl.initializeMotors()
     L_PIN, C_PIN, R_PIN = setupGpio()
 
-    path = mapSetting.findShortestPathToGoal(mapSetting.mapGrid, startNode, endNode, 'up')
-    print(path)
-    curStep = 0
-    prevDirection = 'straight'
-    startTime = updateTime = time.time()
-    isUpdated = False
-    print(f'{startNode} -> {endNode}')
+    initialCarDirection = 'up'
+    if startNode >= 4 and endNode == 0:
+        initialCarDirection = 'down'
+    print('Path Generating..')
+    path = mapSetting.findShortestPathToGoal(mapSetting.mapGrid, startNode, endNode, initialCarDirection)
+    if path:
+        if endNode == 0:
+            path[0] = 'Back'
+            if path[1] == 'Rotate right':
+                path[1] = 'Rotate left'
+            elif path[1] == 'Rotate left':
+                path[1] = 'Rotate right'
+            elif startNode == 4:
+                path[1:4] = 'Back', 'Back', 'Back'
+        print(f'Path Generating Complete! -> Path : {path}')
+    else:
+        print(f'\033[1;31m[Error]\033[0m Path Generation Fail')
+        raise ExitProgramException
 
+    curStep = 0
+    prevDirection = 'GO_STRAIGHT'
+    startTime = updateTime = time.time()
+    isUpdated = isObject = isIntersection = False
+
+    # 상태 표시를 위한 심볼
+    statusSymbols = {blackLine: '☐', whiteLine: '◼'}
     # 방향에 따라 호출할 함수 딕셔너리
     turnFunctions = {
-        'left': motorControl.turnLeft,
-        'right': motorControl.turnRight,
-        'straight': motorControl.turnStraight
+        'GO_LEFT': motorControl.turnLeftGoStraight,
+        'GO_RIGHT': motorControl.turnRightGoStraight,
+        'GO_STRAIGHT': motorControl.turnStraightGoStraight,
+        'BACK_LEFT': motorControl.turnLeftGoBack,
+        'BACK_RIGHT': motorControl.turnRightGoBack,
+        'BACK_STRAIGHT': motorControl.turnStraightGoBack
     }
 
     try:
@@ -70,93 +91,106 @@ def startLineTracing(startNode, endNode, queue):
             elapsedTime = currentTime - updateTime
             totalElapsedTime = currentTime - startTime
             print(f'\033[1mTotal elapsed time: {totalElapsedTime:.2f} sec, [{elapsedTime:.2f}] sec\033[0m')
-
             print(f'  -  \033[1mStep {curStep} : {path[curStep]}\033[0m')
 
             # 라이다 데이터 읽기
             if not queue.empty():
                 lidar_data = queue.get()
-                if lidar_data <= 0.2:
-                    print("\033[1;31m[Warning!]Obstacle detected! Distance: {:.2f} m\033[0m".format(lidar_data), end='\n\n')
-                    time.sleep(0.2)
-                    continue
+                print(lidar_data)
+                if lidar_data <= 0.38:
+                    print("\033[1;31m[Warning!]Obstacle detected! Distance: {:.2f}\033[0m".format(lidar_data), end='\n\n')
+                    isObject = True
+                elif isObject == True:
+                    isObject = False
 
-            if totalElapsedTime >= 50:
+            if isObject:
+                motorControl.stop(kit, motorHat)
+                time.sleep(0.1)
+                continue
+
+            if totalElapsedTime >= 40:
                 raise ExitProgramException
 
             right = GPIO.input(L_PIN)  # 반대로 연결함
             center = GPIO.input(C_PIN)
             left = GPIO.input(R_PIN)  # 반대로 연결함
             
-            # 상태 표시를 위한 심볼
-            statusSymbols = {blackLine: '☐', whiteLine: '◼'}
             print(f'\033[1m[ {statusSymbols[left]} {statusSymbols[center]} {statusSymbols[right]} ] \033[0m', end=' -> ')
 
             if left == whiteLine and center == blackLine and right == whiteLine:        # ◼ ☐ ◼
-                motorControl.turnStraight(kit)
-                prevDirection = 'straight'
+                if path[curStep] == 'Straight' or (path[curStep] == 'Stop' and path[curStep-1] == 'Straight'):
+                    motorControl.turnStraightGoStraight(kit, motorHat)
+                    prevDirection = 'GO_STRAIGHT'
+                elif path[curStep] == 'Back' or (path[curStep] == 'Stop' and path[curStep-1] == 'Back'):
+                    motorControl.turnStraightGoBack(kit, motorHat)
+                    prevDirection = 'BACK_STRAIGHT'
             elif left == whiteLine and center == whiteLine and right == blackLine:      # ◼ ◼ ☐
-                motorControl.turnRight(kit)
-                prevDirection = 'right'
+                if path[curStep] == 'Straight' or (path[curStep] == 'Stop' and path[curStep-1] == 'Straight'):
+                    motorControl.turnRightGoStraight(kit, motorHat)
+                    prevDirection = 'GO_RIGHT'
+                elif path[curStep] == 'Back' or (path[curStep] == 'Stop' and path[curStep-1] == 'Back'):
+                    motorControl.turnLeftGoBack(kit, motorHat)
+                    prevDirection = 'BACK_LEFT'
             elif left == blackLine and center == whiteLine and right == whiteLine:      # ☐ ◼ ◼
-                motorControl.turnLeft(kit)
-                prevDirection = 'left'
-            elif left == whiteLine and center == whiteLine and right == whiteLine:      # ◼ ◼ ◼
-                if path[curStep] == 'Stop':
-                    motorControl.stop(motorHat, kit)
+                if path[curStep] == 'Straight' or (path[curStep] == 'Stop' and path[curStep-1] == 'Straight'):
+                    motorControl.turnLeftGoStraight(kit, motorHat)
+                    prevDirection = 'GO_LEFT'
+                elif path[curStep] == 'Back' or (path[curStep] == 'Stop' and path[curStep-1] == 'Back'):
+                    motorControl.turnRightGoBack(kit, motorHat)
+                    prevDirection = 'BACK_RIGHT'
+            elif left == whiteLine and center == blackLine and right == blackLine:      # ◼ ☐ ☐
+                # if path[curStep] == 'Straight' or (path[curStep] == 'Stop' and path[curStep-1] == 'Straight'):
+                if (path[curStep] == 'Stop' and path[curStep-1] == 'Straight') or (curStep == len(path) -2 and path[curStep] == 'Straight'): 
+                    motorControl.turnLeftGoStraight(kit, motorHat)
+                    prevDirection = 'GO_LEFT'
+                else:
+                    isIntersection = True
+            elif left == blackLine and center == blackLine and right == whiteLine:      # ☐ ☐ ◼
+                # if not (curStep == 0 and path[curStep] == 'Straight') or (path[curStep] == 'Stop' and path[curStep-1] == 'Straight'):
+                if (path[curStep] == 'Stop' and path[curStep-1] == 'Straight') or (curStep == len(path) -2 and path[curStep] == 'Straight'):
+                    motorControl.turnRightGoStraight(kit, motorHat)
+                    prevDirection = 'GO_RIGHT'
+                else:
+                    isIntersection = True
+            elif (left == whiteLine and center == whiteLine and right == whiteLine):
+                turnFunctions[prevDirection](kit, motorHat)
+
+            if (left == blackLine and center == blackLine and right == blackLine) or isIntersection:      # ☐ ☐ ☐ -> 교차로
+                if path[curStep] == 'Stop' and isOverElapsedTime(elapsedTime, threshold=0.1):
+                    motorControl.stop(kit, motorHat)
                     raise ExitProgramException
-                turnFunctions[prevDirection](kit)
-            else:
-                # 교차로 처리 로직
+                
                 if isOverElapsedTime(elapsedTime) and not isUpdated:
-                    print("\t\033[1;33m[Detect!] InterSection!\033[0m")
-                    curStep += 1
+                    if path[curStep] != 'Stop':
+                        curStep += 1
                     isUpdated = True
-                    print('step++')
-                    print(curStep, len(path), path[curStep])
+
                     if curStep < len(path):
                         if 'Rotate' in path[curStep]:
-                            # motorControl.rotate(motorHat, kit, path[curStep])
+                            motorControl.rotate(motorHat, kit, path[curStep])
                             updateTime = time.time()
                             curStep += 1
                             isUpdated = False
-                            print('step++')
-                            print(curStep, len(path), path[curStep])
-                    
-                        elif path[curStep-1] == 'Straight' and path[curStep] == 'Straight':
-                            if left == whiteLine and center == blackLine and right == blackLine:  # ◼ ☐ ☐
-                                motorControl.turnRight(kit)
-                                prevDirection = 'right'
-                            elif left == blackLine and center == blackLine and right == whiteLine:  # ☐ ☐ ◼
-                                motorControl.turnLeft(kit)
-                                prevDirection = 'left'
-                            elif left == blackLine and center == blackLine and right == blackLine:  # ☐ ☐ ☐
-                                motorControl.turnStraight(kit)
-                                prevDirection = 'straight'
-                            time.sleep(0.2) # 교차로를 지나기 위해
+
+                        else:
+                            # time.sleep(0.2) # 교차로를 지나기 위해
                             updateTime = time.time()
-                            curStep += 1
+                            if path[curStep] != 'Stop':
+                                curStep += 1
                             isUpdated = False
-                            print('step++')
-                            # print(curStep, len(path), path[curStep])
-                    
-                elif left == whiteLine and center == blackLine and right == blackLine:  # ◼ ☐ ☐
-                    motorControl.turnRight(kit)
-                    prevDirection = 'right'
-                elif left == blackLine and center == blackLine and right == whiteLine:  # ☐ ☐ ◼
-                    motorControl.turnLeft(kit)
-                    prevDirection = 'left'
-                elif left == blackLine and center == blackLine and right == blackLine:  # ☐ ☐ ☐
-                    motorControl.turnStraight(kit)
-                    prevDirection = 'straight'
-            # motorControl.goStraight(motorHat)
-            time.sleep(0.05)
+                else:
+                    if curStep == 0 and path[curStep] == 'Back':
+                        prevDirection = 'BACK_STRAIGHT'
+                    turnFunctions[prevDirection](kit, motorHat)
+                print("\n\033[1;33m[Detect!] InterSection!\033[0m")
+                isIntersection = False
+            time.sleep(0.1)
             print()
     except KeyboardInterrupt:
         pass
     except ExitProgramException:
         print("Exiting program...")
     finally:
-        motorControl.stop(motorHat, kit)
+        motorControl.stop(kit, motorHat)
         GPIO.cleanup()
         print("Program stopped and motor stopped.")

@@ -3,17 +3,17 @@ from .utils import findCoordinates
 
 # 지도
 mapGrid = [
-    ['7', 'x', '6', 'x', '5', 'x', '4'],
-    ['o', '9', 'o', 'o', 'o', '8', 'o'],
-    ['3', 'x', '2', 'x', '1', 'x', '0']
+    ['4', 'x', '5', 'x', '6', 'x', '7'],
+    ['o', 'o', 'o', 'o', 'o', 'o', 'o'],
+    ['0', 'x', '1', 'x', '2', 'x', '3']
 ]
 
-
 def findShortestPathToGoal(mapGrid, startNode, endNode, initialDirection):
+    # startNode가 0일 때만 매핑을 적용
     start = findCoordinates(mapGrid, startNode)
     goal = findCoordinates(mapGrid, endNode)
     
     if start and goal:
-        path = dijkstra(mapGrid, start, goal, initialDirection) + ['Straight', 'Stop']
-        return path
+        path = dijkstra(mapGrid, start, goal, initialDirection)
+        return path + ['Straight', 'Stop']
     return []

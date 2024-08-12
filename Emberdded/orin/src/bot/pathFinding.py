@@ -61,20 +61,15 @@ def reconstructPath(cameFrom, start, goal):
         # Determine the current direction based on the movement direction to this node
         if prevNode is not None:
             if moveType == 'straight':
-                straightNum += 1
                 action = 'Straight'
-            else:
-                straightNum = 0
-                if moveType == 'left':
-                    action = 'Rotate left'
-                elif moveType == 'right':
-                    action = 'Rotate right'
-                else:
-                    action = 'Unknown action'
+            elif moveType == 'left':
+                action = 'Rotate left'
+            elif moveType == 'right':
+                action = 'Rotate right'
+            else:   
+                action = 'Unknown action'
             path.append(action)
 
-            # if action != 'Straight' or straightNum % 2 == 1:
-            #     path.append(action)
         current = prevNode
     path.reverse()
     return path
