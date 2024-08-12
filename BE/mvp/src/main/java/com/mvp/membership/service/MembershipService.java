@@ -64,6 +64,7 @@ public class MembershipService {
     }
 
     public List<MembershipDTO> findMembershipDate(LocalDateTime start, LocalDateTime end) {
+        end = end.withDayOfMonth(1).plusMonths(1).withHour(0).withMinute(0).withSecond(0).withNano(0);
         List<Membership> allByExitTimeBetween = membershipRepository.findByLicensePlateEntranceTimeBetween(start, end);
         return MembershipConverter.entityToDtoList(allByExitTimeBetween);
     }

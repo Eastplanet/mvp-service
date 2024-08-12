@@ -1,5 +1,7 @@
 package com.mvp.calculator.service;
 
+import com.mvp.common.exception.RestApiException;
+import com.mvp.common.exception.StatusCode;
 import com.mvp.membership.service.MembershipService;
 import com.mvp.parkinglot.dto.ParkingLotSettingDTO;
 import com.mvp.parkinglot.service.ParkingLotService;
@@ -30,6 +32,9 @@ public class CalculatorService {
         long minutes = Duration.between(entranceTime, now).toMinutes();
         minutes -= setting.getBaseParkingTime();
         if(minutes > 0){
+            if(setting.getAdditionalUnitTime() == 0){
+                throw new RestApiException(StatusCode.INTERNAL_SERVER_ERROR);
+            }
             price += (minutes/setting.getAdditionalUnitTime())*setting.getAdditionalUnitFee();
             if(parkedVehicleDTO.getDiscount() != null){
                 price -= parkedVehicleDTO.getDiscount();
