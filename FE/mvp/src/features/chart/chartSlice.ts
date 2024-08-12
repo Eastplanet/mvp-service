@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import api from '../../api/axios';
+import { logoutSuccess } from '../auth/authSlice';
 
 interface RevenueData {
   date: string;
@@ -31,13 +32,16 @@ const initialState: ChartState = {
 export const fetchChartData = createAsyncThunk<ChartData, void>(
   'chart/fetchChartData',
   async (_, thunkAPI) => {
+    const { dispatch, rejectWithValue } = thunkAPI;
     try {
       const response = await api.get('/stats/revenue');
-      // console.log(response.data.data)
       return response.data.data;
-    } catch (error) {
-      console.error('Failed to fetch data:', error);
-      return thunkAPI.rejectWithValue('Failed to fetch data');
+    } catch (error: any) {
+      if (error.response && error.response.status === 401) {
+        localStorage.setItem('isAuthenticated', 'false');
+        dispatch(logoutSuccess());
+      }
+      return rejectWithValue(error.message || '데이터 가져오기에 실패했습니다.');
     }
   }
 );
