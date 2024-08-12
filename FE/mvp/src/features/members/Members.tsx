@@ -270,7 +270,7 @@ const Members: React.FC = () => {
               </div>
               <div>
                 <p className={styles.item}>전체 회원</p>
-                <p className={styles.stat}>{stats.total}</p>
+                <p className={styles.stat}>{stats.total}명</p>
               </div>
             </div>
             <div className={styles.summaryItem}>
@@ -279,7 +279,7 @@ const Members: React.FC = () => {
               </div>
               <div>
                 <p className={styles.item}>신규 회원</p>
-                <p className={styles.stat}>{stats.newMembers}</p>
+                <p className={styles.stat}>{stats.newMembers}명</p>
               </div>
             </div>
             <div className={styles.summaryItem}>
@@ -288,7 +288,7 @@ const Members: React.FC = () => {
               </div>
               <div>
                 <p className={styles.item}>최근 만료</p>
-                <p className={styles.stat}>{stats.recentExpired}</p>
+                <p className={styles.stat}>{stats.recentExpired}명</p>
               </div>
             </div>
             <div className={styles.summaryItem}>
@@ -297,7 +297,7 @@ const Members: React.FC = () => {
               </div>
               <div>
                 <p className={styles.item}>만료 예정</p>
-                <p className={styles.stat}>{stats.expiringSoon}</p>
+                <p className={styles.stat}>{stats.expiringSoon}명</p>
               </div>
             </div>
           </div>
@@ -328,7 +328,7 @@ const Members: React.FC = () => {
               <div className={styles.phone}>연락처</div>
               <div className={styles.date}>가입 날짜</div>
               <div className={styles.date}>만료 날짜</div>
-              {/* <div className={styles.action}>수정</div> */}
+              <div>편집</div>
             </div>
             <div className={styles.tableBodyContainer}>
               {paginatedMembers.map((member) => (
@@ -397,12 +397,12 @@ const Members: React.FC = () => {
                   <div>
                     {editingMemberId === member.id ? (
                       <div className={styles.action}>
-                        <button className={styles.editButton} onClick={handleSave}>Save</button>
-                        <button className={styles.editButton} onClick={handleCancel}>Cancel</button>
+                        <button className={styles.editButton} onClick={handleSave}>확인</button>
+                        <button className={styles.editButton} onClick={handleCancel}>취소</button>
                       </div>
                     ) : (
                       <div className={styles.action}>
-                        <button className={styles.editButton} onClick={() => handleEdit(member)}>Edit</button>
+                        <button className={styles.editButton} onClick={() => handleEdit(member)}>수정</button>
                       </div>
                     )}
                   </div>

@@ -24,8 +24,7 @@
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  padding: 0 30px;
-  margin-bottom: 10px;
+  margin: 35px 10px 15px 0;
 }
 
 .search {
@@ -88,7 +87,7 @@
 
 .stat{
   font-size: 30px;
-  text-align: left;
+  text-align: right;
   margin: 10px 5px;
 }
 
@@ -99,6 +98,7 @@
 }
 
 .tableHead{
+  /* border: 1px solid black; */
   display: flex;
   border-radius: 10px;
   background: none;
@@ -150,22 +150,31 @@
   margin-right: 2%;
 }
 
-.action{
+/* .action{
   flex: 0 0 10%;
   display: flex;
   gap: 10px;
   justify-content: flex-start;
   padding: 5px;
   box-sizing: border-box;
-}
+} */
 
 .editButton {
   flex: 1;
-  background: none;
+  background: #f1f1ff;
+  /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); */
+  border-radius: 5px;
   border: none;
-  color: #c0c0c0;
+  color: #1a1a1a;
   cursor: pointer;
+  margin-right: 4px;
+  padding-top: 2px;
+  padding-bottom: 2px;
   /* text-decoration: underline; */
+}
+
+.editButton:hover {
+  background: #e2e2ff;
 }
 
 .actionButtons {
@@ -175,8 +184,8 @@
 
 
 .addButton {
-  background-color: #007bff;
-  color: white;
+  background-color: #ffffff;
+  color: #007bff;
   font-size: 18px;
   font-weight: bold;
   border: #007bff solid 1px;;
@@ -188,7 +197,7 @@
 }
 
 .addButton:hover {
-  background-color: #0056b3;
+  background-color: #0066d2;
   color: #ffffff;
 }
 
