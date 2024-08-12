@@ -49,45 +49,29 @@ def dijkstra(mapGrid, start, goal, initialDirection):
     return reconstructPath(cameFrom, start, goal)
 
 def reconstructPath(cameFrom, start, goal):
-    """Reconstructs the path from the goal to the start, including the direction of movement."""
+    """Reconstructs the path from the goal to the start, including the action instructions only."""
     current = goal
     path = []
-    direction_emojis = {
-        'right': '→',
-        'down': '↓',
-        'left': '←',
-        'up': '↑'
-    }
+    previous_action = None
 
     while current != start:
         if current not in cameFrom:
             return []  # No valid path found
         prevNode, moveType = cameFrom[current]
 
-        if prevNode is not None:
-            if current[0] > prevNode[0]:
-                direction = 'down'
-            elif current[0] < prevNode[0]:
-                direction = 'up'
-            elif current[1] > prevNode[1]:
-                direction = 'right'
-            elif current[1] < prevNode[1]:
-                direction = 'left'
-            direction_emoji = direction_emojis[direction]
+        # Determine the action based on the move type
+        if moveType == 'straight':
+            action = 'Straight'
+        elif moveType == 'left':
+            action = 'Rotate left'
+        elif moveType == 'right':
+            action = 'Rotate right'
+        else:
+            action = 'Unknown action'
 
-            if moveType == 'straight':
-                action = 'Continue'
-            elif moveType == 'left':
-                action = 'Turn left'
-            elif moveType == 'right':
-                action = 'Turn right'
-            else:
-                action = 'Unknown action'
-
-            path.append((current, direction_emoji, action))
+        path.append(action)
         current = prevNode
 
-    initialDirectionEmoji = direction_emojis[cameFrom[start][1]]
-    path.append((start, initialDirectionEmoji, "Start"))
     path.reverse()
     return path
+
