@@ -9,6 +9,7 @@ import totalMember from '../../assets/images/icons/total.png';
 import newMember from '../../assets/images/icons/new.png';
 import expiredMember from '../../assets/images/icons/expired.png';
 import soonMember from '../../assets/images/icons/soon.png';
+import Swal from 'sweetalert2'
 
 interface Member {
   id: number;
@@ -73,7 +74,8 @@ const Members: React.FC = () => {
   // Delete selected members
   const handleDelete = () => {
     if (selectedCars.length === 0) {
-      alert("삭제할 회원을 먼저 체크해주세요.");
+      // alert("삭제할 회원을 먼저 체크해주세요.");
+      Swal.fire("삭제할 회원을 먼저 체크해주세요.");
       return;
     }
 

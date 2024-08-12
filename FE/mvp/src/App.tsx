@@ -22,9 +22,10 @@ function App() {
   const dispatch = useDispatch();
     
   const parkingData = useSelector((state: RootState) => state.main.currentParkedCars);
+  const userName = useSelector((state: RootState) => state.auth.user?.name);
   
   useEffect(() => {
-    const eventSource = new EventSource('https://mvp-project.shop/api/notify/subscribe/test');
+    const eventSource = new EventSource(`https://mvp-project.shop/api/notify/subscribe/${userName}`);
 
     eventSource.onopen = () => {
       console.log("Connection opened");

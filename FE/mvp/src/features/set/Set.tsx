@@ -1,9 +1,10 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import React, { useState, useEffect, useRef } from 'react';
+import { useDispatch } from 'react-redux';
 import Sidebar from '../sidebar/Sidebar';
 import styles from './Set.module.css';
 import api from '../../api/axios'
 import { logoutSuccess } from '../auth/authSlice';
+import Swal from 'sweetalert2'
 
 // 초기 상태의 타입 정의
 interface InitialState {
@@ -28,6 +29,7 @@ const Set: React.FC = () => {
   const [oneWeekTicket, setOneWeekTicket] = useState(0);
   const [oneMonthTicket, setOneMonthTicket] = useState(0);
   const [isDirty, setIsDirty] = useState(false);
+  const dispatch = useDispatch();
 
   // 초기 상태를 저장하기 위한 ref 사용
   const initialStateRef = useRef<InitialState>({
@@ -42,43 +44,39 @@ const Set: React.FC = () => {
   });
 
   // 데이터 로드 함수
-  const fetchData = createAsyncThunk(
-    'settings/fetchData',
-    async (_, thunkAPI) => {
-      const { dispatch, rejectWithValue } = thunkAPI;
-      try {
-        const response = await api.get('/parking-lots/setting');
-        const data = response.data.data;
-        // 받아온 데이터로 상태 업데이트
-        setBasicTime(data.baseParkingTime ?? 0);
-        setBasicCost(data.baseFee ?? 0);
-        setAdditionalTime(data.additionalUnitTime ?? 0);
-        setAdditionalCost(data.additionalUnitFee ?? 0);
-        setOneDayTicket(data.dailyFee ?? 0);
-        setOneWeekTicket(data.weeklyFee ?? 0);
-        setOneMonthTicket(data.monthlyFee ?? 0);
-        setIsSystemActive(data.isSystemActive ?? true);
-        
-        // 초기 상태 저장
-        initialStateRef.current = {
-          basicTime: data.basicTime ?? 0,
-          basicCost: data.basicCost ?? 0,
-          additionalTime: data.additionalTime ?? 0,
-          additionalCost: data.additionalCost ?? 0,
-          oneDayTicket: data.dailyFee ?? 0,
-          oneWeekTicket: data.oneWeekTicket ?? 0,
-          oneMonthTicket: data.oneMonthTicket ?? 0,
-          isSystemActive: data.isSystemActive ?? true
-        };
-      } catch (error: any) {
-        if (error.response && error.response.status === 401) {
-          localStorage.setItem('isAuthenticated', 'false');
-          dispatch(logoutSuccess());
-        }
-        return rejectWithValue(error.message || '데이터 가져오기에 실패했습니다.');
+  const fetchData = async () => {
+    try {
+      const response = await api.get('/parking-lots/setting');
+      const data = response.data.data;
+      // 받아온 데이터로 상태 업데이트
+      setBasicTime(data.baseParkingTime ?? 0);
+      setBasicCost(data.baseFee ?? 0);
+      setAdditionalTime(data.additionalUnitTime ?? 0);
+      setAdditionalCost(data.additionalUnitFee ?? 0);
+      setOneDayTicket(data.dailyFee ?? 0);
+      setOneWeekTicket(data.weeklyFee ?? 0);
+      setOneMonthTicket(data.monthlyFee ?? 0);
+      setIsSystemActive(data.isSystemActive ?? true);
+      
+      // 초기 상태 저장
+      initialStateRef.current = {
+        basicTime: data.baseParkingTime ?? 0,
+        basicCost: data.baseFee ?? 0,
+        additionalTime: data.additionalUnitTime ?? 0,
+        additionalCost: data.additionalUnitFee ?? 0,
+        oneDayTicket: data.dailyFee ?? 0,
+        oneWeekTicket: data.weeklyFee ?? 0,
+        oneMonthTicket: data.monthlyFee ?? 0,
+        isSystemActive: data.isSystemActive ?? true
+      };
+    } catch (error: any) {
+      if (error.response && error.response.status === 401) {
+        dispatch(logoutSuccess()); // 로그아웃 액션 디스패치
+      } else {
+        console.error('Failed to fetch data:', error);
       }
     }
-  )
+  };
 
   // 컴포넌트 마운트 시 데이터 로드
   useEffect(() => {
@@ -135,7 +133,8 @@ const Set: React.FC = () => {
         }
       });
       console.log('성공:', response.data);
-      alert('변경사항이 저장되었습니다.'); // 알림 추가
+      // alert('변경사항이 저장되었습니다.'); // 알림 추가
+      Swal.fire("변경사항이 저장되었습니다.");
     } catch (error) {
       console.error('실패:', error);
     }
