@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import api from '../../api/axios';
-import { setLicensePlate } from '../main/mainSlice';
+import { logoutSuccess } from '../auth/authSlice'
 
 interface Member {
   id: number;
@@ -23,22 +23,30 @@ const initialState: MembersState = {
   error: null,
 };
 
-export const fetchMembers = createAsyncThunk<Member[]>('members/fetchMembers', async () => {
-  try {
-    const response = await api.get('/memberships/list');
-    const data = response.data.data;
-    return data.map((item: any, index: number) => ({
-      id: index + 1,
-      name: item.name,
-      car: item.licensePlate,
-      phone: item.phoneNumber,
-      join_date: new Date(item.startDate),
-      secession_date: new Date(item.endDate),
-    }));
-  } catch (error) {
-    console.error(error);
+export const fetchMembers = createAsyncThunk<Member[]>(
+  'members/fetchMembers', 
+  async (_, thunkAPI) => {
+    const { dispatch, rejectWithValue } = thunkAPI;
+    try {
+      const response = await api.get('/memberships/list');
+      const data = response.data.data;
+      return data.map((item: any, index: number) => ({
+        id: index + 1,
+        name: item.name,
+        car: item.licensePlate,
+        phone: item.phoneNumber,
+        join_date: new Date(item.startDate),
+        secession_date: new Date(item.endDate),
+      }));
+    } catch (error: any) {
+      if (error.response && error.response.status === 401) {
+        localStorage.setItem('isAuthenticated', 'false');
+        dispatch(logoutSuccess());
+      }
+      return rejectWithValue(error.message || '데이터 가져오기에 실패했습니다.');
+    }
   }
-});
+);
 
 export const deleteMembersFromServer = createAsyncThunk<void, string[]>('members/deleteMembers', async (licensePlates) => {
   await Promise.all(

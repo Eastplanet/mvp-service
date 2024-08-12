@@ -25,20 +25,16 @@ function App() {
   
   useEffect(() => {
     const eventSource = new EventSource('https://mvp-project.shop/api/notify/subscribe/test');
-    console.log('start 1')
 
     eventSource.onopen = () => {
       console.log("Connection opened");
     };
-    
-    console.log('start 2')
     
     eventSource.onmessage = (event) => {
       console.log("Received message:", event.data);
     };
 
     eventSource.onerror = (error) => {
-      console.log("start4");
       console.error("EventSource failed:", error);
     };
 

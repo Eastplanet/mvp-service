@@ -1,6 +1,7 @@
 // features/main/mainSlice.ts
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import api from '../../api/axios';
+import { logoutSuccess } from '../auth/authSlice';
 
 interface CarLog {
   licensePlate: string;
@@ -39,38 +40,39 @@ const initialState: MainState = {
   error: null,
 };
 
-const getDefaultDateRange = () => {
-  const toSimpleISODate = (date: Date) => {
-    return date.toISOString().replace(/\.\d{3}Z$/, '');
-  };
-  
-  const currentDate = new Date();
-  const endDate = toSimpleISODate(currentDate);
-  const startDate = toSimpleISODate(new Date(currentDate.setDate(currentDate.getDate() - 30)));
-  return { startDate, endDate };
-};
-
-export const fetchParkingData = createAsyncThunk('main/fetchParkingData', async () => {
-  const response = await api.get('/stats/home-init');
-  const data = response.data.data;
-  const parkingLots = data.parkingLots.map((lot: any) => ({
-    licensePlate: lot.licensePlate,
-    parkingDate: lot.parkingDate,
-    carState: lot.carState === 0 ? '주차 중' : lot.carState === 1 ? '대기 중' : lot.carState === 2 ? '이동 중' : '',
-    entryTime: new Date(lot.entranceTime).toISOString(),
-    exitTime: lot.exitTime ? new Date(lot.exitTime).toISOString() : undefined,
-    fee: lot.fee,
-    lotState: lot.lotState,
-    imageBase64: lot.image,
-  }));
-  
-  return {
-    todayIn: data.todayIn,
-    todayOut: data.todayOut,
-    todayIncome: data.todayIncome,
-    currentParkedCars: parkingLots,
-  };
-});
+export const fetchParkingData = createAsyncThunk(
+  'main/fetchParkingData',
+  async (_, thunkAPI) => {
+    const { dispatch, rejectWithValue } = thunkAPI;
+    try {
+      const response = await api.get('/stats/home-init');
+      const data = response.data.data;
+      const parkingLots = data.parkingLots.map((lot: any) => ({
+        licensePlate: lot.licensePlate,
+        parkingDate: lot.parkingDate,
+        carState: lot.carState === 0 ? '주차 중' : lot.carState === 1 ? '대기 중' : lot.carState === 2 ? '이동 중' : '',
+        entryTime: new Date(lot.entranceTime).toISOString(),
+        exitTime: lot.exitTime ? new Date(lot.exitTime).toISOString() : undefined,
+        fee: lot.fee,
+        lotState: lot.lotState,
+        imageBase64: lot.image,
+      }));
+      
+      return {
+        todayIn: data.todayIn,
+        todayOut: data.todayOut,
+        todayIncome: data.todayIncome,
+        currentParkedCars: parkingLots,
+      };
+    } catch (error: any) {
+      if (error.response && error.response.status === 401) {
+        localStorage.setItem('isAuthenticated', 'false');
+        dispatch(logoutSuccess());
+      }
+      return rejectWithValue(error.message || '데이터 가져오기에 실패했습니다.');
+    }
+  }
+);
 
 export const fetchSearchData = createAsyncThunk(
   'main/fetchSearchData',
