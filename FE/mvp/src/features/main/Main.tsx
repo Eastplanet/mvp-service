@@ -159,7 +159,7 @@ const Main: React.FC = () => {
             </div>
             <div className={styles.todayIncome}>
               <p className={styles.dataName}>당일 매출액</p>
-              <p className={styles.dataValue}>{(todayIncome / 10000).toFixed(1)}만원</p>
+              <p className={styles.dataValue}>{todayIncome > 999999 ? `${Math.round(todayIncome / 10000)}만원` : `${todayIncome.toLocaleString()}원`}</p>
             </div>
           </div>
         </div>
