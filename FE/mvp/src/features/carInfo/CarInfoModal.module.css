@@ -15,7 +15,7 @@
     background: #eef2f9;
     border-radius: 10px;
     width: 800px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    /* box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); */
     position: relative;
     z-index: 1001;
     display: flex;
@@ -26,7 +26,7 @@
 
 .closeButton {
     position: absolute;
-    top: 10px;
+    top: 9px;
     right: 10px;
     background: none;
     border: none;
@@ -42,7 +42,7 @@
 }
 
 .imageContainer {
-    flex: 1;
+    flex: 1.5;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -67,7 +67,8 @@
     background-color: white;
     border-radius: 10px;
     padding: 20px;
-    margin-bottom: 20px; /* 버튼들과 구분 */
+    margin-bottom: 10px; /* 버튼들과 구분 */
+    box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.25);
 }
 
 .carDetails {
@@ -102,14 +103,31 @@
 .modalButton {
     flex: 1;
     padding: 15px;
-    margin: 0 5px;
-    background-color: #007bff;
-    color: white;
+    margin: 0 10px;
+    /* background-color: #007bff; */
+    color: black;
     border: none;
-    border-radius: 5px;
+    border-radius: 15px;
     cursor: pointer;
-    text-align: center;
-    font-size: 16px;
+    text-align: left;
+    font-size: 22px;
+    overflow: hidden;
+    height: 120px;
+    width: 110px;
+    box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.25);
+}
+
+.imgOut {
+    width: 110px;
+    margin-left: 30%;
+}
+.imgMove {
+    width: 80px;
+    margin-left: 30%;
+}
+.imgDiscount {
+    width: 100px;
+    margin-left: 30%;
 }
 
 .modalButton:hover {

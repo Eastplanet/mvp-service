@@ -194,7 +194,7 @@ const Set: React.FC = () => {
             <p className={styles.title}>주차권 금액</p>
             <div className={styles.ticketRates}>
               <div className={styles.ticketRow}>
-                <span>1일권:</span>
+                <span>단일:</span>
                 <input
                   type="number"
                   className={styles.rateInput}
@@ -203,7 +203,7 @@ const Set: React.FC = () => {
                 />원
               </div>
               <div className={styles.ticketRow}>
-                <span>1주일권:</span>
+                <span>주간:</span>
                 <input
                   type="number"
                   className={styles.rateInput}
@@ -212,7 +212,7 @@ const Set: React.FC = () => {
                 />원
               </div>
               <div className={styles.ticketRow}>
-                <span>1달권:</span>
+                <span>월간:</span>
                 <input
                   type="number"
                   className={styles.rateInput}
@@ -224,25 +224,29 @@ const Set: React.FC = () => {
           </div>
 
           {/* 시스템 상태 조정 섹션 */}
-          <div className={styles.sectionBottom}>
-            <p className={styles.title}>시스템 정지</p>
-            <div className={styles.system_button}>
+          <div className={styles.section}>
+            <p className={styles.titleBottom}>시스템 정지</p>
+            <div>
               <button
-                className={`${styles.button_deactivate} ${!isSystemActive ? styles.active : ''}`}
+                className={`${styles.buttonDeactivate} ${!isSystemActive ? styles.active : ''}`}
                 onClick={() => handleSystemStateChange(false)}
               >
                 시스템 비활성화
               </button>
               <button
-                className={`${styles.button_activate} ${isSystemActive ? styles.active : ''}`}
+                className={`${styles.buttonActivate} ${isSystemActive ? styles.active : ''}`}
                 onClick={() => handleSystemStateChange(true)}
               >
                 시스템 활성화
               </button>
             </div>
-            <p className={styles.statusMessage}>
-              {isSystemActive ? '시스템 활성화 상태입니다' : '시스템 비활성화 상태입니다'}
-            </p>
+            <p>
+              시스템{' '}
+              <span className={isSystemActive ? styles.statusActive : styles.statusInactive}>
+                {isSystemActive ? '활성화' : '비활성화'}
+              </span>
+              {' 상태입니다'}
+          </p>
           </div>
 
           {/* 저장 버튼 */}
