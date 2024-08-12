@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from './store/store';
@@ -9,13 +9,6 @@ import Set from './features/set/Set';
 import Chart from './features/chart/Chart';
 import './App.css';
 import { fetchParkingData } from './features/main/mainSlice';
-
-import { EventSourcePolyfill, NativeEventSource } from 'event-source-polyfill';
-
-interface Message {
-  message: string;
-  timestamp: string;
-}
 
 function App() {
   const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);

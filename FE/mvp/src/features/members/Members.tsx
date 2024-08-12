@@ -79,12 +79,34 @@ const Members: React.FC = () => {
       return;
     }
 
-    const confirmDelete = window.confirm("해당 회원을 정말 삭제하겠습니까?");
-    if (confirmDelete) {
-      dispatch(deleteMembersFromServer(selectedCars));
-      setSelectedCars([]);
-      setAllSelected(false);
-    }
+    // const confirmDelete = window.confirm("해당 회원을 정말 삭제하겠습니까?");
+    // if (confirmDelete) {
+    //   dispatch(deleteMembersFromServer(selectedCars));
+    //   setSelectedCars([]);
+    //   setAllSelected(false);
+    // }
+
+    Swal.fire({
+      title: "해당 회원을 정말 삭제하겠습니까?",
+      showConfirmButton: false,
+      showDenyButton: true,
+      showCancelButton: true,
+      // confirmButtonText: "삭제",
+      denyButtonText: "삭제",
+    }).then((result) => {
+      /* Read more about isConfirmed, isDenied below */
+      // if (result.isConfirmed) {
+      //   Swal.fire("삭제", "", "success");
+      // } else if (result.isDenied) {
+      //   Swal.fire("취소", "", "error");
+      // }
+      if (result.isDenied) {
+        dispatch(deleteMembersFromServer(selectedCars));
+        setSelectedCars([]);
+        setAllSelected(false);
+        Swal.fire("삭제", "", "success");
+      }
+    });
   };
 
   // Start editing a member
