@@ -42,6 +42,12 @@ const ParkingLot: React.FC<ParkingLotProps> = ({ parkingData, onCarLogClick, sel
     <div className={styles.parkingLotContainer}>
       <div className={styles.parkingLot}>
         <div className={`${styles.side} ${styles.leftSide}`}>
+          <div
+            className={`${styles.parkingSpace} ${styles.emptySpace} ${mode === 'move' ? styles.clickableParkingSpace : ''}`}
+            onClick={() => {
+              if (mode === 'move') handleSlotClick(4);
+            }}
+          ></div>
           {parkingData.slice(0, 3).map((carLog, index) => {
             const isMoveMode = mode === 'move';
             const isSelectedCar = isMoveMode && selectedCarLog && carLog.licensePlate === selectedCarLog.licensePlate;
@@ -69,12 +75,6 @@ const ParkingLot: React.FC<ParkingLotProps> = ({ parkingData, onCarLogClick, sel
               </div>
             );
           })}
-          <div
-            className={`${styles.parkingSpace} ${styles.emptySpace} ${mode === 'move' ? styles.clickableParkingSpace : ''}`}
-            onClick={() => {
-              if (mode === 'move') handleSlotClick(4);
-            }}
-          ></div>
         </div>
         <div className={styles.road}></div>
         <div className={`${styles.side} ${styles.rightSide}`}>

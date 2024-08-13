@@ -335,6 +335,7 @@ const Members: React.FC = () => {
               placeholder='차량 번호 검색'
               value={searchTerm}
               onChange={handleSearchChange}
+              maxLength={4}
             />
           </div>
 
