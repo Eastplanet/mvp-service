@@ -1,6 +1,8 @@
 package com.mvp.vehicle.service;
 
 import com.mvp.calculator.service.CalculatorService;
+import com.mvp.common.exception.RestApiException;
+import com.mvp.common.exception.StatusCode;
 import com.mvp.vehicle.converter.ParkedVehicleConverter;
 import com.mvp.vehicle.converter.ParkingLotSpotConverter;
 import com.mvp.vehicle.dto.DiscountDTO;
@@ -65,22 +67,20 @@ public class VehicleService {
      */
     public List<ParkedVehicleSettleDTO> getParkedVehicleListByBackNum(String backNum) {
         List<ParkedVehicle> parkedVehicleList = parkedVehicleRepository.findByLicensePlateEndingWith(backNum);
+        List<ParkedVehicleSettleDTO> result = new ArrayList<>();
 
         if (!parkedVehicleList.isEmpty()) {
-            List<ParkedVehicleSettleDTO> result = new ArrayList<>();
+
             for(ParkedVehicle parkedVehicle : parkedVehicleList){
                 ParkedVehicleDTO parkedVehicleDTO = ParkedVehicleConverter.entityToDto(parkedVehicle);
                 Long fee = calculatorService.calculatePrice(parkedVehicleDTO);
 
                 ParkedVehicleSettleDTO parkedVehicleSettleDTO = new ParkedVehicleSettleDTO();
                 parkedVehicleSettleDTO.setParkedVehicleDTO(parkedVehicleDTO, fee);
-
                 result.add(parkedVehicleSettleDTO);
             }
-            return result;
-        } else {
-            return null;
         }
+        return result;
     }
 
     public List<ParkingLotSpotDTO> getAllParkingLotSpot() {

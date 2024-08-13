@@ -57,11 +57,7 @@ public class VehicleController {
     @GetMapping
     public ResponseEntity<ResponseDto> getParkedVehicleByBackNum(@RequestParam String backNum){
         List<ParkedVehicleSettleDTO> parkedVehicleList = vehicleService.getParkedVehicleListByBackNum(backNum);
-        if(!parkedVehicleList.isEmpty()){
-            return ResponseDto.response(StatusCode.SUCCESS, parkedVehicleList);
-        } else {
-            throw new RestApiException(StatusCode.INTERNAL_SERVER_ERROR);
-        }
+        return ResponseDto.response(StatusCode.SUCCESS, parkedVehicleList);
     }
 
     @PostMapping("/discount")
