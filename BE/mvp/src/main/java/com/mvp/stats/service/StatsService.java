@@ -44,14 +44,23 @@ public class StatsService {
 
         HomePageInitDto homePageInitDto = new HomePageInitDto();
 
-        List<VehicleLogDTO> enterCnt = loggerService.findAllByEntranceTimeBetween(todayStart, todayEnd);
-        homePageInitDto.setTodayIn(enterCnt.size());
+        List<VehicleLogDTO> todayLog = loggerService.findAllByEntranceTimeBetween(todayStart, todayEnd);
 
-        List<VehicleLogDTO> exitCnt = loggerService.findAllByExitTimeBetween(todayStart, todayEnd);
-        homePageInitDto.setTodayOut(exitCnt.size());
+        int enterCount = 0;
+        int exitCount = 0;
+        for(VehicleLogDTO vehicleLogDTO : todayLog) {
+            if(vehicleLogDTO.getType() == 0){
+                enterCount++;
+            }
+            else{
+                exitCount++;
+            }
+        }
+        homePageInitDto.setTodayIn(enterCount);
+        homePageInitDto.setTodayOut(exitCount);
 
         int incomeSum = 0;
-        for (VehicleLogDTO vehicleLogDTO : enterCnt) {
+        for (VehicleLogDTO vehicleLogDTO : todayLog) {
             if(vehicleLogDTO.getFee() != null) {
                 incomeSum += vehicleLogDTO.getFee();
             }
