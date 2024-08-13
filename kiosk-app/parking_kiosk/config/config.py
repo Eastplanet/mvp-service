@@ -8,8 +8,9 @@ MQTT_TOPIC_PUB = "/parking/command"
 MQTT_BROKER_PATH_WIN = "C:\\Program Files\\mosquitto\\mosquitto.exe"
 MQTT_CONF_PATH_WIN = "C:\\Program Files\\mosquitto\\mosquitto.conf"
 MQTT_BROKER_PATH_RASP = "/usr/sbin/mosquitto"
-MQTT_CONF_PATH_RASP = "/etc/mosquitto/mosquitto.conf"
+MQTT_CONF_PATH_RASP = "/etc/mosquitto/conf.d/external_access.conf"
 SERVER_URL = "https://mvp-project.shop/api"
+
 API_KEY = ""
 
 def set_api_key(api_key):

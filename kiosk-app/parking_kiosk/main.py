@@ -15,7 +15,7 @@ def main():
     mosquitto_process = MQTTBroker.start_mosquitto()
 
     app = QApplication(sys.argv)
-    font_id = QFontDatabase.addApplicationFont("parking_kiosk\gui\\res\\fonts\GothicA1-Medium.ttf")
+    font_id = QFontDatabase.addApplicationFont("parking_kiosk/gui/res/fonts/GothicA1-Medium.ttf")
     if font_id == -1:
         print("Font load failed")
     else:
