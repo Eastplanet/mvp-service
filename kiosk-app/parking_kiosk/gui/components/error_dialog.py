@@ -6,11 +6,10 @@ class ErrorDialog(QWidget):
     def __init__(self, message, parent=None):
         super(ErrorDialog, self).__init__(parent)
         self.setWindowTitle("오류")
-        self.setFixedSize(350, 200)
         self.setWindowFlags(Qt.WindowType.Dialog | Qt.WindowType.FramelessWindowHint)
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)  # 투명 배경 설정
         self.image_path = "parking_kiosk/gui/res/warning.png"
-        
+
         # 메인 레이아웃
         main_layout = QVBoxLayout(self)
         main_layout.setContentsMargins(10, 10, 10, 10)
@@ -43,6 +42,7 @@ class ErrorDialog(QWidget):
         # 오류 메시지
         error_label = QLabel(message, self)
         error_label.setStyleSheet("font-size: 20px; color: red; font-weight: bold;")
+        error_label.setWordWrap(True)  # 텍스트를 자동으로 줄 바꿈
         error_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         message_layout.addWidget(error_label, alignment=Qt.AlignmentFlag.AlignCenter)
 
@@ -71,6 +71,9 @@ class ErrorDialog(QWidget):
         # 메인 레이아웃에 컨테이너 위젯 추가
         main_layout.addWidget(container)
         self.setLayout(main_layout)
+
+        # 창 크기 조정
+        self.adjustSize()  # 메시지에 따라 창 크기 조정
 
     def show_error(self):
         self.show()

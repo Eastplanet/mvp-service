@@ -40,11 +40,11 @@ class SettlementPage(QWidget):
         else:
             pixmap = QPixmap('parking_kiosk/gui/res/test-image1.png')  # 대체 이미지 경로
 
-        pixmap = pixmap.scaled(200, 150, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
+        pixmap = pixmap.scaled(300, 250, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
         
         image_label = QLabel(self)
         image_label.setPixmap(pixmap)
-        image_label.setFixedSize(200, 150)
+        image_label.setFixedSize(300, 250)
         image_label.setStyleSheet("border-radius: 10px;")
         header_layout.addWidget(image_label)
 
