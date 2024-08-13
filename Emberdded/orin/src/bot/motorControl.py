@@ -55,7 +55,7 @@ def rotateLeft(motorHat, kit):
     # 서보를 오른쪽으로 회전시키고 모터를 반대로 설정하여 2초간 유지
     kit.servo[0].angle = initServoAngle + steerServoAngle
     motorHat.setThrottle(1.0)
-    time.sleep(1.35)
+    time.sleep(1.3)
     
     motorHat.setThrottle(0)
     kit.servo[0].angle = initServoAngle
@@ -66,7 +66,7 @@ def rotateRight(motorHat, kit):
     # 서보를 right쪽으로 회전시키고 모터를 설정하여 2초간 유지
     kit.servo[0].angle = initServoAngle + steerServoAngle
     motorHat.setThrottle(-1.0)
-    time.sleep(1.35)
+    time.sleep(1.45)
     
     # 서보를 left쪽으로 회전시키고 모터를 반대로 설정하여 2초간 유지
     kit.servo[0].angle = initServoAngle - steerServoAngle
@@ -121,12 +121,12 @@ def turnRightGoBack(kit, motorHat):
 
 def turnStraightGoStraight(kit, motorHat):
     turnStraight(kit)
-    goStraight(motorHat, throttle=0.4)
+    goStraight(motorHat, throttle=0.45)
     print("    \033[1;32mGo Straight (↑)\033[0m")
 
 def turnStraightGoBack(kit, motorHat):
     turnStraight(kit)
-    goBack(motorHat, throttle=0.4)
+    goBack(motorHat, throttle=0.45)
     print("    \033[1;32mBack Straight (↓)\033[0m")
 
 def stop(kit, motorHat):

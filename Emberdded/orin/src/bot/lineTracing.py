@@ -59,15 +59,18 @@ def startLineTracing(startNode, endNode, queue):
             elif path[1] == 'Rotate left':
                 path[1] = 'Rotate right'
             elif startNode == 4:
-                path[1:4] = 'Back', 'Back', 'Back'
+                path[1:4] = 'Back', 'Back'
         print(f'Path Generating Complete! -> Path : {path}')
     else:
         print(f'\033[1;31m[Error]\033[0m Path Generation Fail')
         raise ExitProgramException
 
-    curStep = 0
+    curStep = lidarStep = prevElapsedTime = 0
     prevDirection = 'GO_STRAIGHT'
+    if startNode != 0:
+        prevDirection = 'BACK_STRAIGHT'
     startTime = updateTime = time.time()
+    lidarOnFlag = True
     isUpdated = isObject = isIntersection = False
 
     # 상태 표시를 위한 심볼
@@ -96,18 +99,25 @@ def startLineTracing(startNode, endNode, queue):
             # 라이다 데이터 읽기
             if not queue.empty():
                 lidar_data = queue.get()
-                print(lidar_data)
+                print(f'queue : {lidar_data}')
                 if lidar_data <= 0.38:
                     print("\033[1;31m[Warning!]Obstacle detected! Distance: {:.2f}\033[0m".format(lidar_data), end='\n\n')
                     isObject = True
                 elif isObject == True:
                     isObject = False
+            else:
+                lidarStep += 1
+                if lidarStep > 100:
+                    lidarOnFlag = False
+                    print('[Warning LiDAR off]')
+                print('queue is empty')
+                isObject = False
 
-            if isObject:
+            if isObject and lidarOnFlag:
                 motorControl.stop(kit, motorHat)
                 time.sleep(0.1)
                 continue
-
+            
             if totalElapsedTime >= 40:
                 raise ExitProgramException
 
@@ -156,32 +166,29 @@ def startLineTracing(startNode, endNode, queue):
                 turnFunctions[prevDirection](kit, motorHat)
 
             if (left == blackLine and center == blackLine and right == blackLine) or isIntersection:      # ☐ ☐ ☐ -> 교차로
-                if path[curStep] == 'Stop' and isOverElapsedTime(elapsedTime, threshold=0.1):
-                    motorControl.stop(kit, motorHat)
-                    raise ExitProgramException
-                
-                if isOverElapsedTime(elapsedTime) and not isUpdated:
-                    if path[curStep] != 'Stop':
+                if path[curStep] == 'Stop':
+                    if isOverElapsedTime(elapsedTime, threshold=0.1) and prevElapsedTime > 2.5:
+                        motorControl.stop(kit, motorHat)
+                        raise ExitProgramException
+                    else:
+                        motorControl.turnStraightGoStraight(kit, motorHat)
+                        prevDirection = 'GO_STRAIGHT'
+
+                if path[curStep] == 'Straight' or path[curStep] == 'Back':
+                    if (curStep != 0 and isOverElapsedTime(elapsedTime)) or (curStep == 0 and isOverElapsedTime(elapsedTime, threshold=3.0)):
+                        prevElapsedTime = elapsedTime
+                        updateTime = time.time()
                         curStep += 1
-                    isUpdated = True
 
-                    if curStep < len(path):
-                        if 'Rotate' in path[curStep]:
-                            motorControl.rotate(motorHat, kit, path[curStep])
-                            updateTime = time.time()
-                            curStep += 1
-                            isUpdated = False
-
-                        else:
-                            # time.sleep(0.2) # 교차로를 지나기 위해
-                            updateTime = time.time()
-                            if path[curStep] != 'Stop':
-                                curStep += 1
-                            isUpdated = False
-                else:
+                    if 'Rotate' in path[curStep]:
+                        motorControl.rotate(motorHat, kit, path[curStep])
+                        prevElapsedTime = elapsedTime
+                        updateTime = time.time()
+                        curStep += 1
+                        prevDirection = 'GO_STRAIGHT'
+                        
                     if curStep == 0 and path[curStep] == 'Back':
-                        prevDirection = 'BACK_STRAIGHT'
-                    turnFunctions[prevDirection](kit, motorHat)
+                        turnFunctions[prevDirection](kit, motorHat)
                 print("\n\033[1;33m[Detect!] InterSection!\033[0m")
                 isIntersection = False
             time.sleep(0.1)

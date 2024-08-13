@@ -62,13 +62,17 @@ def reconstructPath(cameFrom, start, goal):
         if prevNode is not None:
             if moveType == 'straight':
                 action = 'Straight'
-            elif moveType == 'left':
-                action = 'Rotate left'
-            elif moveType == 'right':
-                action = 'Rotate right'
-            else:   
-                action = 'Unknown action'
-            path.append(action)
+                straightNum += 1
+            else:
+                if moveType == 'left':
+                    action = 'Rotate left'
+                elif moveType == 'right':
+                    action = 'Rotate right'
+                else:   
+                    action = 'Unknown action'
+                straightNum = 0
+            if (action == 'Straight' and straightNum % 2 == 1) or action != 'Straight':
+                path.append(action)
 
         current = prevNode
     path.reverse()
