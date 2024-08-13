@@ -21,7 +21,7 @@ class ExitPage(QWidget):
         # 상단 라벨
         top_label = QLabel("차량번호를 입력하세요", self)
         top_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        top_label.setStyleSheet("color: white; font-size: 36px; font-weight: bold;")  # 폰트 크기 조정
+        top_label.setStyleSheet("color: white; font-size: 54px; font-weight: bold;")  # 폰트 크기 조정
         layout.addWidget(top_label, alignment=Qt.AlignmentFlag.AlignCenter)
 
         # 상단 Spacer

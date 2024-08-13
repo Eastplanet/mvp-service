@@ -1,4 +1,4 @@
-MQTT_BROKER = "localhost"
+MQTT_BROKER = "192.168.137.63"
 MQTT_PORT = 1883
 MQTT_TOPIC_PUB = "/parking/complete"
 MQTT_TOPIC_SUB = "/parking/command"

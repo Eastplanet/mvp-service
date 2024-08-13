@@ -8,13 +8,13 @@ class HoverButton(QPushButton):
         self.hover_color = hover_color
 
         # 버튼 크기와 폰트 크기 설정
-        self.setFixedSize(300, 80)  # 버튼 크기를 절대값으로 설정
+        self.setFixedSize(400, 100)  # 버튼 크기를 절대값으로 설정
         self.setStyleSheet(f"""
             QPushButton {{
                 background-color: {self.default_color}; 
                 color: white; 
-                font-size: 24px;
-                border-radius: 15px;
+                font-size: 30px;
+                border-radius: 9px;
                 border: 3px solid #FFF;
             }}
         """)
@@ -32,8 +32,8 @@ class HoverButton(QPushButton):
             QPushButton {{
                 background-color: {self.hover_color}; 
                 color: white; 
-                font-size: 24px; 
-                border-radius: 15px; 
+                font-size: 30px; 
+                border-radius: 9px; 
                 border: 3px solid #FFF;
                 font-weight: bold;
             }}
@@ -64,7 +64,7 @@ class MainButton(QWidget):
         self.entry_button = HoverButton("입차", "#FFB300", "#FFA000", self)
         layout.addWidget(self.entry_button, alignment=Qt.AlignmentFlag.AlignCenter)
         
-        layout.addSpacing(50)  # 버튼 간의 간격 절대값 설정
+        layout.addSpacing(100)  # 버튼 간의 간격 절대값 설정
 
         # 출차 버튼
         self.exit_button = HoverButton("출차", "#FF0000", "#CC0000", self)
