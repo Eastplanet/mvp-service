@@ -5,6 +5,7 @@ import com.mvp.common.exception.RestApiException;
 import com.mvp.common.exception.StatusCode;
 import com.mvp.vehicle.dto.DiscountDTO;
 import com.mvp.vehicle.dto.ParkedVehicleDTO;
+import com.mvp.vehicle.dto.ParkedVehicleSettleDTO;
 import com.mvp.vehicle.service.VehicleService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -55,13 +56,8 @@ public class VehicleController {
      */
     @GetMapping
     public ResponseEntity<ResponseDto> getParkedVehicleByBackNum(@RequestParam String backNum){
-        List<ParkedVehicleDTO> parkedVehicleList = vehicleService.getParkedVehicleListByBackNum(backNum);
-
-        if(!parkedVehicleList.isEmpty()){
-            return ResponseDto.response(StatusCode.SUCCESS, parkedVehicleList);
-        } else {
-            throw new RestApiException(StatusCode.INTERNAL_SERVER_ERROR);
-        }
+        List<ParkedVehicleSettleDTO> parkedVehicleList = vehicleService.getParkedVehicleListByBackNum(backNum);
+        return ResponseDto.response(StatusCode.SUCCESS, parkedVehicleList);
     }
 
     @PostMapping("/discount")
@@ -73,5 +69,11 @@ public class VehicleController {
         } else {
             throw new RestApiException(StatusCode.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @PatchMapping("/update")
+    public ResponseEntity<ResponseDto> updateParkedVehicle(@RequestBody List<ParkedVehicleDTO> parkedVehicleDTOList){
+        vehicleService.updateVehicle(parkedVehicleDTOList);
+        return ResponseDto.response(StatusCode.SUCCESS, null);
     }
 }

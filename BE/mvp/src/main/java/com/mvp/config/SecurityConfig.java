@@ -19,7 +19,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http, ApiKeyRequestFilter apiKeyRequestFilter) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
-                        .requestMatchers("/api/manager/login", "/api/manager").permitAll() // 로그인 및 회원가입 경로 접근 허용
+                        .requestMatchers("/api/manager/login", "/api/manager", "/api/notify/**").permitAll() // 로그인 및 회원가입 경로 접근 허용
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(exceptionHandling -> exceptionHandling

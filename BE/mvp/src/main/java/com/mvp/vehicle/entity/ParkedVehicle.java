@@ -46,4 +46,8 @@ public class ParkedVehicle {
     public void updateStatus(Integer status) {
         this.status = status;
     }
+
+    public void updateImage(byte[] image) {
+        this.image = image;
+    }
 }

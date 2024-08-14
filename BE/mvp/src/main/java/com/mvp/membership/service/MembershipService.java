@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -59,11 +61,27 @@ public class MembershipService {
 
     public List<MembershipDTO> getMembershipList() {
         List<Membership> membershipList = membershipRepository.findAll();
+        List<MembershipDTO> membershipDTOS = MembershipConverter.entityToDtoList(membershipList);
+        // Immutable list를 mutable list로 변환
+        List<MembershipDTO> mutableMembershipDTOS = new ArrayList<>(membershipDTOS);
 
-        return MembershipConverter.entityToDtoList(membershipList);
+        mutableMembershipDTOS.sort((o1, o2) -> {
+            if (o1.getEndDate() == null && o2.getEndDate() == null) {
+                return 0;
+            }
+            if (o1.getEndDate() == null) {
+                return 1; // endDate가 없는 경우 뒤로 보냄
+            }
+            if (o2.getEndDate() == null) {
+                return -1; // endDate가 없는 경우 뒤로 보냄
+            }
+            return o2.getEndDate().compareTo(o1.getEndDate()); // 내림차순 정렬
+        });
+        return mutableMembershipDTOS;
     }
 
     public List<MembershipDTO> findMembershipDate(LocalDateTime start, LocalDateTime end) {
+        end = end.withDayOfMonth(1).plusMonths(1).withHour(0).withMinute(0).withSecond(0).withNano(0);
         List<Membership> allByExitTimeBetween = membershipRepository.findByLicensePlateEntranceTimeBetween(start, end);
         return MembershipConverter.entityToDtoList(allByExitTimeBetween);
     }
