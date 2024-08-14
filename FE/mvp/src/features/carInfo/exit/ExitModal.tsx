@@ -1,17 +1,17 @@
 import React from 'react';
-import styles from './ExitModal.module.css'; // CSS 모듈
+import styles from './ExitModal.module.css';
 
 interface ExitModalProps {
-  carNumber: string;
+  licensePlate: string;
   onConfirm: () => void;
   onClose: () => void;
 }
 
-const ExitModal: React.FC<ExitModalProps> = ({ carNumber, onConfirm, onClose }) => {
+const ExitModal: React.FC<ExitModalProps> = ({ licensePlate, onConfirm, onClose }) => {
   return (
     <div className={styles.modalOverlay}>
       <div className={styles.modalContent}>
-        <h1 className={styles.carNumber}>{carNumber}</h1>
+        <h1 className={styles.licensePlate}>{licensePlate}</h1>
         <p className={styles.message}>출차하시겠습니까?</p>
         <div className={styles.buttons}>
           <button className={styles.confirmButton} onClick={onConfirm}>확인</button>

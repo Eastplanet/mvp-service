@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../store/store';
 import styles from './Login.module.css';
 import logo from '../../assets/images/logos/logo.png'
-import { login, loginSuccess } from './authSlice';
+import { login } from './authSlice';
 import { RootState } from '../../store/store';
 
 const Login: React.FC = () => {
@@ -13,8 +13,8 @@ const Login: React.FC = () => {
   const { error, loading } = useSelector((state: RootState) => state.auth);
 
   const handleLogin = () => {
-    // dispatch(login({ email, password }));
-    dispatch(loginSuccess());
+    dispatch(login({ email, password }));
+    // dispatch(loginSuccess());
   };
 
   return (
