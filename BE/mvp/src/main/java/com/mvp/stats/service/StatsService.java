@@ -1,5 +1,6 @@
 package com.mvp.stats.service;
 
+import com.mvp.calculator.service.CalculatorService;
 import com.mvp.common.exception.RestApiException;
 import com.mvp.common.exception.StatusCode;
 import com.mvp.logger.dto.VehicleLogDTO;
@@ -35,30 +36,7 @@ public class StatsService {
     private final LoggerService loggerService;
     private final ParkingLotService parkingLotService;
     private final MembershipService membershipService;
-
-    public Long calculatePrice(ParkedVehicleDTO parkedVehicleDTO) {
-
-        boolean ownMemberships = membershipService.isOwnMemberships(parkedVehicleDTO.getLicensePlate());
-        if(ownMemberships == true){
-            return 0L;
-        }
-
-        ParkingLotSettingDTO setting = parkingLotService.getSetting();
-
-        long price = setting.getBaseFee();
-        LocalDateTime entranceTime = parkedVehicleDTO.getEntranceTime();
-        LocalDateTime now = LocalDateTime.now();
-        long minutes = Duration.between(entranceTime, now).toMinutes();
-        minutes -= setting.getBaseParkingTime();
-        if(minutes > 0){
-            price += (minutes/setting.getAdditionalUnitTime())*setting.getAdditionalUnitFee();
-            if(parkedVehicleDTO.getDiscount() != null){
-                price -= parkedVehicleDTO.getDiscount();
-            }
-            if(price < 0)price = 0;
-        }
-        return price;
-    }
+    private final CalculatorService calculateService;
 
     public HomePageInitDto getInitHomePage() {
         LocalDateTime todayStart = LocalDateTime.now().with(LocalTime.MIN);
@@ -66,14 +44,23 @@ public class StatsService {
 
         HomePageInitDto homePageInitDto = new HomePageInitDto();
 
-        List<VehicleLogDTO> enterCnt = loggerService.findAllByEntranceTimeBetween(todayStart, todayEnd);
-        homePageInitDto.setTodayIn(enterCnt.size());
+        List<VehicleLogDTO> todayLog = loggerService.findAllByEntranceTimeBetween(todayStart, todayEnd);
 
-        List<VehicleLogDTO> exitCnt = loggerService.findAllByExitTimeBetween(todayStart, todayEnd);
-        homePageInitDto.setTodayOut(exitCnt.size());
+        int enterCount = 0;
+        int exitCount = 0;
+        for(VehicleLogDTO vehicleLogDTO : todayLog) {
+            if(vehicleLogDTO.getType() == 0){
+                enterCount++;
+            }
+            else{
+                exitCount++;
+            }
+        }
+        homePageInitDto.setTodayIn(enterCount);
+        homePageInitDto.setTodayOut(exitCount);
 
         int incomeSum = 0;
-        for (VehicleLogDTO vehicleLogDTO : enterCnt) {
+        for (VehicleLogDTO vehicleLogDTO : todayLog) {
             if(vehicleLogDTO.getFee() != null) {
                 incomeSum += vehicleLogDTO.getFee();
             }
@@ -92,7 +79,7 @@ public class StatsService {
                 stats.setLicensePlate(dto.getParkedVehicle().getLicensePlate());
                 stats.setParkingDate(dto.getParkedVehicle().getEntranceTime());
                 stats.setEntranceTime(dto.getParkedVehicle().getEntranceTime());
-                stats.setFee(calculatePrice(dto.getParkedVehicle()));
+                stats.setFee(calculateService.calculatePrice(dto.getParkedVehicle()));
                 stats.setImage(dto.getParkedVehicle().getImage());
                 stats.setCarState(dto.getParkedVehicle().getStatus());
             }
@@ -105,7 +92,12 @@ public class StatsService {
     }
 
     public List<ParkingLogRes> getParkingLot(ParkingLogReq parkingLogReq){
-        List<VehicleLogDTO> find = loggerService.findByEntranceTimeBetween(parkingLogReq.getStartDate(), parkingLogReq.getEndDate(), parkingLogReq.getLicensePlate());
+        // getStartDate()를 해당 날짜의 00시로 설정
+        LocalDateTime startDate = parkingLogReq.getStartDate().toLocalDate().atStartOfDay();
+        // getEndDate()를 해당 날짜의 23시 59분으로 설정
+        LocalDateTime endDate = parkingLogReq.getEndDate().toLocalDate().atTime(23, 59, 59);
+
+        List<VehicleLogDTO> find = loggerService.findByEntranceTimeBetween(startDate, endDate, parkingLogReq.getLicensePlate());
 
         List<ParkingLogRes> list = new ArrayList<>();
         for(VehicleLogDTO vehicleLogDTO : find){
@@ -128,6 +120,27 @@ public class StatsService {
                     .build();
             list.add(build);
         }
+
+        list.sort((o1, o2) -> {
+            // startTime 기준으로 정렬
+            int startTimeComparison = o1.getEntranceTime().compareTo(o2.getEntranceTime());
+            if (startTimeComparison != 0) {
+                return startTimeComparison;
+            }
+            // startTime이 같은 경우 출차 시간 기준으로 정렬
+            if (o1.getExitTime() == null && o2.getExitTime() == null) {
+                return 0;
+            }
+            if (o1.getExitTime() == null) {
+                return 1; // exitTime이 없는 경우 뒤로 보냄
+            }
+            if (o2.getExitTime() == null) {
+                return -1; // exitTime이 없는 경우 뒤로 보냄
+            }
+            // 출차 시간이 둘 다 존재하면 내림차순 정렬
+            return o2.getExitTime().compareTo(o1.getExitTime());
+        });
+
         return list;
     }
 
@@ -135,7 +148,7 @@ public class StatsService {
         RevenueResDTO revenueResDTO = new RevenueResDTO();
 
         List<DailyRevenue> daily = new ArrayList<>();
-        for (int i = 0; i < 7; i++) {
+        for (int i = 6; i >= 0; i--) {
             LocalDateTime startOfDay = LocalDate.now().minusDays(i).atStartOfDay();
             LocalDateTime endOfDay = LocalDate.now().minusDays(i).atTime(LocalTime.MAX);
             List<VehicleLogDTO> dailyLogs = loggerService.findAllByExitTimeBetween(startOfDay, endOfDay);
@@ -162,7 +175,7 @@ public class StatsService {
         // 이번 달을 포함한 지난 12개월 동안의 데이터를 가져오기 위한 리스트
         List<MonthlyRevenue> monthlyRevenues = new ArrayList<>();
         // 현재 날짜를 기준으로 지난 12개월 동안의 데이터를 가져옴
-        for (int i = 0; i < 12; i++) {
+        for (int i = 11; i >= 0; i--) {
             // 현재 달에서 i 달 전의 첫째 날
             LocalDate firstDayOfMonth = LocalDate.now().minusMonths(i).withDayOfMonth(1);
             LocalDateTime startOfMonth = firstDayOfMonth.atStartOfDay();

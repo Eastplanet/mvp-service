@@ -1,9 +1,13 @@
 package com.mvp.vehicle.service;
 
+import com.mvp.calculator.service.CalculatorService;
+import com.mvp.common.exception.RestApiException;
+import com.mvp.common.exception.StatusCode;
 import com.mvp.vehicle.converter.ParkedVehicleConverter;
 import com.mvp.vehicle.converter.ParkingLotSpotConverter;
 import com.mvp.vehicle.dto.DiscountDTO;
 import com.mvp.vehicle.dto.ParkedVehicleDTO;
+import com.mvp.vehicle.dto.ParkedVehicleSettleDTO;
 import com.mvp.vehicle.dto.ParkingLotSpotDTO;
 import com.mvp.vehicle.entity.ParkedVehicle;
 import com.mvp.vehicle.entity.ParkingLotSpot;
@@ -14,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -21,6 +26,7 @@ import java.util.List;
 public class VehicleService {
     private final ParkedVehicleRepository parkedVehicleRepository;
     private final ParkingLotSpotRepository parkingLotSpotRepository;
+    private final CalculatorService calculatorService;
 
     /**
      * 주차된 차량 정보 조회
@@ -59,14 +65,22 @@ public class VehicleService {
      * @param backNum
      * @return
      */
-    public List<ParkedVehicleDTO> getParkedVehicleListByBackNum(String backNum) {
+    public List<ParkedVehicleSettleDTO> getParkedVehicleListByBackNum(String backNum) {
         List<ParkedVehicle> parkedVehicleList = parkedVehicleRepository.findByLicensePlateEndingWith(backNum);
+        List<ParkedVehicleSettleDTO> result = new ArrayList<>();
 
         if (!parkedVehicleList.isEmpty()) {
-            return ParkedVehicleConverter.entityListToDtoList(parkedVehicleList);
-        } else {
-            return null;
+
+            for(ParkedVehicle parkedVehicle : parkedVehicleList){
+                ParkedVehicleDTO parkedVehicleDTO = ParkedVehicleConverter.entityToDto(parkedVehicle);
+                Long fee = calculatorService.calculatePrice(parkedVehicleDTO);
+
+                ParkedVehicleSettleDTO parkedVehicleSettleDTO = new ParkedVehicleSettleDTO();
+                parkedVehicleSettleDTO.setParkedVehicleDTO(parkedVehicleDTO, fee);
+                result.add(parkedVehicleSettleDTO);
+            }
         }
+        return result;
     }
 
     public List<ParkingLotSpotDTO> getAllParkingLotSpot() {
@@ -84,6 +98,15 @@ public class VehicleService {
             return ParkedVehicleConverter.entityToDto(parkedVehicle);
         } else {
             return null;
+        }
+    }
+
+    @Transactional
+    public void updateVehicle(List<ParkedVehicleDTO> list) {
+        for(ParkedVehicleDTO parkedVehicleDTO : list){
+            ParkedVehicle find = parkedVehicleRepository.findByLicensePlate(parkedVehicleDTO.getLicensePlate());
+            find.updateImage(parkedVehicleDTO.getImage());
+
         }
     }
 }

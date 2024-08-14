@@ -14,6 +14,6 @@ public interface MembershipRepository extends JpaRepository<Membership, Long> {
     void deleteByLicensePlate(String licensePlate);
     Membership findByLicensePlate(String licensePlate);
 
-    @Query("SELECT m FROM Membership m WHERE m.startDate BETWEEN :start AND :end")
+    @Query("SELECT m FROM Membership m WHERE m.startDate >= :start AND m.startDate < :end")
     List<Membership> findByLicensePlateEntranceTimeBetween(@Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
 }
