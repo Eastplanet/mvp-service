@@ -103,7 +103,7 @@
 
 - **Component Structure**
 
-    ![Component Structure](https://www.notion.so/60ae87d943ad44cd8b53e3de22a1bc32?pvs=4#1c022ce85fc94c618436a77901732140)
+    ![Component Structure](/uploads/a26575d8c070ad0b72262db250bea362/시스템아키텍쳐.png)
 ---
 
 - **ERD(Entity Relationship Diagram)**
