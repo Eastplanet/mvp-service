@@ -22,7 +22,9 @@
 
 ### 1. 프로젝트 설명
 
-**프로젝트 로고**:
+**프로젝트 로고**
+
+![React](/uploads/988a28c9ef7772a26b49ea2220e80d59/image.png)
 
 **프로젝트 이름**: MVP(Management for Valet Parking)
 
