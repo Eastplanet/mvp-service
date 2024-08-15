@@ -3,6 +3,7 @@ from aiohttp import ClientSession
 import requests
 import base64
 import cv2
+from core.handlers import handle_lpr_api
 from static.ko_en_mapper import ko_en_mapper
 
 image_path = "parking_kiosk/gui/res/test.jpg"
@@ -31,11 +32,6 @@ class Camera:
     def ocr_reader(self):
         self.capture_image()
         
-        url = 'https://apis.openapi.sk.com/sigmeta/lpr/v1'
-        headers = {
-            'accept': 'application/json',
-            'appKey': 'l7xx846db5f3bc1e48d29b7275a745d501c8'
-        }
 
         # 이미지 리사이즈
         image = cv2.imread('./result/captured_img.jpeg')
@@ -50,22 +46,18 @@ class Camera:
                 'File': ('captured_img.jpeg', image_file, 'image/jpeg')
             }
             
-            response = requests.post(url, headers=headers, files=files)
+            response_json = handle_lpr_api(files)
             
-            response_json = response.json()
             if 'result' in response_json and 'objects' in response_json['result']:
                 lp_string = response_json['result']['objects'][0]['lp_string']
-                
-                with open(temp_file_path, 'rb') as img_file:
-                    base64_encoded_img = base64.b64encode(img_file.read()).decode('utf-8')
-                    
+                return self.kor_converter(lp_string)
+            else:
+                return None
+         
         # os.remove(temp_file_path)
-        print(lp_string)
-        print(base64_encoded_img)
+        # print(lp_string)
+        # print(base64_encoded_img)
         
-        
-        return self.kor_converter(lp_string)
-
     def resize_image(self, image, max_width=1024, max_height=1024):
         height, width = image.shape[:2]
         if width > max_width or height > max_height:
