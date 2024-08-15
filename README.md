@@ -135,14 +135,15 @@
     - Soft Actor-Critic (SAC) 알고리즘과 Hindsight Experience Replay(HER) 알고리즘을 통해 학습 효율성 극대화.
     - Mish 활성화 함수를 사용하여 Dying Relu 문제 해결.
 
-    ![successful_parking_simulation_1](/uploads/53eec2ac1d3e68d8fb69413cdca00a29/successful_parking_simulation_1.gif)
+![successful_parking_simulation_1](/uploads/53eec2ac1d3e68d8fb69413cdca00a29/successful_parking_simulation_1.gif)
 
-    ![successful_parking_simulation_3](/uploads/17924523f4b12f1eb02c517ca5933dd3/successful_parking_simulation_3.gif)
+![successful_parking_simulation_3](/uploads/17924523f4b12f1eb02c517ca5933dd3/successful_parking_simulation_3.gif)
 
 2. **환경 이식 및 SLAM 알고리즘**
     - Hector SLAM을 이용한 2D LiDAR 기반 맵 생성.
     - AMCL과 Particle Filter 기반의 Localization 기술을 사용하여 차량의 위치와 헤딩 값을 정확히 도출.
-    ![LiDAR](/uploads/2f052b468c26bd77098f2bbf41ff4b6d/LiDAR.PNG)
+    
+![LiDAR](/uploads/2f052b468c26bd77098f2bbf41ff4b6d/LiDAR.PNG)
 
 3. **LPR 기술 활용**
     - 차량 번호판을 실시간으로 인식하고, 텍스트로 변환하여 주차 시스템에 반영.
