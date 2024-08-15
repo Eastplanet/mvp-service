@@ -11,6 +11,7 @@ MQTT_BROKER_PATH_RASP = "/usr/sbin/mosquitto"
 MQTT_CONF_PATH_RASP = "/etc/mosquitto/conf.d/external_access.conf"
 SERVER_URL = "https://mvp-project.shop/api"
 
+API_KEY_LPR = "l7xx846db5f3bc1e48d29b7275a745d501c8"
 API_KEY = ""
 
 def set_api_key(api_key):

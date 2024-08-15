@@ -128,7 +128,7 @@ class MainWindow(QMainWindow):
             self.home_button.show()
             self.stacked_widget.setCurrentWidget(self.entry_page)
         else:
-            self.show_error_dialog("번호판을 인식할 수 없습니다.")
+            self.show_error_dialog("인터넷 연결을 확인해주세요.")
         QTimer.singleShot(0, self.gif_widget.stop)
         
     # 입차 처리

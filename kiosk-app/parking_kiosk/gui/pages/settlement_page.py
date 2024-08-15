@@ -44,7 +44,7 @@ class SettlementPage(QWidget):
         
         image_label = QLabel(self)
         image_label.setPixmap(pixmap)
-        image_label.setFixedSize(300, 250)
+        image_label.setFixedSize(350, 300)
         image_label.setStyleSheet("border-radius: 10px;")
         header_layout.addWidget(image_label)
 
