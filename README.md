@@ -116,6 +116,8 @@
 
 **Gitlab 내 'exec'폴더 참조**
 
+[Notion 페이지로 이동](https://humdrum-geranium-104.notion.site/E101-Management-Valet-Parking-073fe3723242494fa2dd9b9fd39ca786?pvs=4)
+
 <div align="right">
   
 [목차로](#목차)
