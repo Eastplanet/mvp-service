@@ -131,6 +131,10 @@
 #### **자율 주차를 위한 모델 및 알고리즘**
 
 1. **강화 학습 기반 자율 주차 모델**
+
+    <img src="/uploads/53eec2ac1d3e68d8fb69413cdca00a29/successful_parking_simulation_1.gif" alt="My Image" width="300" height="200"/>
+    <img src="/uploads/17924523f4b12f1eb02c517ca5933dd3/successful_parking_simulation_3.gif" alt="My Image" width="300" height="200"/>
+
     - 심층 강화 학습을 이용한 자율 주차 모델 개발.
     - Soft Actor-Critic (SAC) 알고리즘과 Hindsight Experience Replay(HER) 알고리즘을 통해 학습 효율성 극대화.
     - Mish 활성화 함수를 사용하여 Dying Relu 문제 해결.
