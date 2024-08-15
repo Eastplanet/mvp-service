@@ -17,7 +17,6 @@
     - [Git 브랜치 작성 컨벤션](#2-git-브랜치-작성-컨벤션)
     - [브랜치 관리](#3-브랜치-관리)
 - [프로젝트 후기](#프로젝트-후기)
-- [License](#license)
 
 ## 프로젝트 소개
 
@@ -104,12 +103,12 @@
 
 - **Component Structure**
 
-    ![Component Structure]
+    ![Component Structure](https://www.notion.so/60ae87d943ad44cd8b53e3de22a1bc32?pvs=4#1c022ce85fc94c618436a77901732140)
 ---
 
 - **ERD(Entity Relationship Diagram)**
 
-    ![ERD]
+    ![ERD](https://www.notion.so/ERD-0510777fde244c66ab641a1a08f47402?pvs=4#614bb50df5c24bb6bd0cdb2df950b86e)
 
 ---
 
@@ -151,7 +150,7 @@
 
     - 무인 주차 시스템의 모든 주요 기능이 계획대로 구현됨.
     - 관리자 페이지를 통해 실시간으로 주차장 상태 및 데이터 관리 가능.
-    - 자율 주행 보드와 LPR 시스템의 통합이 완료되어 무인 주차 및 출차 과정이 원활히 작동.
+    - 자율 주행 보드와 키오스크 기능의 통합이 완료되어 무인 주차 및 출차 과정이 원활히 작동.
 
 
 <div align="right">
