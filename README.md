@@ -132,8 +132,8 @@
 
 1. **강화 학습 기반 자율 주차 모델**
 
-    <img src="/uploads/7ea61d89de9af54a68e8c155718fcac4/successful_parking_simulation_2.gif" alt="My Image" width="300" height="200"/>
-    <img src="/uploads/a3b7ce08f473c5cee8e0a3f002476bc6/successful_parking_simulation_3__1_.gif" alt="My Image" width="300" height="200"/>
+    <img src="/uploads/b53ac70a5c149473146acf7bafc5d2c3/best_parking_simulation__1_.gif" alt="My Image" width="300" height="200"/>
+    <img src="/uploads/736cdb6414a0d68da159e953eff32388/best_parking_simulation.gif" alt="My Image" width="300" height="200"/>
 
     - 심층 강화 학습을 이용한 자율 주차 모델 개발.
     - Soft Actor-Critic (SAC) 알고리즘과 Hindsight Experience Replay(HER) 알고리즘을 통해 학습 효율성 극대화.
