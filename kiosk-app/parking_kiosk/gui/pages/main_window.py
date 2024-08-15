@@ -152,9 +152,7 @@ class MainWindow(QMainWindow):
         pass
 
     def barrier_control(self, callback):
-        self.parking_barrier.upBarrier()
-        time.sleep(3)
-        self.parking_barrier.downBarrier()
+        self.parking_barrier.run_cycle()
         QTimer.singleShot(0, callback)
 
     def on_barrier_control_complete(self):

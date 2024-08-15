@@ -16,7 +16,7 @@ class SettlementPage(QWidget):
         self.vehicle_info = vehicle_info
 
         layout = QVBoxLayout()
-        layout.setContentsMargins(60, 100, 60, 40)
+        layout.setContentsMargins(60, 200, 60, 40)
         self.setLayout(layout)
 
         # 차량 정보 카드
@@ -111,12 +111,12 @@ class SettlementPage(QWidget):
 
         # 정산하기 버튼
         settle_button = QPushButton("정산하기", self)
-        settle_button.setFixedSize(300, 80)
+        settle_button.setFixedSize(500, 200)
         settle_button.setStyleSheet("""
             QPushButton {
                 background-color: #FFB300; 
                 color: white; 
-                font-size: 26px; 
+                font-size: 46px; 
                 border-radius: 10px;
             }
             QPushButton:hover {

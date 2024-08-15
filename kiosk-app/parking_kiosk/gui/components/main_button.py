@@ -46,7 +46,7 @@ class HoverButton(QPushButton):
                 background-color: {self.default_color}; 
                 color: white; 
                 font-size: 24px; 
-                border-radius: 15px; 
+                border-radius: 9px; 
                 border: 3px solid #FFF;
                 font-weight: bold;
             }}
