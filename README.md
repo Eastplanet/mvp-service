@@ -101,14 +101,14 @@
 
 ### 1. 프로젝트 구조
 
-- **Component Structure**
+- **System Architecture**
 
     ![Component Structure](/uploads/a26575d8c070ad0b72262db250bea362/시스템아키텍쳐.png)
 ---
 
 - **ERD(Entity Relationship Diagram)**
 
-    ![ERD](https://www.notion.so/ERD-0510777fde244c66ab641a1a08f47402?pvs=4#614bb50df5c24bb6bd0cdb2df950b86e)
+    ![ERD](/uploads/99a0405c8451f45ff768833c25a4b09c/image__1_.png)
 
 ---
 
