@@ -22,7 +22,10 @@
 
 ### 1. 프로젝트 설명
 
-**프로젝트 로고**:
+**프로젝트 로고**
+
+<img src="/uploads/39e33bbabcdedfbab4b2bd4ec18ac6ab/image__12_-removebg-preview.png" alt="My Image" width="300"/>
+
 
 **프로젝트 이름**: MVP(Management for Valet Parking)
 
@@ -112,9 +115,17 @@
 
 ---
 
-### 2. 포팅 메뉴얼
+### 2. 기타 산출물
 
-**Gitlab 내 'exec'폴더 참조**
+[프로젝트 기획서](https://www.notion.so/6ff283b4e0324e27a23fe5b721305bcc)
+
+[요구 사항 명세서/기능 정의서](https://www.notion.so/15e6581d44e146ff82b8aa42203b9cb8)
+
+[API 명세서](https://www.notion.so/API-f64b46ae482842219462fde2b702f689)
+
+[목업](https://www.figma.com/design/SNqRm7PsHwA5R10uP15Voq/%EC%9E%90%EC%9C%A8%EC%A3%BC%EC%B0%A8-%ED%82%A4%EC%98%A4%EC%8A%A4%ED%81%AC?node-id=75-309&t=8n1PO18hJ2bVxxgv-1)
+
+[개발 일정표](https://docs.google.com/spreadsheets/d/10vDb563ECTz8zRupqkGqP0Hwy7vR4ZgLYPvttU_avdY/edit?gid=0#gid=0)
 
 [포팅 메뉴얼](https://humdrum-geranium-104.notion.site/66a2392070744374ba0238d9c6f74f6c)
 
