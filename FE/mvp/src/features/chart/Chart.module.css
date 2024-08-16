@@ -4,78 +4,196 @@
   background-color: #f9fafc;
 }
 
+.page {
+  flex: 1; /* 남은 공간을 채우도록 설정 */
+  padding: 20px;
+  background-color: #f9fafc;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .mainContent {
   flex: 3;
   display: flex;
   flex-direction: column;
-  margin-top: 30px;
-  margin-left: 15px;
-  padding: 5px;
+  max-width: 1200px;
+  /* margin-top: 30px;
+  margin-left: 15px; */
+  padding: 5px; 
 }
 
 .summaryContainer {
   display: flex;
   justify-content: space-between;
   margin-bottom: 20px;
+  flex: 1; /* 전체 너비의 100%를 사용 */
+}
+
+.summaryContainer hr {
+  margin: 0 5px;
+  width: 1.5px;
+  background-color: #DFDEDD;
+  border: none;
 }
 
 .summary {
-  flex: 1;
+  flex: 1; /* 1:1:1 비율로 설정 */
   background-color: white;
-  padding: 15px;
-  margin: 0 10px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  text-align: center;
+  padding: 0px 15px;
+  margin: 0 10px; /* 주변에 여백 추가 */
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+  min-width: 150px;
 }
 
+.summaryTitle {
+  margin: 10px 0;
+  text-align: left;
+  font-size: 24px;
+  color: #a8a8a8;
+}
+
+.dayHighlight {
+  color: #4BC0C0;
+}
+
+.monthHighlight {
+  color: #9966FF;
+}
+
+.summaryData {
+  font-size: 22px;
+  margin: 0;
+  text-align: right;
+  font-weight: 600;
+}
+
+.summaryComparison {
+  margin: 5px 0 10px 0;
+  justify-content: flex-end;
+  display: flex;
+  align-items: center;
+}
+
+/* 차트 */
 .chartContainer {
   background-color: white;
   padding: 20px;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 474px;
+  flex: 2; /* 비율 설정: 전체의 2/6 */
   margin: 0px 10px;
+  min-height: 350px;
+}
+
+/* 우측 데이터 */
+
+.deatilsContainer{
+  display: flex;
+  flex-direction: column;
 }
 
 .details {
-  flex: 1;
-  padding: 20px;
+  /* flex: 1; */
+  padding: 0 20px;
   background-color: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  margin: 35px 35px;
-  text-align: center;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+  margin: 20px 35px;
+  text-align: right;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  height: 662px;
-  overflow-y: auto;
+  width: 200px;
+  min-height: 300px;
 }
 
 .details p {
-  margin: 10px 0;
-  font-size: 1rem;
+  margin: 0;
+  font-size: 1.4rem;
 }
 
 .details h3 {
-  margin: 10px 0;
-  font-size: 1.5rem;
+  margin: 0 0 15px 0;
+  font-size: 2rem;
 }
+
+/* .details .detailsTotal {
+  margin: 0;
+  font-size: 2.5rem;
+} */
 
 .up {
   color: red;
+  font-weight: bold;
+}
+
+.same {
+  color: black;
+  font-weight: bold;
 }
 
 .down {
   color: blue;
+  font-weight: bold;
+}
+
+.arrowUp{
+  width: 0px;
+  height: 0px;
+  border-bottom: 10px solid red;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  margin-left: 5px;
+  position: relative;
+}
+
+.arrowDown{
+  width: 0px;
+  height: 0px;
+  border-top: 10px solid blue;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  margin-left: 5px;
+  position: relative;
 }
 
 .totalUp {
-  color: green;
+  display: flex;
+  justify-content: flex-end;
+  color: red;
   font-weight: bold;
-  font-size: 1.2rem;
+  font-size: 28px;
 }
+.totalDown {
+  display: flex;
+  justify-content: flex-end;
+  color: blue;
+  font-weight: bold;
+  font-size: 28px;
+}
+.totalUp .arrowUp{
+  width: 0px;
+  height: 0px;
+  border-bottom: 20px solid red;
+  border-left: 12px solid transparent;
+  border-right: 12px solid transparent;
+  margin-left: 5px;
+  position: relative;
+  top: 10px; 
+}
+.totalDown .arrowDown{
+  width: 0px;
+  height: 0px;
+  border-top: 20px solid blue;
+  border-left: 12px solid transparent;
+  border-right: 12px solid transparent;
+  margin-left: 5px;
+  position: relative;
+  top: 10px; 
+}
+ 

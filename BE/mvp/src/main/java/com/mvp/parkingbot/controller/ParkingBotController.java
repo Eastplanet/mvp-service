@@ -3,8 +3,10 @@ package com.mvp.parkingbot.controller;
 import com.mvp.common.ResponseDto;
 import com.mvp.common.exception.RestApiException;
 import com.mvp.common.exception.StatusCode;
+import com.mvp.notify.service.NotificationService;
 import com.mvp.parkingbot.dto.*;
 import com.mvp.parkingbot.service.ParkingBotService;
+import com.mvp.task.dto.Task;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +20,7 @@ import java.util.List;
 @AllArgsConstructor
 public class ParkingBotController {
     private ParkingBotService parkingBotService;
+    private NotificationService notificationService;
 
     /**
      * 입차 요청
@@ -29,6 +32,7 @@ public class ParkingBotController {
     public ResponseEntity<ResponseDto> enterRequest(@RequestBody EnterRequestDTO enterRequestDTO) {
         Task task = parkingBotService.handleEnterRequest(enterRequestDTO);
         if (task != null) {
+            notificationService.sendEvent("data changed");
             return ResponseDto.response(StatusCode.SUCCESS, task);
         } else {
             throw new RestApiException(StatusCode.BAD_REQUEST);
@@ -45,22 +49,8 @@ public class ParkingBotController {
     public ResponseEntity<ResponseDto> exitRequest(@PathVariable String licensePlate) {
         boolean success = parkingBotService.handleExitRequest(licensePlate);
         if (success) {
+            notificationService.sendEvent("data changed");
             return ResponseDto.response(StatusCode.SUCCESS, null);
-        } else {
-            throw new RestApiException(StatusCode.BAD_REQUEST);
-        }
-    }
-
-    /**
-     * 주차봇에게 할당된 작업을 가져옴
-     *
-     * @return
-     */
-    @GetMapping("/poll")
-    public ResponseEntity<ResponseDto> pollTask() {
-        Task nextTask = parkingBotService.handleTask();
-        if (nextTask != null) {
-            return ResponseDto.response(StatusCode.SUCCESS, nextTask);
         } else {
             throw new RestApiException(StatusCode.BAD_REQUEST);
         }
@@ -76,6 +66,7 @@ public class ParkingBotController {
     public ResponseEntity<ResponseDto> moveRequest(@RequestBody MoveRequestDTO moveRequestDTO) {
         Task task = parkingBotService.handleMoveRequest(moveRequestDTO);
         if (task != null) {
+            notificationService.sendEvent("data changed");
             return ResponseDto.response(StatusCode.SUCCESS, task);
         } else {
             throw new RestApiException(StatusCode.BAD_REQUEST);
@@ -92,6 +83,7 @@ public class ParkingBotController {
     public ResponseEntity<ResponseDto> moveVehicle(@RequestBody MoveVehicleRequestDTO moveVehicleRequestDTO) {
         Task task = parkingBotService.handleMoveVehicleRequest(moveVehicleRequestDTO);
         if (task != null) {
+            notificationService.sendEvent("data changed");
             return ResponseDto.response(StatusCode.SUCCESS, task);
         } else {
             throw new RestApiException(StatusCode.BAD_REQUEST);
@@ -110,6 +102,7 @@ public class ParkingBotController {
         ParkingBotDTO parkingBotDTO = parkingBotService.updateStatus(statusRequestDTO.getSerialNumber(), statusRequestDTO.getStatus());
 
         if (parkingBotDTO != null) {
+            notificationService.sendEvent("data changed");
             return ResponseDto.response(StatusCode.SUCCESS, parkingBotDTO);
         } else {
             throw new RestApiException(StatusCode.BAD_REQUEST);
@@ -119,6 +112,7 @@ public class ParkingBotController {
     @PatchMapping("/status/complete")
     public ResponseEntity<ResponseDto> completeTask(@RequestBody Task task) {
         if(parkingBotService.completeTask(task)) {
+            notificationService.sendEvent("data changed");
             return ResponseDto.response(StatusCode.SUCCESS, null);
         } else {
             throw new RestApiException(StatusCode.BAD_REQUEST);

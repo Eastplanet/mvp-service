@@ -26,16 +26,25 @@ public class LoggerService {
 
     public List<VehicleLogDTO> findAllByEntranceTimeBetween(LocalDateTime start, LocalDateTime end) {
         List<VehicleLog> allByEntranceTimeBetween = vehicleLogRepository.findAllByEntranceTimeBetween(start, end);
+        allByEntranceTimeBetween.sort((o1 ,o2) -> {
+            return o1.getEntranceTime().compareTo(o2.getEntranceTime());
+        });
         return VehicleLogConverter.entityListToDtoList(allByEntranceTimeBetween);
     }
 
     public List<VehicleLogDTO> findAllByExitTimeBetween(LocalDateTime start, LocalDateTime end) {
         List<VehicleLog> allByExitTimeBetween = vehicleLogRepository.findAllByExitTimeBetween(start, end);
+        allByExitTimeBetween.sort((o1 ,o2) -> {
+            return o1.getEntranceTime().compareTo(o2.getEntranceTime());
+        });
         return VehicleLogConverter.entityListToDtoList(allByExitTimeBetween);
     }
 
     public List<VehicleLogDTO> findByEntranceTimeBetween(LocalDateTime start, LocalDateTime end, String licensePlate) {
         List<VehicleLog> byLicensePlate = vehicleLogRepository.findByLicensePlateEntranceTimeBetween(start, end, licensePlate);
+        byLicensePlate.sort((o1 ,o2) -> {
+            return o1.getEntranceTime().compareTo(o2.getEntranceTime());
+        });
         return VehicleLogConverter.entityListToDtoList(byLicensePlate);
     }
 

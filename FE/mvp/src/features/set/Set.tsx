@@ -1,6 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useDispatch } from 'react-redux';
 import Sidebar from '../sidebar/Sidebar';
 import styles from './Set.module.css';
+import api from '../../api/axios'
+import { logoutSuccess } from '../auth/authSlice';
+import Swal from 'sweetalert2'
 
 // 초기 상태의 타입 정의
 interface InitialState {
@@ -25,6 +29,7 @@ const Set: React.FC = () => {
   const [oneWeekTicket, setOneWeekTicket] = useState(0);
   const [oneMonthTicket, setOneMonthTicket] = useState(0);
   const [isDirty, setIsDirty] = useState(false);
+  const dispatch = useDispatch();
 
   // 초기 상태를 저장하기 위한 ref 사용
   const initialStateRef = useRef<InitialState>({
@@ -41,31 +46,35 @@ const Set: React.FC = () => {
   // 데이터 로드 함수
   const fetchData = async () => {
     try {
-      const response = await fetch('/api/get-settings');
-      const data = await response.json();
+      const response = await api.get('/parking-lots/setting');
+      const data = response.data.data;
       // 받아온 데이터로 상태 업데이트
-      setBasicTime(data.basicTime);
-      setBasicCost(data.basicCost);
-      setAdditionalTime(data.additionalTime);
-      setAdditionalCost(data.additionalCost);
-      setOneDayTicket(data.oneDayTicket);
-      setOneWeekTicket(data.oneWeekTicket);
-      setOneMonthTicket(data.oneMonthTicket);
-      setIsSystemActive(data.isSystemActive);
+      setBasicTime(data.baseParkingTime ?? 0);
+      setBasicCost(data.baseFee ?? 0);
+      setAdditionalTime(data.additionalUnitTime ?? 0);
+      setAdditionalCost(data.additionalUnitFee ?? 0);
+      setOneDayTicket(data.dailyFee ?? 0);
+      setOneWeekTicket(data.weeklyFee ?? 0);
+      setOneMonthTicket(data.monthlyFee ?? 0);
+      setIsSystemActive(data.isSystemActive ?? true);
       
       // 초기 상태 저장
       initialStateRef.current = {
-        basicTime: data.basicTime,
-        basicCost: data.basicCost,
-        additionalTime: data.additionalTime,
-        additionalCost: data.additionalCost,
-        oneDayTicket: data.oneDayTicket,
-        oneWeekTicket: data.oneWeekTicket,
-        oneMonthTicket: data.oneMonthTicket,
-        isSystemActive: data.isSystemActive
+        basicTime: data.baseParkingTime ?? 0,
+        basicCost: data.baseFee ?? 0,
+        additionalTime: data.additionalUnitTime ?? 0,
+        additionalCost: data.additionalUnitFee ?? 0,
+        oneDayTicket: data.dailyFee ?? 0,
+        oneWeekTicket: data.weeklyFee ?? 0,
+        oneMonthTicket: data.monthlyFee ?? 0,
+        isSystemActive: data.isSystemActive ?? true
       };
-    } catch (error) {
-      console.error('데이터 로드 실패:', error);
+    } catch (error: any) {
+      if (error.response && error.response.status === 401) {
+        dispatch(logoutSuccess()); // 로그아웃 액션 디스패치
+      } else {
+        console.error('Failed to fetch data:', error);
+      }
     }
   };
 
@@ -102,32 +111,40 @@ const Set: React.FC = () => {
   };
 
   // 저장 버튼 클릭 핸들러
-  const handleSave = () => {
+  const handleSave = async () => {
     const data = {
-      basicTime,
-      basicCost,
-      additionalTime,
-      additionalCost,
-      oneDayTicket,
-      oneWeekTicket,
-      oneMonthTicket,
-      isSystemActive
+      weekdayStartTime: null, 
+      weekdayEndTime: null,
+      weekendStartTime: null,
+      weekendEndTime: null,
+      baseParkingTime: basicTime,
+      baseFee: basicCost,
+      additionalUnitTime: additionalTime,
+      additionalUnitFee: additionalCost,
+      dailyFee: oneDayTicket,
+      weeklyFee: oneWeekTicket,
+      monthlyFee: oneMonthTicket
     };
-    
-    console.log("저장된 데이터:", data);
-
-    // 실제 서버로 데이터 전송 코드 (주석 처리된 예시)
-    // fetch('/api/save-settings', {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    //   body: JSON.stringify(data),
-    // })
-    // .then(response => response.json())
-    // .then(result => console.log('성공:', result))
-    // .catch(error => console.error('실패:', error));
+  
+    try {
+      const response = await api.put('/parking-lots/setting', data, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      console.log('성공:', response.data);
+      // alert('변경사항이 저장되었습니다.'); // 알림 추가
+      Swal.fire("변경사항이 저장되었습니다.");
+    } catch (error) {
+      console.error('실패:', error);
+    }
   };
+  //     console.log('성공:', response.data);
+  //   } catch (error) {
+  //     console.error('실패:', error);
+  //   }
+  // };
+  
 
   return (
     <div className={styles.container}>
@@ -177,7 +194,7 @@ const Set: React.FC = () => {
             <p className={styles.title}>주차권 금액</p>
             <div className={styles.ticketRates}>
               <div className={styles.ticketRow}>
-                <span>1일권:</span>
+                <span>단일:</span>
                 <input
                   type="number"
                   className={styles.rateInput}
@@ -186,7 +203,7 @@ const Set: React.FC = () => {
                 />원
               </div>
               <div className={styles.ticketRow}>
-                <span>1주일권:</span>
+                <span>주간:</span>
                 <input
                   type="number"
                   className={styles.rateInput}
@@ -195,7 +212,7 @@ const Set: React.FC = () => {
                 />원
               </div>
               <div className={styles.ticketRow}>
-                <span>1달권:</span>
+                <span>월간:</span>
                 <input
                   type="number"
                   className={styles.rateInput}
@@ -207,25 +224,29 @@ const Set: React.FC = () => {
           </div>
 
           {/* 시스템 상태 조정 섹션 */}
-          <div className={styles.sectionBottom}>
-            <p className={styles.title}>시스템 정지</p>
-            <div className={styles.system_button}>
+          <div className={styles.section}>
+            <p className={styles.titleBottom}>시스템 정지</p>
+            <div>
               <button
-                className={`${styles.button_deactivate} ${!isSystemActive ? styles.active : ''}`}
+                className={`${styles.buttonDeactivate} ${!isSystemActive ? styles.active : ''}`}
                 onClick={() => handleSystemStateChange(false)}
               >
                 시스템 비활성화
               </button>
               <button
-                className={`${styles.button_activate} ${isSystemActive ? styles.active : ''}`}
+                className={`${styles.buttonActivate} ${isSystemActive ? styles.active : ''}`}
                 onClick={() => handleSystemStateChange(true)}
               >
                 시스템 활성화
               </button>
             </div>
-            <p className={styles.statusMessage}>
-              {isSystemActive ? '시스템 활성화 상태입니다' : '시스템 비활성화 상태입니다'}
-            </p>
+            <p>
+              시스템{' '}
+              <span className={isSystemActive ? styles.statusActive : styles.statusInactive}>
+                {isSystemActive ? '활성화' : '비활성화'}
+              </span>
+              {' 상태입니다'}
+          </p>
           </div>
 
           {/* 저장 버튼 */}
