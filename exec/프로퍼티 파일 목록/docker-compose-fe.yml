@@ -1,0 +1,17 @@
+version: "3.2"
+services:
+  frontend:
+    restart: always
+    command : npm start
+    container_name: front
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    networks:
+      - mvp_app-network
+
+networks:
+  mvp_app-network:
+    external: true
