@@ -1,6 +1,8 @@
 import json
 import paho.mqtt.client as mqtt
 
+from core.handlers import handle_task_complete
+
 class MQTTClient:
     def __init__(self, broker, port, sub_topic, pub_topic):
         self.broker = broker
@@ -30,6 +32,10 @@ class MQTTClient:
 
     def on_message(self, client, userdata, msg):
         print(f"Received `{msg.payload.decode()}` from `{msg.topic}` topic")
+        data = json.loads(msg.payload.decode())
+        
+        handle_task_complete(data)
+        print("전송 완료!")
         
     def publish_message(self, message):
         if not self.client.is_connected():

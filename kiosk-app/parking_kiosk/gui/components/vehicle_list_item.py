@@ -1,35 +1,74 @@
+import base64
+from datetime import datetime
 from PyQt6.QtWidgets import QWidget, QHBoxLayout, QLabel, QVBoxLayout, QSpacerItem, QSizePolicy
 from PyQt6.QtGui import QPixmap
 from PyQt6.QtCore import Qt
 
 class VehicleListItem(QWidget):
-    def __init__(self, image_path, plate_number, duration, main_window, parent=None):
+    def __init__(self, vehicle, main_window, parent=None):
         super(VehicleListItem, self).__init__(parent)
         self.main_window = main_window
+        self.imageBase64 = vehicle['image']
+        self.licensePlate = vehicle['licensePlate']
+        self.discount = 0 if vehicle['discount'] is None else vehicle['discount']
+        self.fee = vehicle['fee']
+        self.total_fee = self.fee - self.discount
+        
+        try:
+            self.entranceTime = datetime.strptime(vehicle['entranceTime'], '%Y-%m-%dT%H:%M:%S.%f')
+        except ValueError:
+            self.entranceTime = datetime.strptime(vehicle['entranceTime'], '%Y-%m-%dT%H:%M:%S')
+
+        # 입차 시간과 현재 시간의 차이 계산
+        self.duration = datetime.now() - self.entranceTime
+        total_seconds = self.duration.total_seconds()
+        total_minutes = total_seconds // 60
+        total_hours = total_minutes // 60
+        hours = int(total_hours)
+        minutes = int(total_minutes % 60)
+
+        duration_str = f"{hours}시간 {minutes}분"
 
         # 흰색 배경의 빈 위젯 생성
         container_widget = QWidget(self)
-        container_widget.setStyleSheet("background-color: white; border-radius: 15px; border: 1px solid white;")  # 테두리 색상을 흰색으로 설정
+        container_widget.setFixedSize(600, 240)  # 컨테이너 위젯의 고정 크기 설정
+        container_widget.setStyleSheet("""
+            background-color: white;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            padding: 20px;
+        """)
 
         # 외부 레이아웃을 빈 위젯의 레이아웃으로 설정
         outer_layout = QHBoxLayout(container_widget)
         container_widget.setLayout(outer_layout)
-        
+
+        # Base64 이미지를 QPixmap으로 변환 또는 대체 이미지 사용
+        if self.imageBase64:
+            image_data = base64.b64decode(self.imageBase64)
+            pixmap = QPixmap()
+            pixmap.loadFromData(image_data)
+        else:
+            pixmap = QPixmap('parking_kiosk/gui/res/test-image1.png')  # 대체 이미지 경로
+
+        pixmap = pixmap.scaled(200, 200, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
+
         # 차량 이미지
-        pixmap = QPixmap(image_path).scaled(80, 80, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
         image_label = QLabel(self)
         image_label.setPixmap(pixmap)
-        image_label.setFixedSize(100, 100)
+        image_label.setFixedSize(220, 220)
         image_label.setStyleSheet("border-radius: 10px; background-color: white;")
         outer_layout.addWidget(image_label)
 
+        outer_layout.addItem(QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum))
+
         # 차량 정보 레이아웃
         info_layout = QVBoxLayout()
-        info_layout.setContentsMargins(10, 0, 10, 0)
-        plate_label = QLabel(plate_number, self)
-        plate_label.setStyleSheet("font-size: 18px; color: black; font-weight: bold;")
-        duration_label = QLabel(duration, self)
-        duration_label.setStyleSheet("font-size: 16px; color: black;")
+        info_layout.setContentsMargins(20, 0, 20, 0)
+        plate_label = QLabel(self.licensePlate, self)
+        plate_label.setStyleSheet("font-size: 36px; color: #333; font-weight: bold;")
+        duration_label = QLabel(duration_str, self)
+        duration_label.setStyleSheet("font-size: 30px; color: #666;")
         info_layout.addWidget(plate_label)
         info_layout.addWidget(duration_label)
         outer_layout.addLayout(info_layout)
@@ -42,28 +81,22 @@ class VehicleListItem(QWidget):
         main_layout = QVBoxLayout(self)
         main_layout.addWidget(container_widget)
         self.setLayout(main_layout)
-        
+
         # vehicle info
         self.vehicle_info = {
-            'image_path': 'parking_kiosk\\gui\\res\\test-image1.png',
-            'plate_number': '19오 7777',
-            'duration': '43분',
-            'entry_time': '07-23 20:03',
-            'exit_time': '07-23 20:46',
-            'parking_duration': '00:43',
+            'image': self.imageBase64,
+            'license_plate': self.licensePlate,
+            'duration': duration_str,
+            'entry_time': self.entranceTime.isoformat(),
+            'exit_time': datetime.now().isoformat(),
             'fee_type': '일반',
-            'parking_fee': '3,500원',
-            'discount_fee': '-1,000원',
-            'total_fee': '2,500원'
+            'parking_fee': (self.fee.__str__() + " 원"),
+            'discount_fee': (self.discount.__str__() + " 원"),
+            'total_fee': (self.total_fee.__str__() + " 원")
         }
-        
+
         # 클릭 이벤트 연결
         self.mousePressEvent = self.on_click
-        
+
     def on_click(self, event):
         self.main_window.show_settlement_page(self.vehicle_info)
-        
-        
-        
-    
-        

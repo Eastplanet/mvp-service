@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QSpacerItem, QSizePolicy
 from PyQt6.QtCore import Qt
 from gui.components.clickable_label import ClickableLabel
 
@@ -10,40 +10,68 @@ class EnterNumberPlate(QWidget):
         self.car_number_labels = []
         self.keypad = None  # 키패드 속성을 초기화합니다.
 
-        # 레이아웃 설정
-        layout = QVBoxLayout()
-        layout1 = QHBoxLayout()
-        layout2 = QHBoxLayout()
-        layout.addLayout(layout1)
-        layout.addLayout(layout2)
-        self.setLayout(layout)
+        # 전체 레이아웃 설정
+        main_layout = QVBoxLayout()
+        self.setLayout(main_layout)
 
-        for i in range(8):
+        # 레이아웃 설정
+        row1_layout = QHBoxLayout()
+        row2_layout = QHBoxLayout()
+
+        # 첫 번째 행의 레이아웃
+        layout1 = QHBoxLayout()
+        layout1.setAlignment(Qt.AlignmentFlag.AlignLeft)
+        layout1.setSpacing(20)  # 간격을 크게 설정
+        for i in range(4):
             label = ClickableLabel(" ", self)
-            label.setFixedSize(40, 40)
+            label.setFixedSize(120, 120)  # 레이블 크기를 크게 설정
             label.setAlignment(Qt.AlignmentFlag.AlignCenter)
             if i == 3:  # 4번째 레이블은 '-'로 설정하고 수정 불가
                 label.setText('-')
-                label.setStyleSheet("border: 1px solid black; background-color: gray; font-size: 20px; border-radius: 3px; color: white;")
+                label.setStyleSheet("border: 2px solid black; background-color: gray; font-size: 60px; border-radius: 10px; color: white;")
             else:
-                label.setStyleSheet("border: 1px solid black; background-color: white; font-size: 20px; border-radius: 3px; color: black;")
+                label.setStyleSheet("border: 2px solid black; background-color: white; font-size: 60px; border-radius: 10px; color: black;")
                 label.clicked.connect(self.label_clicked)
-            if i < 4:
-                layout1.addWidget(label)
-            else:
-                layout2.addWidget(label)
+            layout1.addWidget(label)
             self.car_number_labels.append(label)
 
-        layout1.setSpacing(5)
-        layout2.setSpacing(5)
+        # 두 번째 행의 레이아웃
+        layout2 = QHBoxLayout()
+        layout2.setAlignment(Qt.AlignmentFlag.AlignRight)
+        layout2.setSpacing(20)  # 간격을 크게 설정
+        for i in range(4, 8):
+            label = ClickableLabel(" ", self)
+            label.setFixedSize(120, 120)  # 레이블 크기를 크게 설정
+            label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+            label.setStyleSheet("border: 2px solid black; background-color: white; font-size: 60px; border-radius: 10px; color: black;")
+            label.clicked.connect(self.label_clicked)
+            layout2.addWidget(label)
+            self.car_number_labels.append(label)
 
-        dummy_data = "12가3456"
-        for i, char in enumerate(dummy_data):
-            self.car_number_labels[i].setText(char)
+        # 첫 번째 행
+        row1_layout.addLayout(layout1)
+        main_layout.addLayout(row1_layout)
+
+        # 두 번째 행
+        row2_layout.addSpacerItem(QSpacerItem(160, 120, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum))
+        row2_layout.addLayout(layout2)
+        main_layout.addLayout(row2_layout)
+
+        self.update_current_label_color()
+
+    def update_current_label_color(self):
+        for i, label in enumerate(self.car_number_labels):
+            if i == self.current_label_index and i != 3:  # 4번째 레이블은 수정 불가
+                label.setStyleSheet("border: 2px solid black; background-color: lightblue; font-size: 60px; border-radius: 10px; color: black;")
+            elif i == 3:
+                label.setStyleSheet("border: 2px solid black; background-color: gray; font-size: 60px; border-radius: 10px; color: white;")
+            else:
+                label.setStyleSheet("border: 2px solid black; background-color: white; font-size: 60px; border-radius: 10px; color: black;")
 
     def label_clicked(self):
         label = self.sender()
         self.current_label_index = self.car_number_labels.index(label)
+        self.update_current_label_color()
         if self.keypad:
             if self.current_label_index == 2:  # 3번째 레이블은 한글로 고정
                 self.keypad.show_cheonjiin_keyboard()
@@ -55,11 +83,26 @@ class EnterNumberPlate(QWidget):
     def clear_label(self):
         if self.current_label_index != 3:  # 4번째 레이블은 수정 불가
             self.car_number_labels[self.current_label_index].setText("")
+            if self.current_label_index == 4:
+                self.current_label_index -= 2
+            elif self.current_label_index > 0:
+                self.current_label_index -= 1
+            else:
+                self.current_label_index = 0
+        self.update_current_label_color()
         
     def set_label_text(self, text):
         if self.current_label_index != 3:  # 4번째 레이블은 수정 불가
             self.car_number_labels[self.current_label_index].setText(text)
-
+            self.update_current_label_color()
+            if self.current_label_index == 2:
+                self.current_label_index += 2
+            elif self.current_label_index < 7:
+                self.current_label_index += 1
+            else:
+                self.current_label_index = 7
+        self.update_current_label_color()
+        
     def get_current_label_text(self):
         return self.car_number_labels[self.current_label_index].text()
         
@@ -78,4 +121,12 @@ class EnterNumberPlate(QWidget):
         
         for i, char in enumerate(data):
             self.car_number_labels[i].setText(char)
+        self.update_current_label_color()
     
+    def reset_labels(self):
+        for label in self.car_number_labels:
+            label.setText(" ")
+        self.current_label_index = 0
+        self.update_current_label_color()
+        if self.keypad:
+            self.keypad.show_number_keyboard()

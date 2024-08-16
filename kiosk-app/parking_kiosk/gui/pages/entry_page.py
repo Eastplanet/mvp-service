@@ -1,9 +1,10 @@
-from PyQt6.QtWidgets import QWidget, QVBoxLayout
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout
 from PyQt6.QtCore import Qt
 from gui.components.top_label import TopLabel
 from gui.components.enter_number_plate import EnterNumberPlate
 from gui.components.keypad import Keypad
 from gui.components.park_button import ParkButton
+from gui.components.home_button import HomeButton
 from core.camera import Camera
 
 # 입차 페이지
@@ -16,6 +17,7 @@ class EntryPage(QWidget):
         
         # 레이아웃 설정
         layout = QVBoxLayout()
+        layout.setContentsMargins(60, 120, 60, 60)
         self.setLayout(layout)
 
         # 상단 라벨
