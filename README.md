@@ -53,6 +53,8 @@
 ![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
 ![Jenkins](https://img.shields.io/badge/Jenkins-D24939?style=for-the-badge&logo=jenkins&logoColor=white)
 ![Nginx](https://img.shields.io/badge/Nginx-009639?style=for-the-badge&logo=nginx&logoColor=white)
+![ROS](https://img.shields.io/badge/ROS-22314E?style=for-the-badge&logo=ros&logoColor=white)
+![C++](https://img.shields.io/badge/C%2B%2B-00599C?style=for-the-badge&logo=c%2B%2B&logoColor=white)
 
 - **프론트엔드(FE):** React 18.3.1, JavaScript, TypeScript, CSS3, HTML5, PyQT
 - **백엔드(BE):** Java 17, SpringBoot, RabbitMQ 3.13.6
@@ -306,7 +308,7 @@ Git 브랜치 작성 컨벤션은 브랜치 이름을 일관성 있게 관리하
 - **손우혁**:
   - SSAFY에서 전공자와 비전공자 6명이 팀을 이뤄 진행한 팀 프로젝트로, 총 6주간 진행한 프로젝트입니다. 회의할때도 팀원 모두 의견을 적극적으로 제시하면서 예상 문제점에 대응하고, 기능을 설계하였습니다.
   - 차량 제어 / 임베디드 - 웹 서버 간 통신을 위해 백엔드 개발자와 협력하면서 많은 것을 배울 수 있었습니다. 모터 드라이버가 늦게 배송되는 등 여러 이슈가 있었지만, 주어진 상황에서 프로젝트를 잘 끝낸 것 같아 뿌듯합니다.
-  - ~마지막으로 프로젝트 기간 같이 노력해 만족스러운 결과를 낼 수 있도록 도와준 팀원들에게 감사의 인사를 전하고 싶습니다.
+  - 마지막으로 프로젝트 기간 같이 노력해 만족스러운 결과를 낼 수 있도록 도와준 팀원들에게 감사의 인사를 전하고 싶습니다.
 
 - **손원륜**:
   - 하반기 처음 시작하게된 공통 PJT 6주간 프로젝트를 진행하면서 새로운 기술들과 새로운 경험들을 하게되어 뜻깊은 시간이었습니다.
