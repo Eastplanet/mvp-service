@@ -8,22 +8,26 @@ parking_kiosk
 ├── config
 │   ├── config.py                # 설정 파일
 │   ├── mqtt_broker.py           # MQTT 브로커 설정
-│   ├── polling_daemon.py        # 폴링 데몬 설정
+│   ├── consumer_daemon.py       # 작업 큐 리스너 데몬 프로세스
 │
 ├── core
 │   ├── parking_barrier
-│   │   └── parking_barrier.py   # 주차 차단기 제어
+│   │   └── parking_barrier_controller.py   # 주차 차단기 제어
+│   ├── thread
+│   │   ├── ocr_thread.py        # OCR 쓰레드
+│   │   └── settle_thread.py     # 정산 처리 쓰레드
 │   ├── camera.py                # 카메라 관련 기능
 │   ├── handlers.py              # 요청 처리 핸들러
-│   ├── mqtt_client.py           # MQTT 클라이언트
-│   ├── ocr_reader.py            # OCR 판독기
-│
+│   └── mqtt_client.py           # MQTT 클라이언트
+│   
 ├── gui
 │   ├── components               # UI 구성 요소
 │   │   ├── clickable_label.py   # 클릭 가능한 레이블
 │   │   ├── enter_number_plate.py # 입차 차량 번호판 입력
 │   │   ├── exit_number_plate.py  # 출차 차량 번호판 입력
+│   │   ├── error_dialog.py      # 오류 처리 모달
 │   │   ├── gif_widget.py        # GIF 위젯
+│   │   ├── homebutton.py        # 키패드
 │   │   ├── keypad.py            # 키패드
 │   │   ├── main_button.py       # 메인 버튼
 │   │   ├── park_button.py       # 주차 버튼
@@ -35,10 +39,7 @@ parking_kiosk
 │   │   ├── main_window.py       # 메인 윈도우
 │   │   ├── settlement_page.py   # 정산 페이지
 │   │   └── vehicle_selection_page.py # 차량 선택 페이지
-│   ├── res                      # 리소스 파일
-│   │   ├── car-anime.gif        # 애니메이션 GIF
-│   │   ├── test-image1.png      # 테스트 이미지 1
-│   │   └── test-image2.png      # 테스트 이미지 2
+│   └── res                      # 리소스 파일
 │
 ├── main.py                      # 메인 실행 파일
 ├── result                       # 결과 저장 폴더
@@ -94,4 +95,4 @@ python main.py
 
 - **개발 언어**: Python
 - **GUI 라이브러리**: PyQt6
-- **기타 라이브러리**: OpenCV, asyncio, aiohttp, qasync
+- **기타 라이브러리**: OpenCV, pika, paho-mqtt, requests

@@ -12,7 +12,7 @@ from PyQt6.QtGui import QFontDatabase
 from PyQt6.QtGui import QFont
 
 def main():
-    # mosquitto_process = MQTTBroker.start_mosquitto()
+    mosquitto_process = MQTTBroker.start_mosquitto()
 
     app = QApplication(sys.argv)
     font_id = QFontDatabase.addApplicationFont("parking_kiosk/gui/res/fonts/GothicA1-Medium.ttf")
@@ -43,7 +43,7 @@ def main():
     def on_exit():
         consumer_daemon.stop()
         consumer_daemon.join()
-        # MQTTBroker.stop_mosquitto(mosquitto_process)
+        MQTTBroker.stop_mosquitto(mosquitto_process)
     
     app.aboutToQuit.connect(on_exit)
 
