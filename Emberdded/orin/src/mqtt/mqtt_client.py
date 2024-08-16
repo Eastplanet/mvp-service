@@ -11,7 +11,7 @@ class MQTTClient:
         self.pub_topic = pub_topic
         self.sub_topic = sub_topic
         self.bot_controller = bot_controller
-        self.client = mqtt.Client()
+        self.client = mqtt.Client(protocol=mqtt.MQTTv5)
         self.client.on_connect = self.on_connect
         self.client.on_message = self.on_message
 
@@ -19,7 +19,8 @@ class MQTTClient:
         self.client.connect(self.broker, self.port, 60)
         self.client.loop_start()
 
-    def on_connect(self, client, userdata, flags, rc):
+    def on_connect(self, client, userdata, flags, rc, properties=None):
+        print(f"Connect: flags={flags}, rc={rc}, properties={properties}")
         if rc == 0:
             print("브로커 연결 성공!")
             self.client.subscribe(self.sub_topic)
@@ -35,7 +36,7 @@ class MQTTClient:
         if(serial_number != SERIAL_NUMBER):
             return
         # TODO : 작업 내용을 추가합니다.
-        self.bot_controller.start_driving(command)
+        self.bot_controller.startDriving(command)
         
     def publish(self, message):
         print("Publishing message" + str(message))
