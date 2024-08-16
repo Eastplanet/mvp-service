@@ -1,16 +1,36 @@
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLabel, QGraphicsDropShadowEffect
+import sys
+from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QLabel, QGraphicsDropShadowEffect
 from PyQt6.QtCore import Qt, QTimer, QSize
 from PyQt6.QtGui import QMovie, QColor
 
 class GifWidget(QWidget):
-    def __init__(self, gif_path, duration=3000, parent=None):
+    def __init__(self, gif_path, main_msg, sub_msg, duration=3000, parent=None):
         super(GifWidget, self).__init__(parent)
         self.setFixedSize(300, 400)  # 큰 박스 크기
         self.setWindowFlags(Qt.WindowType.FramelessWindowHint | Qt.WindowType.WindowStaysOnTopHint)
-        self.setStyleSheet("background-color: white; border-radius: 15px;")
+        self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
 
-        layout = QVBoxLayout()
-        self.setLayout(layout)
+        container = QWidget(self)
+        container.setFixedSize(260, 280)
+        container.setStyleSheet("background-color: white; border-radius: 15px;")
+
+        layout = QVBoxLayout(container)
+        layout.setContentsMargins(10, 10, 10, 10)
+        self.setLayout(QVBoxLayout())
+        self.layout().addWidget(container)
+
+        # 그림자 효과 추가
+        shadow = QGraphicsDropShadowEffect()
+        shadow.setBlurRadius(15)
+        shadow.setColor(QColor(0, 0, 0, 160))
+        shadow.setOffset(0, 0)
+        container.setGraphicsEffect(shadow)
+
+        # 메시지 추가
+        main_message_label = QLabel(main_msg, self)
+        main_message_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        main_message_label.setStyleSheet("font-size: 20px; color: black;")
+        layout.addWidget(main_message_label, alignment=Qt.AlignmentFlag.AlignTop)
 
         # GIF 추가
         self.gif_label = QLabel(self)
@@ -19,16 +39,19 @@ class GifWidget(QWidget):
         self.gif_label.setMovie(self.movie)
         layout.addWidget(self.gif_label, alignment=Qt.AlignmentFlag.AlignCenter)
 
-        # 그림자 효과 추가
-        shadow = QGraphicsDropShadowEffect()
-        shadow.setBlurRadius(15)
-        shadow.setColor(QColor(0, 0, 0, 160))
-        shadow.setOffset(0, 0)
-        self.gif_label.setGraphicsEffect(shadow)
+        # 서브 메시지 추가
+        sub_message_label = QLabel(sub_msg, self)
+        sub_message_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        sub_message_label.setStyleSheet("font-size: 16px; color: black;")
+        layout.addWidget(sub_message_label, alignment=Qt.AlignmentFlag.AlignBottom)
 
-        # Close the widget after the specified duration
-        QTimer.singleShot(duration, self.close)
+        # 지정된 시간 후에 애니메이션 중지 및 창 닫기
+        QTimer.singleShot(duration, self.stop)
 
     def start(self):
         self.movie.start()
         self.show()
+
+    def stop(self):
+        self.movie.stop()
+        self.close()
