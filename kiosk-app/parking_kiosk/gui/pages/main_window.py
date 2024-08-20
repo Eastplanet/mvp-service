@@ -71,7 +71,7 @@ class MainWindow(QMainWindow):
         main_button_layout.addWidget(self.logo_label, alignment=Qt.AlignmentFlag.AlignTop)
 
         # 사이 여백
-        main_button_layout.addSpacing(int(150 * self.height_ratio))
+        # main_button_layout.addSpacing(int(150 * self.height_ratio))
 
         # 메인 버튼 추가
         self.main_button = MainButton(self)
