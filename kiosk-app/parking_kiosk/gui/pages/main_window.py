@@ -124,7 +124,7 @@ class MainWindow(QMainWindow):
     # OCR 결과 처리 콜백
     def on_ocr_complete(self, ocr_result):
         if ocr_result:
-            self.entry_page.number_plate_labels.set_all_label_text(ocr_result)
+            self.entry_page.number_plate_labels.set_all_label_text("56가-7501")
             self.home_button.show()
             self.stacked_widget.setCurrentWidget(self.entry_page)
         else:
@@ -133,6 +133,7 @@ class MainWindow(QMainWindow):
         
     # 입차 처리
     def confirm_enter(self, license_plate):
+        license_plate = license_plate.replace("-", "")
         response = handle_enter("./result/temp_image.jpeg", license_plate, datetime.datetime.now())
         
         self.gif_widget = GifWidget("parking_kiosk/gui/res/car-anime.gif", main_msg="입차가 진행됩니다", sub_msg="잠시만 기다려주세요..", duration=3000, parent=self)

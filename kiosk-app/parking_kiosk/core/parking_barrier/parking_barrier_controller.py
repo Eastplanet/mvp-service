@@ -33,7 +33,7 @@ class ParkingBarrierController:
         self.buzzer.stop()
 
     def move_servo_up(self):
-        for i in range(0, 121, 30):
+        for i in range(0, 91, 30):
             self.led.on()
             self.setServoAngle(i)
             sleep(0.1)
@@ -41,7 +41,7 @@ class ParkingBarrierController:
             sleep(0.1)
 
     def move_servo_down(self):
-        for i in range(120, -1, -30):
+        for i in range(90, -1, -30):
             self.led.on()
             self.setServoAngle(i)
             sleep(0.1)
