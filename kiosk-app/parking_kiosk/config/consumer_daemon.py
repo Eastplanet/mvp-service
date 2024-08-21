@@ -2,6 +2,7 @@ import pika
 import json
 import threading
 
+# RabbitMQ Consumer Daemon
 class ConsumerDaemon(threading.Thread):
     def __init__(self, mqtt_client, rabbitmq_host, queue_name):
         super().__init__()

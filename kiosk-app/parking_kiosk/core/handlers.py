@@ -7,6 +7,7 @@ import requests
 from config.config import API_KEY_LPR, SERVER_URL, get_api_key, set_api_key
 from urllib3.exceptions import MaxRetryError
 
+# 연결 예외 처리
 def handle_connection_excetpion():
     response = {
         'status': None,
@@ -87,7 +88,6 @@ def handle_enter(image_path, license_plate, entrance_time):
             
         print(f"Status Code: {response.status_code}")
         print(f"Response: {response.text}")
-        # os.remove('./result/temp_image.jpeg')
         
         return response.json()
     except (MaxRetryError, requests.ConnectionError) as e: 
@@ -117,6 +117,7 @@ def handle_get_vehicles(license_plate):
     except (MaxRetryError, requests.ConnectionError, requests.exceptions.ChunkedEncodingError) as e: 
         return handle_connection_excetpion()
 
+# 최초 로그인
 def kiosk_login():
     try:
         url = SERVER_URL + "/manager/login"

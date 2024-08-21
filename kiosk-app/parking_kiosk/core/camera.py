@@ -1,14 +1,9 @@
 import os
-from aiohttp import ClientSession
-import requests
 import base64
 import cv2
 from core.handlers import handle_lpr_api
 from static.ko_en_mapper import ko_en_mapper
 
-image_path = "parking_kiosk/gui/res/test.jpg"
-
-# TODO: 사진 찍어서 경로 전달
 class Camera:
     def __init__(self):
         pass
@@ -35,7 +30,6 @@ class Camera:
 
         # 이미지 리사이즈
         image = cv2.imread('./result/captured_img.jpeg')
-        # image = cv2.imread(image_path)
         resized_img = self.resize_image(image)
 
         temp_file_path = './result/temp_image.jpeg'
@@ -54,10 +48,6 @@ class Camera:
             else:
                 return None
          
-        # os.remove(temp_file_path)
-        # print(lp_string)
-        # print(base64_encoded_img)
-        
     def resize_image(self, image, max_width=1024, max_height=1024):
         height, width = image.shape[:2]
         if width > max_width or height > max_height:

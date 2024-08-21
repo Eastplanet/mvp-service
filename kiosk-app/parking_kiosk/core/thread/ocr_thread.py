@@ -1,6 +1,7 @@
 from PyQt6.QtCore import QThread, pyqtSignal
 from core.camera import Camera
 
+# OCR 스레드 (차량 인식)
 class OcrThread(QThread):
     def __init__(self):
         super(OcrThread, self).__init__()
