@@ -108,11 +108,13 @@
 ### 1. 프로젝트 구조
 
 - **System Architecture**
+![image](https://github.com/user-attachments/assets/70e2473a-b32a-4876-95e6-ec5cab24e176)
 
     ![Component Structure](/uploads/71bdbdc3dad8ee0a702c77dd8a7e68f9/시스템아키텍쳐.png)
 ---
 
 - **ERD(Entity Relationship Diagram)**
+![image](https://github.com/user-attachments/assets/c7a29692-b3fb-4886-8b40-ed82a42fc2fe)
 
     ![ERD](/uploads/447749ef020a3b83f0e0c3fd366fa72d/image__1_.png)
 
@@ -145,22 +147,27 @@
 #### **자율 주차를 위한 모델 및 알고리즘**
 
 1. **강화 학습 기반 자율 주차 모델**
+![image]()
+![image](https://github.com/user-attachments/assets/9dc0da5c-7eb9-4358-9d16-1b9aecc0f8fc)
 
-    <img src="/uploads/b53ac70a5c149473146acf7bafc5d2c3/best_parking_simulation__1_.gif" alt="My Image" width="300" height="200"/>
+
+    <img src="https://github.com/user-attachments/assets/ffc0d325-97f8-443b-92f2-0cdb22e082bf" alt="My Image" width="300" height="200"/>
     <img src="/uploads/736cdb6414a0d68da159e953eff32388/best_parking_simulation.gif" alt="My Image" width="300" height="200"/>
 
     - 심층 강화 학습을 이용한 자율 주차 모델 개발.
     - Soft Actor-Critic (SAC) 알고리즘과 Hindsight Experience Replay(HER) 알고리즘을 통해 학습 효율성 극대화.
     - Mish 활성화 함수를 사용하여 Dying Relu 문제 해결.
 
-2. **환경 이식 및 SLAM 알고리즘**
+3. **환경 이식 및 SLAM 알고리즘**
 
     <img src="/uploads/2f052b468c26bd77098f2bbf41ff4b6d/LiDAR.PNG" alt="My Image" width="300" height="200"/>
+    ![image](https://github.com/user-attachments/assets/1a1d2ac7-d3ee-4e1c-8e5b-a768f166cf09)
+
 
     - Hector SLAM을 이용한 2D LiDAR 기반 맵 생성.
     - AMCL과 Particle Filter 기반의 Localization 기술을 사용하여 차량의 위치와 헤딩 값을 정확히 도출.
 
-3. **LPR 기술 활용**
+4. **LPR 기술 활용**
     - 차량 번호판을 실시간으로 인식하고, 텍스트로 변환하여 주차 시스템에 반영.
 
 ### 2. 목표 서비스 구현 및 실제 구현 정도
