@@ -26,7 +26,6 @@
 
 ![image](https://github.com/user-attachments/assets/a70f8a16-da5e-4d88-b48b-7842d272bea2)
 
-<img src="/uploads/39e33bbabcdedfbab4b2bd4ec18ac6ab/image__12_-removebg-preview.png" alt="My Image" width="300"/>
 
 
 **프로젝트 이름**: MVP(Management for Valet Parking)
