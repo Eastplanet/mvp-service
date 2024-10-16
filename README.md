@@ -115,13 +115,11 @@
 - **System Architecture**
 ![image](https://github.com/user-attachments/assets/70e2473a-b32a-4876-95e6-ec5cab24e176)
 
-    ![Component Structure](/uploads/71bdbdc3dad8ee0a702c77dd8a7e68f9/시스템아키텍쳐.png)
 ---
 
 - **ERD(Entity Relationship Diagram)**
 ![image](https://github.com/user-attachments/assets/c7a29692-b3fb-4886-8b40-ed82a42fc2fe)
 
-    ![ERD](/uploads/447749ef020a3b83f0e0c3fd366fa72d/image__1_.png)
 
 ---
 
