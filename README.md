@@ -48,7 +48,7 @@
 # Awards
 [SSAFY] 11기 공통 최우수(1등) 프로젝트 
 
-![상장](https://github.com/user-attachments/assets/a1e7d363-a81d-4dc6-835e-98f1121841ea)
+![resized_image](https://github.com/user-attachments/assets/f068f170-ef3d-48f2-9b20-6787d264c1e7)
 
 ---
 
