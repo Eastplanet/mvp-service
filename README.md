@@ -164,7 +164,6 @@
 
 2. **환경 이식 및 SLAM 알고리즘**
 
-    <img src="/uploads/2f052b468c26bd77098f2bbf41ff4b6d/LiDAR.PNG" alt="My Image" width="300" height="200"/>
     ![image](https://github.com/user-attachments/assets/1a1d2ac7-d3ee-4e1c-8e5b-a768f166cf09)
 
 
