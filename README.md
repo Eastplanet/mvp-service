@@ -154,8 +154,9 @@
 ![best_parking_simulation](https://github.com/user-attachments/assets/4d431ff9-8f7f-4cdc-a887-fabf203d5be2)
 ![best_parking_simulation__1_](https://github.com/user-attachments/assets/fd9bd4c0-0682-480c-a4b0-bdec306d36cd)
 
-    <img src="https://github.com/user-attachments/assets/ffc0d325-97f8-443b-92f2-0cdb22e082bf.gif" alt="My Image" width="300" height="200"/>
-    <img src="/uploads/736cdb6414a0d68da159e953eff32388/best_parking_simulation.gif" alt="My Image" width="300" height="200"/>
+<img src="https://github.com/user-attachments/assets/ffc0d325-97f8-443b-92f2-0cdb22e082bf.gif" alt="My Image" width="300" height="200"/>
+<img src="/uploads/736cdb6414a0d68da159e953eff32388/best_parking_simulation.gif" alt="My Image" width="300" height="200"/>
+    
 
     - 심층 강화 학습을 이용한 자율 주차 모델 개발.
     - Soft Actor-Critic (SAC) 알고리즘과 Hindsight Experience Replay(HER) 알고리즘을 통해 학습 효율성 극대화.
