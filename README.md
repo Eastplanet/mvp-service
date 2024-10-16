@@ -47,7 +47,9 @@
 
 # Awards
 [SSAFY] 11기 공통 최우수(1등) 프로젝트 
-![상장.jpeg](https://prod-files-secure.s3.us-west-2.amazonaws.com/c2c56c8e-8a9c-4aab-82c2-3ce4d88760c8/a6ff5dd3-b89b-4276-a9db-8457dd5ac2dd/%EC%83%81%EC%9E%A5.jpeg)
+
+![상장](https://github.com/user-attachments/assets/a1e7d363-a81d-4dc6-835e-98f1121841ea)
+
 ---
 
 ### 2. 개발 스택 및 개발 툴
