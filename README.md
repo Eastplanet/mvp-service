@@ -50,6 +50,8 @@
 
 ![resized_image](https://github.com/user-attachments/assets/f068f170-ef3d-48f2-9b20-6787d264c1e7)
 
+![outputvideo-cutter-js com-ezgif com-optimize](https://github.com/user-attachments/assets/769bff87-ce9d-4fe2-9eae-0b0feaaa4118)
+
 ---
 
 ### 2. 개발 스택 및 개발 툴
